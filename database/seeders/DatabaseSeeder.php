@@ -4,6 +4,15 @@ namespace Database\Seeders;
 
 namespace App\Traits;
 
+use App\Models\Form;
+use App\Models\Form_field;
+use App\Models\Form_section;
+use App\Models\Program;
+use App\Models\Round;
+use App\Models\Sample;
+use App\Models\Schema;
+use App\Models\Test;
+use App\Models\User;
 use Illuminate\Support\Str;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -33,6 +42,9 @@ class DatabaseSeeder extends Seeder
                 'created_at' => new \dateTime, 'updated_at' => new \dateTime
             ),
         );
+        $programObj = new Program();
+        Program::query()->truncate();
+        $programObj->insert($program);
 
         $form_field = array(
             array(
@@ -58,6 +70,9 @@ class DatabaseSeeder extends Seeder
                 'updated_at' => new \dateTime
             ),
         );
+        $form_fieldObj = new Form_field();
+        Form_field::query()->truncate();
+        $form_fieldObj->insert($form_field);
 
 
         $form_section = array(
@@ -72,6 +87,9 @@ class DatabaseSeeder extends Seeder
                 'updated_at' => new \dateTime
             ),
         );
+        $form_sectionObj = new Form_section();
+        Form_section::query()->truncate();
+        $form_sectionObj->insert($form_section);
 
 
         $round = array(
@@ -88,6 +106,9 @@ class DatabaseSeeder extends Seeder
                 'end_date' => new \dateTime
             ),
         );
+        $roundObj = new Round();
+        Round::query()->truncate();
+        $roundObj->insert($round);
 
 
         $schema = array(
@@ -102,6 +123,9 @@ class DatabaseSeeder extends Seeder
                 'scoringCriteria' => 'consensus'
             ),
         );
+        $schemaObj = new Schema();
+        Schema::query()->truncate();
+        $schemaObj->insert($schema);
 
 
         $sample = array(
@@ -119,7 +143,9 @@ class DatabaseSeeder extends Seeder
 
             ),
         );
-
+        $sampleObj = new Sample();
+        Sample::query()->truncate();
+        $sampleObj->insert($sample);
 
         $test = array(
             array(
@@ -132,13 +158,18 @@ class DatabaseSeeder extends Seeder
                 'updated_at' => new \dateTime,
             ),
         );
+        $testObj = new Test();
+        Test::query()->truncate();
+        $testObj->insert($test);
 
 
         $user = array(
             array('name' => 'test', 'email' => 'test@gmail.com', 'password' => '$2y$10$wCyQ7j2mwl.NGD3brp1RSuCo3nIv9b1pDO4Cb8v0xjmfBshm93bGm', 'created_at' => new \dateTime, 'updated_at' => new \dateTime),
 
         );
-
+        $userObj = new User();
+        User::query()->truncate();
+        $userObj->insert($user);
 
         $form = array(
             array(
@@ -151,11 +182,8 @@ class DatabaseSeeder extends Seeder
                 'updated_at' => new \dateTime,
             ),
         );
-
-
-
-        // $authObj = new Role();
-        // Role::query()->truncate();
-        // $authObj->insert($data);
+        $formObj = new Form();
+        Form::query()->truncate();
+        $formObj->insert($form);
     }
 }
