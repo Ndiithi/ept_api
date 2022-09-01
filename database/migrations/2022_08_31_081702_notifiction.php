@@ -15,10 +15,9 @@ return new class extends Migration
     {
         Schema::create('notification', function (Blueprint $table) {
             $table->uuid('uuid');
-            $table->uuid('recipients');
-            $table->string('message');
+            $table->string('category');
+            $table->string('description');
             $table->string('mode');
-            $table->string('status');
             $table->json('meta');
             $table->timestamps();
         });

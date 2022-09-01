@@ -7,6 +7,7 @@ namespace App\Traits;
 use App\Models\Form;
 use App\Models\Form_field;
 use App\Models\Form_section;
+use App\Models\Notification;
 use App\Models\Program;
 use App\Models\Round;
 use App\Models\RoundUsergroup;
@@ -220,5 +221,21 @@ class DatabaseSeeder extends Seeder
         $formObj = new Form();
         Form::query()->truncate();
         $formObj->insert($form);
+
+
+        $notification = array(
+            array(
+                'uuid' =>  Str::uuid()->toString(),
+                'message' =>  "Test message",
+                'mode' => '[mobile, email]',
+                'category' => 'cycle',
+                'meta' => '{}',
+                'created_at' => new \dateTime,
+                'updated_at' => new \dateTime,
+            ),
+        );
+        $notificationObj = new Notification();
+        Notification::query()->truncate();
+        $notificationObj->insert($notification);
     }
 }
