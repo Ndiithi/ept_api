@@ -198,7 +198,6 @@ class DatabaseSeeder extends Seeder
         $user = array(
             array(
                 'name' => 'test', 'email' => 'test@gmail.com',
-                'group' => 'userGroup1',
                 'password' => '$2y$10$wCyQ7j2mwl.NGD3brp1RSuCo3nIv9b1pDO4Cb8v0xjmfBshm93bGm', 'created_at' => new \dateTime, 'updated_at' => new \dateTime
             ),
 

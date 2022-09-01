@@ -13,7 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('user_program', function (Blueprint $table) {
+            $table->uuid('uuid');
+            $table->uuid('user');
+            $table->uuid('program');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -23,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('user_program');
     }
 };
