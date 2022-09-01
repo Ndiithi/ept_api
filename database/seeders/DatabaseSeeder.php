@@ -9,10 +9,12 @@ use App\Models\Form_field;
 use App\Models\Form_section;
 use App\Models\Program;
 use App\Models\Round;
+use App\Models\RoundUsergroup;
 use App\Models\Sample;
 use App\Models\Schema;
 use App\Models\Test;
 use App\Models\User;
+use App\Models\UserGroup;
 use Illuminate\Support\Str;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -37,7 +39,8 @@ class DatabaseSeeder extends Seeder
 
         $program = array(
             array(
-                'uuid' =>  Str::uuid()->toString(), 'name' => 'COVID Proficiency Testing',
+                'uuid' =>  'prog1',
+                'name' => 'COVID Proficiency Testing',
                 'description' => 'SARS-CoV-2 Proficiency Testing', 'meta' => '{}',
                 'created_at' => new \dateTime, 'updated_at' => new \dateTime
             ),
@@ -49,7 +52,7 @@ class DatabaseSeeder extends Seeder
         $form_field = array(
             array(
                 'uuid' =>  Str::uuid()->toString(),
-                'form_section' =>  Str::uuid()->toString(),
+                'form_section' =>  'sec1',
                 'name' => 'Test name',
                 'description' => 'Test field',
                 'type' => 'text',
@@ -60,7 +63,7 @@ class DatabaseSeeder extends Seeder
             ),
             array(
                 'uuid' =>  Str::uuid()->toString(),
-                'form_section' =>  Str::uuid()->toString(),
+                'form_section' =>  'sec1',
                 'name' => 'Test name',
                 'description' => 'Test field',
                 'type' => 'password',
@@ -77,8 +80,8 @@ class DatabaseSeeder extends Seeder
 
         $form_section = array(
             array(
-                'uuid' =>  Str::uuid()->toString(),
-                'form' =>  Str::uuid()->toString(),
+                'uuid' =>  'sec1',
+                'form' =>  'form1',
                 'name' => 'Section 1: General Information',
                 'description' => 'Section 1: General Information',
                 'actions' => '',
@@ -94,8 +97,10 @@ class DatabaseSeeder extends Seeder
 
         $round = array(
             array(
-                'uuid' =>  Str::uuid()->toString(),
-                'program' =>  Str::uuid()->toString(),
+                'uuid' =>  'round1',
+                'program' =>  'prog1',
+                'schema'=>'schema1',
+                'form'=> 'form1',
                 'user_group' =>  Str::uuid()->toString(),
                 'name' => 'SARS-CoV-2-PT-RA-Aug22-Primary-Entry-Form',
                 'description' => 'Section 1: testing_instructions22-Primary-Entry-Form',
@@ -110,11 +115,36 @@ class DatabaseSeeder extends Seeder
         Round::query()->truncate();
         $roundObj->insert($round);
 
+        $RoundUsergroup = array(
+            array(
+                'uuid' =>   Str::uuid()->toString(),
+                'round' =>  'round1',
+                'user_group' =>  'userGroup1',
+                'start_date' => new \dateTime,
+                'end_date' => new \dateTime
+            ),
+        );
+        $roundUsergroupObj = new RoundUsergroup();
+        RoundUsergroup::query()->truncate();
+        $roundUsergroupObj->insert($RoundUsergroup);
+
+
+        $usergroup = array(
+            array(
+                'uuid' =>   'userGroup1',
+                'name' =>  'Group one',
+                'start_date' => new \dateTime,
+                'end_date' => new \dateTime
+            ),
+        );
+        $usergroupObj = new Usergroup();
+        UserGroup::query()->truncate();
+        $usergroupObj->insert($usergroup);
+
 
         $schema = array(
             array(
-                'uuid' =>  Str::uuid()->toString(),
-                'sample' =>  010,
+                'uuid' =>  'schema1',
                 'name' => 'SARS-CoV-2-PT-RA-Aug22-Primary-Entry-Form',
                 'description' => 'Section 1: General Information',
                 'meta' => '{}',
@@ -130,9 +160,10 @@ class DatabaseSeeder extends Seeder
 
         $sample = array(
             array(
-                'uuid' =>  Str::uuid()->toString(),
-                'name' => 'S1',
-                'round' => '10',
+                'uuid' =>  'sample1',
+                'name' => 'schema name',
+                'schema'=> 'schema1',
+                'round' => 'round1',
                 'meta' => '{
                     "created": "2020-08-22T11:00:00.000Z",
                     "modified": "2020-08-22T11:00:00.000Z",
@@ -153,6 +184,7 @@ class DatabaseSeeder extends Seeder
                 'round' =>  010,
                 'name' => 'HPV 16',
                 'target_type' => 'dropdown',
+                'sample'=>'sample1',
                 'meta' => '{}',
                 'created_at' => new \dateTime,
                 'updated_at' => new \dateTime,
@@ -164,7 +196,11 @@ class DatabaseSeeder extends Seeder
 
 
         $user = array(
-            array('name' => 'test', 'email' => 'test@gmail.com', 'password' => '$2y$10$wCyQ7j2mwl.NGD3brp1RSuCo3nIv9b1pDO4Cb8v0xjmfBshm93bGm', 'created_at' => new \dateTime, 'updated_at' => new \dateTime),
+            array(
+                'name' => 'test', 'email' => 'test@gmail.com',
+                'group' => 'userGroup1',
+                'password' => '$2y$10$wCyQ7j2mwl.NGD3brp1RSuCo3nIv9b1pDO4Cb8v0xjmfBshm93bGm', 'created_at' => new \dateTime, 'updated_at' => new \dateTime
+            ),
 
         );
         $userObj = new User();
@@ -173,7 +209,7 @@ class DatabaseSeeder extends Seeder
 
         $form = array(
             array(
-                'uuid' =>  Str::uuid()->toString(),
+                'uuid' =>  'form1',
                 'description' =>  "for covid test",
                 'name' => 'HPV 16',
                 'target_type' => 'dropdown',
