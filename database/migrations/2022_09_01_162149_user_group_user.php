@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('user_group_user', function (Blueprint $table) {
+        Schema::create('user_group_users', function (Blueprint $table) {
             $table->uuid('uuid');
             $table->uuid('user');
             $table->uuid('user_group');
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_group_user');
+        Schema::dropIfExists('user_group_users');
     }
 };

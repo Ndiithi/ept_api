@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('round', function (Blueprint $table) {
+        Schema::create('rounds', function (Blueprint $table) {
             $table->uuid('uuid');
             $table->uuid('program');
             $table->uuid('user_group');
@@ -38,6 +38,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('round');
+        Schema::dropIfExists('rounds');
     }
 };

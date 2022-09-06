@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('round_usergroup', function (Blueprint $table) {
+        Schema::create('round_usergroups', function (Blueprint $table) {
             $table->uuid('uuid');
             $table->uuid('round');
             $table->uuid('user_group');
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('round_usergroup');
+        Schema::dropIfExists('round_usergroups');
     }
 };

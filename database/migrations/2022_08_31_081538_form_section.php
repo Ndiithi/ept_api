@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
 
-        Schema::create('form_section', function (Blueprint $table) {
+        Schema::create('form_sections', function (Blueprint $table) {
             $table->uuid('uuid');
             $table->uuid('form');
             $table->string('name');
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('form_section');
+        Schema::dropIfExists('form_sections');
     }
 };

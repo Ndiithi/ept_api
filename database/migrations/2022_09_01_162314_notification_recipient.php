@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('notification_recipient', function (Blueprint $table) {
+        Schema::create('notification_recipients', function (Blueprint $table) {
             $table->uuid('uuid');
             $table->uuid('notification');
             $table->string('recipient');
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('notification_recipient');
+        Schema::dropIfExists('notification_recipients');
     }
 };

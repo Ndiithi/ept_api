@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('dictionary', function (Blueprint $table) {
+        Schema::create('dictionaries', function (Blueprint $table) {
             $table->uuid('uuid');
             $table->string('description');
             $table->string('name');
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('dictionary');
+        Schema::dropIfExists('dictionaries');
     }
 };

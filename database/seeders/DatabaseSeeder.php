@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-namespace App\Traits;
+//namespace App\Traits;
 
 use App\Models\Form;
 use App\Models\Form_field;
