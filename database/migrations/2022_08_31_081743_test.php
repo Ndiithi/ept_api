@@ -16,11 +16,13 @@ return new class extends Migration
         Schema::create('tests', function (Blueprint $table) {
             $table->uuid('uuid');
             $table->uuid('round');
+            $table->uuid('schema');
             $table->string('name');
             $table->string('description');
             $table->json('meta');
-            $table->timestamps();
             $table->string('target_type');
+            $table->timestamps();
+            
         });
     }
     

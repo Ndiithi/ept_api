@@ -9,6 +9,7 @@ class Schema extends Model
 {
     use HasFactory;
 
+    protected $table = 'schemaas';
      /**
      * The attributes that are mass assignable.
      *

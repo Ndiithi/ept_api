@@ -16,6 +16,6 @@ class UserProgram extends Model
      * @var array
      */
     protected $fillable = [
-        'user', 'name', 'program', 'created_at', 'updated_at'
+        'uuid', 'user', 'name', 'program', 'created_at', 'updated_at'
     ];
 }

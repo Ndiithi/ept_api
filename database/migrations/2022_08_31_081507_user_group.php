@@ -15,10 +15,8 @@ return new class extends Migration
     {
         Schema::create('user_groups', function (Blueprint $table) {
             $table->uuid('uuid');
-            $table->uuid('user');
             $table->string('name');
             $table->string('description');
-            $table->json('meta');
             $table->timestamps();
         });
     }

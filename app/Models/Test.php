@@ -15,6 +15,6 @@ class Test extends Model
      * @var array
      */
     protected $fillable = [
-        'uuid', 'round', 'name', 'target_type', 'sample', 'meta', 'created_at', 'updated_at'
+        'uuid', 'round', 'name', 'target_type', 'description','schema', 'meta', 'created_at', 'updated_at'
     ];
 }

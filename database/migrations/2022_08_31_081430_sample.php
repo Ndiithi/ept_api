@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('samples', function (Blueprint $table) {
             $table->uuid('uuid');
             $table->uuid('round');
+            $table->uuid('schema');
             $table->string('name');
             $table->string('description');
             $table->string('expected_outcome');

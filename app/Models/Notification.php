@@ -15,6 +15,6 @@ class Notification extends Model
      * @var array
      */
     protected $fillable = [
-        'uuid', 'message', 'mode', 'category', 'meta', 'created_at', 'updated_at'
+        'uuid', 'message', 'mode', 'category','description', 'meta', 'created_at', 'updated_at'
     ];
 }

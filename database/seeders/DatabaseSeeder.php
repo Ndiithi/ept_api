@@ -44,7 +44,7 @@ class DatabaseSeeder extends Seeder
             array(
                 'uuid' =>  'prog1',
                 'name' => 'COVID Proficiency Testing',
-                'description' => 'SARS-CoV-2 Proficiency Testing', 'meta' => '{}',
+                'description' => 'SARS-CoV-2 Proficiency Testing', 'meta' => '{"": ""}',
                 'created_at' => new \dateTime, 'updated_at' => new \dateTime
             ),
         );
@@ -59,8 +59,8 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Test name',
                 'description' => 'Test field',
                 'type' => 'text',
-                'actions' => '',
-                'meta' => '{}',
+                'actions' => '{"": ""}',
+                'meta' => '{"": ""}',
                 'created_at' => new \dateTime,
                 'updated_at' => new \dateTime
             ),
@@ -70,8 +70,8 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Test name',
                 'description' => 'Test field',
                 'type' => 'password',
-                'actions' => '',
-                'meta' => '{}',
+                'actions' => '{"": ""}',
+                'meta' => '{"": ""}',
                 'created_at' => new \dateTime,
                 'updated_at' => new \dateTime
             ),
@@ -87,8 +87,8 @@ class DatabaseSeeder extends Seeder
                 'form' =>  'form1',
                 'name' => 'Section 1: General Information',
                 'description' => 'Section 1: General Information',
-                'actions' => '',
-                'meta' => '{}',
+                'actions' => '{"": ""}',
+                'meta' => '{"": ""}',
                 'created_at' => new \dateTime,
                 'updated_at' => new \dateTime
             ),
@@ -105,13 +105,15 @@ class DatabaseSeeder extends Seeder
                 'schema' => 'schema1',
                 'form' => 'form1',
                 'user_group' =>  Str::uuid()->toString(),
-                'name' => 'SARS-CoV-2-PT-RA-Aug22-Primary-Entry-Form',
+                'name' => "SARS-CoV-2-PT-RA-Aug22-Primary-Entry-Form",
                 'description' => 'Section 1: testing_instructions22-Primary-Entry-Form',
-                'meta' => '{}',
+                'meta' => '{"": ""}',
                 'active' => true,
                 'testing_instructions' => "test instruct",
                 'start_date' => new \dateTime,
-                'end_date' => new \dateTime
+                'end_date' => new \dateTime,
+                'created_at' => new \dateTime,
+                'updated_at' => new \dateTime
             ),
         );
         $roundObj = new Round();
@@ -122,10 +124,10 @@ class DatabaseSeeder extends Seeder
 
             array(
                 'uuid' =>   Str::uuid()->toString(),
-                'user' =>  'round1',
+                'round' =>  'round1',
                 'user_group' =>  'userGroup1',
-                'start_date' => new \dateTime,
-                'end_date' => new \dateTime
+                'created_at' => new \dateTime,
+                'updated_at' => new \dateTime
             ),
         );
         $roundUsergroupObj = new RoundUsergroup();
@@ -139,8 +141,8 @@ class DatabaseSeeder extends Seeder
                 'uuid' =>   Str::uuid()->toString(),
                 'user' =>  1,
                 'user_group' =>  'userGroup1',
-                'start_date' => new \dateTime,
-                'end_date' => new \dateTime
+                'created_at' => new \dateTime,
+                'updated_at' => new \dateTime
             ),
         );
         $usergroupUserObj = new UserGroupUser();
@@ -152,8 +154,9 @@ class DatabaseSeeder extends Seeder
             array(
                 'uuid' =>   'userGroup1',
                 'name' =>  'Group one',
-                'start_date' => new \dateTime,
-                'end_date' => new \dateTime
+                'description' => 'description',
+                'created_at' => new \dateTime,
+                'updated_at' => new \dateTime
             ),
         );
         $usergroupObj = new Usergroup();
@@ -166,7 +169,7 @@ class DatabaseSeeder extends Seeder
                 'uuid' =>  'schema1',
                 'name' => 'SARS-CoV-2-PT-RA-Aug22-Primary-Entry-Form',
                 'description' => 'Section 1: General Information',
-                'meta' => '{}',
+                'meta' => '{"": ""}',
                 'created_at' => new \dateTime,
                 'updated_at' => new \dateTime,
                 'scoringCriteria' => 'consensus'
@@ -183,10 +186,15 @@ class DatabaseSeeder extends Seeder
                 'name' => 'schema name',
                 'schema' => 'schema1',
                 'round' => 'round1',
+                'description' => 'description',
+                'expected_outcome' => 'expected_outcome',
+                'expected_outcome_notes' => 'expected_outcome_notes',
+                'expected_interpretation' => 'expected_interpretation',
+                'expected_interpretation_notes' => 'expected_interpretation_notes',
                 'meta' => '{
                     "created": "2020-08-22T11:00:00.000Z",
                     "modified": "2020-08-22T11:00:00.000Z",
-                    "scoringCriteria": "z-score" // null, consensus, z-score, expert opinion
+                    "scoringCriteria": "z-score"
                 }',
                 'created_at' => new \dateTime,
                 'updated_at' => new \dateTime
@@ -200,11 +208,12 @@ class DatabaseSeeder extends Seeder
         $test = array(
             array(
                 'uuid' =>  Str::uuid()->toString(),
-                'round' =>  010,
+                'round' =>  'round1',
                 'name' => 'HPV 16',
                 'target_type' => 'dropdown',
-                'sample' => 'sample1',
-                'meta' => '{}',
+                'description'=>'description',
+                'schema' => 'schema1',
+                'meta' => '{"": ""}',
                 'created_at' => new \dateTime,
                 'updated_at' => new \dateTime,
             ),
@@ -216,8 +225,11 @@ class DatabaseSeeder extends Seeder
 
         $user = array(
             array(
-                'id' => 1, 'name' => 'test', 'email' => 'test@gmail.com',
-                'password' => '$2y$10$wCyQ7j2mwl.NGD3brp1RSuCo3nIv9b1pDO4Cb8v0xjmfBshm93bGm', 'created_at' => new \dateTime, 'updated_at' => new \dateTime
+                'uuid' =>  Str::uuid()->toString(),'id' => 1, 'name' => 'test', 'email' => 'test@gmail.com',
+                'password' => '$2y$10$wCyQ7j2mwl.NGD3brp1RSuCo3nIv9b1pDO4Cb8v0xjmfBshm93bGm', 
+                'role'=>1,
+                'meta'=>'{"":""}',
+                'created_at' => new \dateTime, 'updated_at' => new \dateTime
             ),
 
         );
@@ -228,6 +240,7 @@ class DatabaseSeeder extends Seeder
 
         $userProgram = array(
             array(
+                'uuid' =>  Str::uuid()->toString(),
                 'user' => 'user1', 'program' => 'prog1',
                 'created_at' => new \dateTime, 'updated_at' => new \dateTime
             ),
@@ -244,7 +257,9 @@ class DatabaseSeeder extends Seeder
                 'description' =>  "for covid test",
                 'name' => 'HPV 16',
                 'target_type' => 'dropdown',
-                'meta' => '{}',
+                'meta' => '{"": ""}',
+                'actions'=>'{"": ""}',
+                'content'=>'{"": ""}',
                 'created_at' => new \dateTime,
                 'updated_at' => new \dateTime,
             ),
@@ -259,8 +274,9 @@ class DatabaseSeeder extends Seeder
                 'uuid' =>  Str::uuid()->toString(),
                 'message' =>  "Test message",
                 'mode' => '[mobile, email]',
+                'description'=>'description',
                 'category' => 'cycle',
-                'meta' => '{}',
+                'meta' => '{"": ""}',
                 'created_at' => new \dateTime,
                 'updated_at' => new \dateTime,
             ),

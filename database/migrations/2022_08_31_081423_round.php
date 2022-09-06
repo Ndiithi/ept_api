@@ -18,16 +18,15 @@ return new class extends Migration
             $table->uuid('program');
             $table->uuid('user_group');
             $table->string('description');
-            $table->json('data');
             $table->date('start_date');
             $table->date('end_date');
-            $table ->uuid('scheme');
-            $table ->uuid('form');
-            $table -> boolean('active');
+            $table->uuid('schema');
+            $table->uuid('form');
+            $table->string('name');
+            $table->boolean('active');
             $table->string('testing_instructions');
             $table->json('meta');
             $table->timestamps();
-
         });
     }
 

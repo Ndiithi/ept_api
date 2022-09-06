@@ -15,6 +15,6 @@ class UserGroup extends Model
      * @var array
      */
     protected $fillable = [
-        'uuid', 'name', 'start_date', 'end_date', 'created_at', 'updated_at'
+        'uuid', 'name', 'description', 'created_at', 'updated_at'
     ];
 }

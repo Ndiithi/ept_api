@@ -15,8 +15,6 @@ return new class extends Migration
     {
         Schema::create('schemaas', function (Blueprint $table) {
             $table->uuid('uuid');
-            $table->uuid('sample');
-            $table->uuid('test');
             $table->string('name');
             $table->string('description');
             $table->json('meta');

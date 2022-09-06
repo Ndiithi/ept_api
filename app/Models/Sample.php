@@ -15,7 +15,7 @@ class Sample extends Model
      * @var array
      */
     protected $fillable = [
-        'uuid', 'name', 'schema', 'round', 'meta', 'created_at', 'updated_at'
+        'uuid', 'name', 'schema', 'description', 'round', 'meta', 'created_at', 'updated_at',
+        'expected_outcome', 'expected_outcome_notes', 'expected_interpretation', 'expected_interpretation_notes'
     ];
-
 }
