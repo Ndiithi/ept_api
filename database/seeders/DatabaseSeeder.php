@@ -16,6 +16,8 @@ use App\Models\Schema;
 use App\Models\Test;
 use App\Models\User;
 use App\Models\UserGroup;
+use App\Models\UserGroupUser;
+use App\Models\UserProgram;
 use Illuminate\Support\Str;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -100,8 +102,8 @@ class DatabaseSeeder extends Seeder
             array(
                 'uuid' =>  'round1',
                 'program' =>  'prog1',
-                'schema'=>'schema1',
-                'form'=> 'form1',
+                'schema' => 'schema1',
+                'form' => 'form1',
                 'user_group' =>  Str::uuid()->toString(),
                 'name' => 'SARS-CoV-2-PT-RA-Aug22-Primary-Entry-Form',
                 'description' => 'Section 1: testing_instructions22-Primary-Entry-Form',
@@ -117,9 +119,10 @@ class DatabaseSeeder extends Seeder
         $roundObj->insert($round);
 
         $RoundUsergroup = array(
+
             array(
                 'uuid' =>   Str::uuid()->toString(),
-                'round' =>  'round1',
+                'user' =>  'round1',
                 'user_group' =>  'userGroup1',
                 'start_date' => new \dateTime,
                 'end_date' => new \dateTime
@@ -128,6 +131,21 @@ class DatabaseSeeder extends Seeder
         $roundUsergroupObj = new RoundUsergroup();
         RoundUsergroup::query()->truncate();
         $roundUsergroupObj->insert($RoundUsergroup);
+
+
+        $usergroupUser = array(
+
+            array(
+                'uuid' =>   Str::uuid()->toString(),
+                'user' =>  1,
+                'user_group' =>  'userGroup1',
+                'start_date' => new \dateTime,
+                'end_date' => new \dateTime
+            ),
+        );
+        $usergroupUserObj = new UserGroupUser();
+        UserGroupUser::query()->truncate();
+        $usergroupUserObj->insert($usergroupUser);
 
 
         $usergroup = array(
@@ -163,7 +181,7 @@ class DatabaseSeeder extends Seeder
             array(
                 'uuid' =>  'sample1',
                 'name' => 'schema name',
-                'schema'=> 'schema1',
+                'schema' => 'schema1',
                 'round' => 'round1',
                 'meta' => '{
                     "created": "2020-08-22T11:00:00.000Z",
@@ -185,7 +203,7 @@ class DatabaseSeeder extends Seeder
                 'round' =>  010,
                 'name' => 'HPV 16',
                 'target_type' => 'dropdown',
-                'sample'=>'sample1',
+                'sample' => 'sample1',
                 'meta' => '{}',
                 'created_at' => new \dateTime,
                 'updated_at' => new \dateTime,
@@ -198,7 +216,7 @@ class DatabaseSeeder extends Seeder
 
         $user = array(
             array(
-                'name' => 'test', 'email' => 'test@gmail.com',
+                'id' => 1, 'name' => 'test', 'email' => 'test@gmail.com',
                 'password' => '$2y$10$wCyQ7j2mwl.NGD3brp1RSuCo3nIv9b1pDO4Cb8v0xjmfBshm93bGm', 'created_at' => new \dateTime, 'updated_at' => new \dateTime
             ),
 
@@ -206,6 +224,19 @@ class DatabaseSeeder extends Seeder
         $userObj = new User();
         User::query()->truncate();
         $userObj->insert($user);
+
+
+        $userProgram = array(
+            array(
+                'user' => 'user1', 'program' => 'prog1',
+                'created_at' => new \dateTime, 'updated_at' => new \dateTime
+            ),
+
+        );
+        $userProgramObj = new UserProgram();
+        UserProgram::query()->truncate();
+        $userProgramObj->insert($userProgram);
+
 
         $form = array(
             array(

@@ -8,4 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class RoundUsergroup extends Model
 {
     use HasFactory;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'uuid', 'user_group', 'round', 'start_date', 'end_date', 'created_at', 'updated_at'
+    ];
+
+
 }
