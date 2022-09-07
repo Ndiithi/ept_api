@@ -15,7 +15,7 @@ class Form_section extends Model
      * @var array
      */
     protected $fillable = [
-        'uuid','form','name', 'description', 'name','meta','actions','created_at', 'updated_at'
+        'uuid','form','name', 'description', 'name','meta','actions','created_at', 'updated_at','next','next_condition','disabled'
     ];
 
 }

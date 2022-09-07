@@ -21,6 +21,9 @@ return new class extends Migration
             $table->string('description');
             $table->json('meta');
             $table->json('actions');
+            $table->string('next');
+            $table->boolean('next_condition');
+            $table->boolean('disabled');
             $table->timestamps();
         });
     }

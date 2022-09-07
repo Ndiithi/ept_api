@@ -89,6 +89,11 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Section 1: General Information',
                 'actions' => '{"": ""}',
                 'meta' => '{"": ""}',
+
+                "next"=> "SARS-CoV-2-PT-RA-Aug22-Primary-Entry-Form-Section-2",
+                "next_condition"=> true,
+                "disabled"=> false,
+
                 'created_at' => new \dateTime,
                 'updated_at' => new \dateTime
             ),
