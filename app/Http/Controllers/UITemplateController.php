@@ -4,14 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class UITemplateController extends Controller
 {
     public function getUITemplate()
     {
-
-
-        $formTemplate = DB::select("select 
+        $formTemplates = DB::select("select 
         p.name program_name,p.description program_description,p.meta program_meta,p.uuid program_code,
         r.name round_name,r.description round_description, r.start_date round_startdate,r.end_date round_enddate, r.form round_form, r.`schema` round_schema,r.active round_active,r.meta round_meta,
         sch.name schema_name, sch.description shema_description, sch.scoringCriteria schema_scoringcriteria, 
@@ -29,5 +28,11 @@ class UITemplateController extends Controller
         INNER JOIN tests test_round on test_round.round =r.uuid 
         INNER JOIN tests test_schema on test_schema.`schema`  =sch.uuid 
         ");
+
+
+        foreach ($formTemplates  as $formTemplate) {
+            // Log::info(print_r($formTemplate, true));
+            return $formTemplate;
+        }
     }
 }
