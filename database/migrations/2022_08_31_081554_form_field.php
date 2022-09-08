@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('form_field', function (Blueprint $table) {
+        Schema::create('form_fields', function (Blueprint $table) {
             $table->uuid('uuid');
             $table->uuid('form_section');
             $table->string('name');
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('form_field');
+        Schema::dropIfExists('form_fields');
     }
 };

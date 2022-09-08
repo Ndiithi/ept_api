@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class User extends Model
+class Round extends Model
 {
     use HasFactory;
 
@@ -15,6 +15,8 @@ class User extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'description', 'email', 'meta','password', 'created_at', 'updated_at'
+        'uuid', 'program', 'schema', 'form', 'user_group', 'name',
+        'description', 'meta', 'active', 'testing_instructions', 'start_date', 'end_date',
+        'created_at', 'updated_at'
     ];
 }

@@ -13,12 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('user_group', function (Blueprint $table) {
+        Schema::create('user_groups', function (Blueprint $table) {
             $table->uuid('uuid');
-            $table->uuid('user');
             $table->string('name');
             $table->string('description');
-            $table->json('meta');
             $table->timestamps();
         });
     }
@@ -30,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_group');
+        Schema::dropIfExists('user_groups');
     }
 };

@@ -13,16 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('roles', function (Blueprint $table) {
+        Schema::create('round_usergroups', function (Blueprint $table) {
             $table->uuid('uuid');
-            $table->uuid('permissions');
-            $table->string('name');
-            $table->string('description');
-            $table->json('meta');
+            $table->uuid('round');
+            $table->uuid('user_group');
             $table->timestamps();
         });
     }
- 
+
     /**
      * Reverse the migrations.
      *
@@ -30,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('roles');
+        Schema::dropIfExists('round_usergroups');
     }
 };

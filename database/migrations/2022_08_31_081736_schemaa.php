@@ -13,14 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('schemaa', function (Blueprint $table) {
+        Schema::create('schemaas', function (Blueprint $table) {
             $table->uuid('uuid');
-            $table->uuid('sample');
-            $table->uuid('test');
             $table->string('name');
             $table->string('description');
             $table->json('meta');
             $table->timestamps();
+            // $table->integer("sample");
+            $table->string('scoringCriteria');
+            
         });
     }
 
@@ -31,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('schemaa');
+        Schema::dropIfExists('schemaas');
     }
 };

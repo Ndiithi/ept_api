@@ -5,16 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class User extends Model
+class Form_field extends Model
 {
     use HasFactory;
 
-    /**
+     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'description', 'email', 'meta','password', 'created_at', 'updated_at'
+        'form_section','name', 'description', 'name','meta','type','actions','created_at', 'updated_at'
     ];
+
 }

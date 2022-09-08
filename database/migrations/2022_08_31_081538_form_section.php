@@ -14,13 +14,16 @@ return new class extends Migration
     public function up()
     {
 
-        Schema::create('form_section', function (Blueprint $table) {
+        Schema::create('form_sections', function (Blueprint $table) {
             $table->uuid('uuid');
             $table->uuid('form');
             $table->string('name');
             $table->string('description');
             $table->json('meta');
             $table->json('actions');
+            $table->string('next');
+            $table->boolean('next_condition');
+            $table->boolean('disabled');
             $table->timestamps();
         });
     }
@@ -32,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('form_section');
+        Schema::dropIfExists('form_sections');
     }
 };

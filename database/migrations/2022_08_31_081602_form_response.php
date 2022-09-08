@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('form_response', function (Blueprint $table) {
+        Schema::create('form_responses', function (Blueprint $table) {
             $table->uuid('uuid');
             $table->uuid('user');
             $table->uuid('form');
@@ -33,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('form_response');
+        Schema::dropIfExists('form_responses');
     }
 };
