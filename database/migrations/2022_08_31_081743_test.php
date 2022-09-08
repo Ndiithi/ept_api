@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('description');
             $table->json('meta');
+            $table->string('overall_result');
+            $table->string('target_code');
             $table->string('target_type');
             $table->timestamps();
             

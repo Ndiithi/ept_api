@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 //namespace App\Traits;
 
+use App\Models\Dictionary;
 use App\Models\Form;
 use App\Models\Form_field;
 use App\Models\Form_section;
@@ -90,9 +91,9 @@ class DatabaseSeeder extends Seeder
                 'actions' => '{"": ""}',
                 'meta' => '{"": ""}',
 
-                "next"=> "SARS-CoV-2-PT-RA-Aug22-Primary-Entry-Form-Section-2",
-                "next_condition"=> true,
-                "disabled"=> false,
+                "next" => "SARS-CoV-2-PT-RA-Aug22-Primary-Entry-Form-Section-2",
+                "next_condition" => true,
+                "disabled" => false,
 
                 'created_at' => new \dateTime,
                 'updated_at' => new \dateTime
@@ -216,7 +217,9 @@ class DatabaseSeeder extends Seeder
                 'round' =>  'round1',
                 'name' => 'HPV 16',
                 'target_type' => 'dropdown',
-                'description'=>'description',
+                'target_code' => 'oncology_HPV_16',
+                'overall_result'=>'positive',
+                'description' => 'description',
                 'schema' => 'schema1',
                 'meta' => '{"": ""}',
                 'created_at' => new \dateTime,
@@ -230,10 +233,10 @@ class DatabaseSeeder extends Seeder
 
         $user = array(
             array(
-                'uuid' =>  Str::uuid()->toString(),'id' => 1, 'name' => 'test', 'email' => 'test@gmail.com',
-                'password' => '$2y$10$wCyQ7j2mwl.NGD3brp1RSuCo3nIv9b1pDO4Cb8v0xjmfBshm93bGm', 
-                'role'=>1,
-                'meta'=>'{"":""}',
+                'uuid' =>  Str::uuid()->toString(), 'id' => 1, 'name' => 'test', 'email' => 'test@gmail.com',
+                'password' => '$2y$10$wCyQ7j2mwl.NGD3brp1RSuCo3nIv9b1pDO4Cb8v0xjmfBshm93bGm',
+                'role' => 1,
+                'meta' => '{"":""}',
                 'created_at' => new \dateTime, 'updated_at' => new \dateTime
             ),
 
@@ -263,8 +266,8 @@ class DatabaseSeeder extends Seeder
                 'name' => 'HPV 16',
                 'target_type' => 'dropdown',
                 'meta' => '{"": ""}',
-                'actions'=>'{"": ""}',
-                'content'=>'{"": ""}',
+                'actions' => '{"": ""}',
+                'content' => '{"": ""}',
                 'created_at' => new \dateTime,
                 'updated_at' => new \dateTime,
             ),
@@ -279,7 +282,7 @@ class DatabaseSeeder extends Seeder
                 'uuid' =>  Str::uuid()->toString(),
                 'message' =>  "Test message",
                 'mode' => '[mobile, email]',
-                'description'=>'description',
+                'description' => 'description',
                 'category' => 'cycle',
                 'meta' => '{"": ""}',
                 'created_at' => new \dateTime,
@@ -289,5 +292,36 @@ class DatabaseSeeder extends Seeder
         $notificationObj = new Notification();
         Notification::query()->truncate();
         $notificationObj->insert($notification);
+
+
+        $dictionary = array(
+            array(
+                'uuid' =>  Str::uuid()->toString(),
+                'description' => 'description',
+                'name' => 'oncology_HPV_16',
+                'meta' => '[
+                    {
+                        "target_id": "1",
+                        "outcome": "High",
+                        "value": true
+                    },
+                    {
+                        "target_id": "2",
+                        "outcome": "Medium",
+                        "value": false
+                    },
+                    {
+                        "target_id": "3",
+                        "outcome": "Low",
+                        "value": false
+                    }
+                ]',
+                'created_at' => new \dateTime,
+                'updated_at' => new \dateTime,
+            ),
+        );
+        $dictionaryObj = new Dictionary();
+        Dictionary::query()->truncate();
+        $dictionaryObj->insert($dictionary);
     }
 }

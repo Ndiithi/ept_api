@@ -13,11 +13,13 @@ class UITemplateController extends Controller
         $rowSets = DB::select("select 
         p.name program_name,p.description program_description,p.meta program_meta,p.uuid program_code,
         r.name round_name,r.description round_description, r.start_date round_startdate,r.end_date round_enddate, r.form round_form, r.`schema` round_schema,r.active round_active,r.meta round_meta,
+        sch.name schema_name, sch.description shema_description, sch.scoringCriteria schema_scoringcriteria, sch.meta schema_meta,
         f.name form_name, f.description form_description, f.target_type form_targettype, f.uuid form_code, f.meta form_meta,
-        sch.name schema_name, sch.description shema_description, sch.scoringCriteria schema_scoringcriteria, 
-        test_schema.uuid test_id, test_schema.name test_name, test_schema.target_type test_targettype,
+        test_schema.uuid test_id, test_schema.name test_name, test_schema.target_type test_targettype,test_schema.overall_result test_overall_result,
         fs.name section_name, fs.uuid section_code, fs.description section_description, fs.next section_next, fs.next_condition section_nextcondition, fs.disabled section_disabled,fs.meta section_meta, 
-        ff.name field_name, ff.uuid field_code, ff.description field_description, ff.type field_type, ff.meta field_meta, ff.actions field_actions
+        ff.name field_name, ff.uuid field_code, ff.description field_description, ff.type field_type,  ff.meta field_meta, ff.actions field_actions, 
+        dic.name dictionary_name, dic.meta dictionary_meta,
+        sample_schema.uuid sample_code,sample_schema.name sample_name, sample_schema.description sample_description, sample_schema.expected_outcome sample_expected_outcome, sample_schema.expected_outcome_notes sample_expected_outcome_notes, sample_schema.expected_interpretation sample_expected_interpretation, sample_schema.expected_interpretation_notes sample_eexpected_interpretation_notes, sample_schema.meta sample_expected_meta 
         from  programs p
         inner join rounds r  on r.program=p.uuid 
         inner join schemaas sch on sch.uuid = r.`schema` 
@@ -28,6 +30,7 @@ class UITemplateController extends Controller
         INNER JOIN samples sample_schema on sample_schema.`schema`  =sch.uuid 
         INNER JOIN tests test_round on test_round.round =r.uuid 
         INNER JOIN tests test_schema on test_schema.`schema`  =sch.uuid 
+        inner JOIN dictionaries dic on dic.name = test_schema.target_code       
         ");
 
         $programmes = [];
@@ -40,6 +43,8 @@ class UITemplateController extends Controller
                     if (strcmp($program["code"], $rowSet->program_code) == 0) {
                         $programmes[$index]['forms'] = $this->addFormData($program['forms'], $rowSet);
                         $programmes[$index]['rounds'] = $this->addRound($program['rounds'], $rowSet);
+                        $programmes[$index]['schema'] = $this->addShema($program['schema'], $rowSet);
+
                         $programAdded = true;
                         break;
                     }
@@ -67,6 +72,9 @@ class UITemplateController extends Controller
                 ];
 
                 $program['forms'] = $this->addFormData($program['forms'], $rowSet);
+                $program['rounds'] = $this->addRound($program['rounds'], $rowSet);
+                $program['schema'] = $this->addShema($program['schema'], $rowSet);
+
                 $programmes[] = $program;
             }
             $programAdded = false;
@@ -98,7 +106,6 @@ class UITemplateController extends Controller
             "name" => $rowSet->form_name,
             "code" => $rowSet->form_code,
             "meta" => $rowSet->form_meta,
-            "target_type" => $rowSet->form_targettype,
             "description" => $rowSet->form_description,
             "sections" => []
         ];
@@ -202,5 +209,98 @@ class UITemplateController extends Controller
 
         array_push($roundsArr, $roundEtry);
         return $roundsArr;
+    }
+
+
+    private function addShema($schemaArr, $rowSet)
+    {
+
+        $shemaAdded = false;
+        if (!empty($schemaArr)) {
+
+            foreach ($schemaArr  as $index => $schema) {
+                if (strcmp($schema["name"], $rowSet->schema_name) == 0) {
+                    $schemaArr[$index]["samples"] = $this->addSample($schemaArr[$index]["samples"], $rowSet);
+                    $schemaArr[$index]["tests"] = $this->addTest($schemaArr[$index]["tests"], $rowSet);
+                    $shemaAdded = true;
+                    break;
+                }
+            }
+            if ($shemaAdded) {
+                return $schemaArr;
+            }
+        }
+        $shemaEntry = [
+
+            "name" => $rowSet->schema_name,
+            "scoringCriteria" => $rowSet->schema_scoringcriteria,
+            "description" => $rowSet->shema_description,
+            "samples" => [],
+            "tests" => [],
+            "metadata" => $rowSet->schema_meta,
+        ];
+
+        $shemaEntry["samples"] = $this->addSample($shemaEntry["samples"], $rowSet);
+        $shemaEntry["tests"] = $this->addTest($shemaEntry["tests"], $rowSet);
+        array_push($schemaArr,  $shemaEntry);
+        return $schemaArr;
+    }
+
+
+    private function addSample($samplesArr, $rowSet)
+    {
+        $sampleAdded = false;
+        if (!empty($samplesArr)) {
+            foreach ($samplesArr as $index => $sample) {
+                if (strcmp($sample["sample_id"], $rowSet->sample_code) == 0) {
+                    $sampleAdded = true;
+                    break;
+                }
+            }
+            if ($sampleAdded) {
+                return $samplesArr;
+            }
+        }
+
+        array_push(
+            $samplesArr,
+            [
+                "sample_id" => $rowSet->sample_code,
+                "sample_name" => $rowSet->sample_name,
+                "interpretation" => $rowSet->sample_expected_interpretation,
+                "meta" => $rowSet->sample_expected_meta,
+            ]
+        );
+        return $samplesArr;
+    }
+
+    private function addTest($testArr, $rowSet)
+    {
+        $testAdded = false;
+        if (!empty($testArr)) {
+            foreach ($testArr as $index => $test) {
+                if (strcmp($test["id"], $rowSet->test_id) == 0) {
+                    $testAdded = true;
+                    break;
+                }
+            }
+            if ($testAdded) {
+                return $testArr;
+            }
+        }
+
+        array_push(
+
+            $testArr,
+            [
+                "id" => $rowSet->test_id,
+                "name" => $rowSet->test_name,
+                "target_type" => $rowSet->test_targettype,
+                "targets" => $rowSet->dictionary_meta,
+                "overall_result" => $rowSet->test_overall_result,
+                "remarks" => ""
+            ]
+        );
+        return $testArr;
     }
 }
