@@ -25,6 +25,7 @@ return new class extends Migration
             $table->boolean('next_condition');
             $table->boolean('disabled');
             $table->timestamps();
+$table->softDeletes();
         });
     }
 

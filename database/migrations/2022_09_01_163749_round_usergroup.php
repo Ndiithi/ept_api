@@ -18,6 +18,7 @@ return new class extends Migration
             $table->uuid('round');
             $table->uuid('user_group');
             $table->timestamps();
+$table->softDeletes();
         });
     }
 

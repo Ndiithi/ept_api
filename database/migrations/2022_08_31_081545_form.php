@@ -22,6 +22,7 @@ return new class extends Migration
             $table->json('actions');
             $table->json('content');
             $table->timestamps();
+$table->softDeletes();
         });
     }
 
