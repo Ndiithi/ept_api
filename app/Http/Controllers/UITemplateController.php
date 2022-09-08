@@ -34,10 +34,12 @@ class UITemplateController extends Controller
         $programAdded = false;
         foreach ($rowSets  as $rowSet) {
 
+            //add programmes
             if (!empty($programmes)) {
                 foreach ($programmes  as $index => $program) {
                     if (strcmp($program["code"], $rowSet->program_code) == 0) {
                         $programmes[$index]['forms'] = $this->addFormData($program['forms'], $rowSet);
+                        $programmes[$index]['rounds'] = $this->addRound($program['rounds'], $rowSet);
                         $programAdded = true;
                         break;
                     }
@@ -165,5 +167,40 @@ class UITemplateController extends Controller
             ]
         );
         return $sectionObject;
+    }
+
+
+    //add rounds
+    private function addRound($roundsArr, $rowSet)
+    {
+
+        $roundAdded = false;
+        if (!empty($roundsArr)) {
+
+
+            foreach ($roundsArr  as $index => $round) {
+                if (strcmp($round["name"], $rowSet->round_name) == 0) {
+                    $roundAdded = true;
+                    break;
+                }
+            }
+            if ($roundAdded) {
+                return $roundsArr;
+            }
+        }
+        //case if form is not added to payload
+        $roundEtry = [
+            "name" => $rowSet->round_name,
+            "description" => $rowSet->round_description,
+            "start" => $rowSet->round_startdate,
+            "end" => $rowSet->round_enddate,
+            "form" => $rowSet->round_form,
+            "schema" => $rowSet->round_schema,
+            "active" => $rowSet->round_active,
+            "metadata" => $rowSet->round_meta
+        ];
+
+        array_push($roundsArr, $roundEtry);
+        return $roundsArr;
     }
 }
