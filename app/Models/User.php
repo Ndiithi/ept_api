@@ -15,6 +15,12 @@ class User extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'description', 'email', 'meta','password', 'created_at', 'updated_at'
+        'name', 'description', 'email', 'meta','password', 'created_at', 'updated_at', 'role_id'
     ];
+
+    // user permission check
+    public function hasPermission(Permission $permission)
+    {
+        return $this->role->permissions->contains($permission);
+    }
 }

@@ -15,15 +15,15 @@ return new class extends Migration
     {
         Schema::create('roles', function (Blueprint $table) {
             $table->uuid('uuid');
-            $table->uuid('permissions');
+            $table->json('permissions');
             $table->string('name');
             $table->string('description');
             $table->json('meta');
             $table->timestamps();
-$table->softDeletes();
+            $table->softDeletes();
         });
     }
- 
+
     /**
      * Reverse the migrations.
      *
