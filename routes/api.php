@@ -25,5 +25,5 @@ Route::get('/getUITemplates', [UITemplateController::class, 'getUITemplate'])->m
 
 Route::post('/auth/register', [AuthController::class, 'createUser']);
 Route::post('/auth/login', [AuthController::class, 'loginUser']);
-Route::post('/login', [AuthController::class, 'loginUser']);
+
 

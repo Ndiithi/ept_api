@@ -11,7 +11,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory;
 
     /**
      * The attributes that are mass assignable.
