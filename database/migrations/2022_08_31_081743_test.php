@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('target_code');
             $table->string('target_type');
             $table->timestamps();
+$table->softDeletes();
             
         });
     }

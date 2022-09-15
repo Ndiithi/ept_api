@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('expected_interpretation_notes');
             $table->json('meta');
             $table->timestamps();
+$table->softDeletes();
         });
     }
 

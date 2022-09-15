@@ -23,6 +23,7 @@ return new class extends Migration
             $table->json('meta');
             $table->json('value');
             $table->timestamps();
+$table->softDeletes();
         });
     }
 

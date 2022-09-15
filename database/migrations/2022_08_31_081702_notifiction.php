@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('mode');
             $table->json('meta');
             $table->timestamps();
+$table->softDeletes();
         });
     }
 

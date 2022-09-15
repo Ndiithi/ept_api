@@ -18,6 +18,7 @@ return new class extends Migration
             $table->uuid('notification');
             $table->string('recipient');
             $table->timestamps();
+$table->softDeletes();
         });
     }
 

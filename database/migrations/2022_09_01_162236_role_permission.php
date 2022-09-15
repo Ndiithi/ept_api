@@ -18,6 +18,7 @@ return new class extends Migration
             $table->uuid('role');
             $table->string('permission');
             $table->timestamps();
+$table->softDeletes();
         });
     }
 
