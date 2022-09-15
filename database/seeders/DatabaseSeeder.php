@@ -33,13 +33,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
-
+        $this->call([
+            AuthoritiesSeed::class,
+            Roles::class,
+            PermissionRolesMaps::class,
+        ]);
 
         $program = array(
             array(
@@ -218,7 +216,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'HPV 16',
                 'target_type' => 'dropdown',
                 'target_code' => 'oncology_HPV_16',
-                'overall_result'=>'positive',
+                'overall_result' => 'positive',
                 'description' => 'description',
                 'schema' => 'schema1',
                 'meta' => '{"": ""}',

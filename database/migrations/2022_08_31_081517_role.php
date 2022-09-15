@@ -15,10 +15,9 @@ return new class extends Migration
     {
         Schema::create('roles', function (Blueprint $table) {
             $table->uuid('uuid');
-            $table->uuid('permissions');
             $table->string('name');
-            $table->string('description');
-            $table->json('meta');
+            $table->string('description')->nullable();
+            $table->json('meta')->nullable();
             $table->timestamps();
 $table->softDeletes();
         });
