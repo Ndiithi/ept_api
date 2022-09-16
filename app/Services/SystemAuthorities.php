@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App\Models\User;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class SystemAuthorities
@@ -17,4 +19,5 @@ class SystemAuthorities
         'add_user' => 'add_user',
         'add_role' => 'add_role',
     ];
+
 }
