@@ -28,7 +28,7 @@ class AuthController extends Controller
                     'name' => 'required',
                     'email' => 'required|email|unique:users,email',
                     'password' => 'required',
-                    
+                    'role'=> 'required'
                 ]
             );
 
@@ -44,6 +44,7 @@ class AuthController extends Controller
                 'uuid'=> Str::uuid(),
                 'name' => $request->name,
                 'email' => $request->email,
+                'role'=> $request->role,
                 'password' => Hash::make($request->password),
             ]);
 
