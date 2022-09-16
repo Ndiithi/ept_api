@@ -34,9 +34,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
-            AuthoritiesSeed::class,
-            Roles::class,
-            PermissionRolesMaps::class,
+            UserRolePermission::class,
         ]);
 
         $program = array(
@@ -227,22 +225,6 @@ class DatabaseSeeder extends Seeder
         $testObj = new Test();
         Test::query()->truncate();
         $testObj->insert($test);
-
-
-        $user = array(
-            array(
-                'uuid' =>  Str::uuid()->toString(), 'id' => 1, 'name' => 'test', 'email' => 'test@gmail.com',
-                'password' => '$2y$10$wCyQ7j2mwl.NGD3brp1RSuCo3nIv9b1pDO4Cb8v0xjmfBshm93bGm',
-                'role' => 1,
-                'meta' => '{"":""}',
-                'created_at' => new \dateTime, 'updated_at' => new \dateTime
-            ),
-
-        );
-        $userObj = new User();
-        User::query()->truncate();
-        $userObj->insert($user);
-
 
         $userProgram = array(
             array(
