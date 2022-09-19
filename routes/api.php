@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\DictionaryController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UITemplateController;
 use Illuminate\Http\Request;
@@ -36,3 +37,8 @@ Route::put('/permission/create', [PermissionController::class, 'createPermission
 Route::get('/permission/get', [PermissionController::class, 'getPermissions'])->middleware('auth:sanctum');
 Route::delete('/permission/delete/{id}', [PermissionController::class, 'deletePermission'])->middleware('auth:sanctum');
 Route::post('/permission/update', [PermissionController::class, 'updatePermission'])->middleware('auth:sanctum');
+
+Route::put('/dictionary/create', [DictionaryController::class, 'createEntry'])->middleware('auth:sanctum');
+Route::get('/dictionary/get', [DictionaryController::class, 'getAll'])->middleware('auth:sanctum');
+Route::delete('/dictionary/delete/{id}', [DictionaryController::class, 'deleteItem'])->middleware('auth:sanctum');
+Route::post('/dictionary/update', [DictionaryController::class, 'updateItem'])->middleware('auth:sanctum');
