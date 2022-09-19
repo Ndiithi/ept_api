@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\DictionaryController;
+use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UITemplateController;
 use Illuminate\Http\Request;
@@ -42,3 +43,8 @@ Route::put('/dictionary/create', [DictionaryController::class, 'createEntry'])->
 Route::get('/dictionary/get', [DictionaryController::class, 'getAll'])->middleware('auth:sanctum');
 Route::delete('/dictionary/delete/{id}', [DictionaryController::class, 'deleteItem'])->middleware('auth:sanctum');
 Route::post('/dictionary/update', [DictionaryController::class, 'updateItem'])->middleware('auth:sanctum');
+
+Route::put('/program/create', [ProgramController::class, 'createEntry'])->middleware('auth:sanctum');
+Route::get('/program/get', [ProgramController::class, 'getPrograms'])->middleware('auth:sanctum');
+Route::delete('/program/delete/{id}', [ProgramController::class, 'deleteProgram'])->middleware('auth:sanctum');
+Route::post('/program/update', [ProgramController::class, 'updateProgram'])->middleware('auth:sanctum');
