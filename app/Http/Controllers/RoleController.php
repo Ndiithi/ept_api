@@ -93,11 +93,9 @@ class RoleController extends Controller
         }
         try {
             $role = Role::find($request->id);
-            $role = new Role([
-                'name' => $request->name,
-                'description' => $request->description,
-                'meta' => $request->meta,
-            ]);
+            $role->name -> $request->name;
+            $role->description -> $request->description;
+            $role->meta -> $request->meta;
             $role->save();
 
             DB::delete('delete from role_permissions where role=?)', [$request->id]);
