@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\DictionaryController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UITemplateController;
