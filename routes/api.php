@@ -29,4 +29,4 @@ Route::post('/auth/login', [AuthController::class, 'loginUser'])->name('login');
 
 // viewAny, view, create, update, delete, restore, and forceDelete
 Route::post('/role/update', [RoleController::class, 'updateRole'])->middleware('auth:sanctum');
-
+Route::get('/role/{id}', [RoleController::class, 'deleteRole'])->middleware('auth:sanctum');
