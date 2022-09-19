@@ -27,6 +27,12 @@ Route::get('/getUITemplates', [UITemplateController::class, 'getUITemplate'])->m
 Route::post('/auth/register', [AuthController::class, 'createUser'])->name('register');;
 Route::post('/auth/login', [AuthController::class, 'loginUser'])->name('login');
 
-// viewAny, view, create, update, delete, restore, and forceDelete
+Route::put('/role/create', [RoleController::class, 'createRole'])->middleware('auth:sanctum');
+Route::get('/role/get', [RoleController::class, 'getRoles'])->middleware('auth:sanctum');
+Route::delete('/role/delete/{id}', [RoleController::class, 'deleteRole'])->middleware('auth:sanctum');
 Route::post('/role/update', [RoleController::class, 'updateRole'])->middleware('auth:sanctum');
-Route::get('/role/{id}', [RoleController::class, 'deleteRole'])->middleware('auth:sanctum');
+
+Route::put('/permission/create', [PermissionController::class, 'createPermission'])->middleware('auth:sanctum');
+Route::get('/permission/get', [PermissionController::class, 'getPermissions'])->middleware('auth:sanctum');
+Route::delete('/permission/delete/{id}', [PermissionController::class, 'deletePermission'])->middleware('auth:sanctum');
+Route::post('/permission/update', [PermissionController::class, 'updatePermission'])->middleware('auth:sanctum');
