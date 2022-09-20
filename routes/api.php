@@ -49,3 +49,7 @@ Route::put('/program/create', [ProgramController::class, 'createEntry'])->middle
 Route::get('/program/get', [ProgramController::class, 'getPrograms'])->middleware('auth:sanctum');
 Route::delete('/program/delete/{id}', [ProgramController::class, 'deleteProgram'])->middleware('auth:sanctum');
 Route::post('/program/update', [ProgramController::class, 'updateProgram'])->middleware('auth:sanctum');
+
+Route::put('/user_program/create', [UserProgramController::class, 'mapUserProgram'])->middleware('auth:sanctum');
+Route::get('/user_program/get', [UserProgramController::class, 'getUserPrograms'])->middleware('auth:sanctum');
+Route::delete('/user_program/delete/{id}', [UserProgramController::class, 'deleteUserPrograms'])->middleware('auth:sanctum');
