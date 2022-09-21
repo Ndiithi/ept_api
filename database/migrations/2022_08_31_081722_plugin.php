@@ -30,6 +30,6 @@ $table->softDeletes();
      */
     public function down()
     {
-        Schema::dropIfExists('themes');
+        Schema::dropIfExists('plugins');
     }
 };
