@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Route;
 // });
 
 
-Route::get('/getUITemplates', [UITemplateController::class, 'getUITemplate'])->middleware('auth:sanctum');
+Route::get('/getUITemplates/{scheme}/{schema_id}', [UITemplateController::class, 'getUITemplate'])->middleware('auth:sanctum');
 
 Route::post('/auth/register', [AuthController::class, 'createUser'])->name('register');;
 Route::post('/auth/login', [AuthController::class, 'loginUser'])->name('login');
