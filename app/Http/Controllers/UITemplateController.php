@@ -2,85 +2,69 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Round;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class UITemplateController extends Controller
 {
-    public function getUITemplate()
+    public function getUITemplate(Request $request)
     {
-        $rowSets = DB::select("select 
-        p.name program_name,p.description program_description,p.meta program_meta,p.uuid program_code,
-        r.name round_name,r.description round_description, r.start_date round_startdate,r.end_date round_enddate, r.form round_form, r.`schema` round_schema,r.active round_active,r.meta round_meta,
-        sch.name schema_name, sch.description shema_description, sch.scoringCriteria schema_scoringcriteria, sch.meta schema_meta,
-        f.name form_name, f.description form_description, f.target_type form_targettype, f.uuid form_code, f.meta form_meta,
-        test_schema.uuid test_id, test_schema.name test_name, test_schema.target_type test_targettype,test_schema.overall_result test_overall_result,
-        fs.name section_name, fs.uuid section_code, fs.description section_description, fs.next section_next, fs.next_condition section_nextcondition, fs.disabled section_disabled,fs.meta section_meta, 
-        ff.name field_name, ff.uuid field_code, ff.description field_description, ff.type field_type,  ff.meta field_meta, ff.actions field_actions, 
-        dic.name dictionary_name, dic.meta dictionary_meta,
-        sample_schema.uuid sample_code,sample_schema.name sample_name, sample_schema.description sample_description, sample_schema.expected_outcome sample_expected_outcome, sample_schema.expected_outcome_notes sample_expected_outcome_notes, sample_schema.expected_interpretation sample_expected_interpretation, sample_schema.expected_interpretation_notes sample_eexpected_interpretation_notes, sample_schema.meta sample_expected_meta 
-        from  programs p
-        inner join rounds r  on r.program=p.uuid 
-        inner join schemaas sch on sch.uuid = r.`schema` 
-        inner join forms f on f.uuid = r.form 
-        INNER JOIN form_sections fs on f.uuid = fs.form 
-        INNER JOIN form_fields ff on ff.form_section = fs.uuid 
-        INNER JOIN samples sample_round on sample_round.round =r.uuid 
-        INNER JOIN samples sample_schema on sample_schema.`schema`  =sch.uuid 
-        INNER JOIN tests test_round on test_round.round =r.uuid 
-        INNER JOIN tests test_schema on test_schema.`schema`  =sch.uuid 
-        inner JOIN dictionaries dic on dic.name = test_schema.target_code       
-        ");
 
-        $programmes = [];
-        $programAdded = false;
-        foreach ($rowSets  as $rowSet) {
+        $rowSet = Round::select(
+            "rounds.name as round_name",
+            "rounds.description as round_description",
+            "rounds.start_date as round_startdate",
+            "rounds.end_date as round_enddate",
+            "rounds.form as round_form",
+            "rounds.active as round_active",
+            "rounds.meta as round_meta",
+            "programs.name as program_name",
+            "programs.description as program_description",
+            "programs.meta as program_meta",
+            "programs.uuid as program_code",
+        )->join('programs', 'programs.uuid', '=', 'rounds.program')
+            ->where("rounds.uuid", "=", $request->round)->get();
 
-            //add programmes
-            if (!empty($programmes)) {
-                foreach ($programmes  as $index => $program) {
-                    if (strcmp($program["code"], $rowSet->program_code) == 0) {
-                        $programmes[$index]['forms'] = $this->addFormData($program['forms'], $rowSet);
-                        $programmes[$index]['rounds'] = $this->addRound($program['rounds'], $rowSet);
-                        $programmes[$index]['schema'] = $this->addShema($program['schema'], $rowSet);
-
-                        $programAdded = true;
-                        break;
-                    }
-                }
-            }
-
-            if (!$programAdded) {
-                $program = [
-                    "name" => $rowSet->program_name,
-                    "code" => $rowSet->program_code,
-                    "description" => $rowSet->program_description,
-                    "forms" => [],
-                    "rounds" => [],
-                    "schema" => [],
-                    "reports" => [],
-                    "dataDictionary" => [
-
-                        "GENDER_OPTIONS" => [
-                            [
-                                "name" => "Male",
-                                "value" => "M"
-                            ]
-                        ]
-                    ]
-                ];
-
-                $program['forms'] = $this->addFormData($program['forms'], $rowSet);
-                $program['rounds'] = $this->addRound($program['rounds'], $rowSet);
-                $program['schema'] = $this->addShema($program['schema'], $rowSet);
-
-                $programmes[] = $program;
-            }
-            $programAdded = false;
+        if (empty($rowSet)) {
+            return [
+                "name" => "",
+                "code" => "",
+                "description" => "",
+                "forms" => [],
+                "rounds" => [],
+                "schema" => [],
+                "reports" => [],
+                "dataDictionary" => []
+            ];
         }
+        $rowSet = $rowSet[0];
+        $program = [
+            "name" => $rowSet->program_name,
+            "code" => $rowSet->program_code,
+            "description" => $rowSet->program_description,
+            "forms" => [],
+            "rounds" => [],
+            "schema" => [],
+            "reports" => [],
+            "dataDictionary" => [
+
+                "GENDER_OPTIONS" => [
+                    [
+                        "name" => "Male",
+                        "value" => "M"
+                    ]
+                ]
+            ]
+        ];
+
+        // $program['forms'] = $this->addFormData($program['forms'], $rowSet);
+        $program['rounds'] = $this->addRound($program['rounds'], $rowSet);
+        // $program['schema'] = $this->addShema($program['schema'], $rowSet);
+
         // Log::info(print_r($formTemplate->program_name, true));
-        return $programmes;
+        return $program;
     }
 
     private function addFormData($formsArr, $rowSet)
