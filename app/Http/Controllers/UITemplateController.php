@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Form;
 use App\Models\Round;
+use App\Models\Schema;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -69,11 +70,33 @@ class UITemplateController extends Controller
             "forms.meta as form_meta"
         )->where("forms.uuid", "=", $rowSet->round_form)->get();
 
-        $program['forms'] = $this->addFormData($program['forms'], $formSet[0]);
-        $program['rounds'] = $this->addRound($program['rounds'], $rowSet);
-        // $program['schema'] = $this->addShema($program['schema'], $rowSet);
 
-        // Log::info(print_r($formTemplate->program_name, true));
+        $formSet = Form::select(
+            "forms.name as form_name",
+            "forms.description as form_description",
+            "forms.target_type as form_targettype",
+            "forms.uuid as form_code",
+            "forms.meta as form_meta"
+        )->where("forms.uuid", "=", $rowSet->round_form)->get();
+
+        $schemaSet = Schema::select(
+            "schemaas.name as schema_name",
+            "schemaas.description as shema_description",
+            "schemaas.scoringCriteria as schema_scoringcriteria",
+            "schemaas.meta as schema_meta"
+
+        )->where("schemaas.uuid", "=", $request->schema)->get();
+
+        $program['rounds'] = $this->addRound($program['rounds'], $rowSet);
+
+        if (!empty($formSet)) {
+            $program['forms'] = $this->addFormData($program['forms'], $formSet[0]);
+        }
+
+        if (!empty($schemaSet)) {
+            $program['schema'] = $this->addShema($program['schema'], $schemaSet[0]);
+        }
+
         return $program;
     }
 
@@ -234,8 +257,8 @@ class UITemplateController extends Controller
             "metadata" => $rowSet->schema_meta,
         ];
 
-        $shemaEntry["samples"] = $this->addSample($shemaEntry["samples"], $rowSet);
-        $shemaEntry["tests"] = $this->addTest($shemaEntry["tests"], $rowSet);
+        // $shemaEntry["samples"] = $this->addSample($shemaEntry["samples"], $rowSet);
+        // $shemaEntry["tests"] = $this->addTest($shemaEntry["tests"], $rowSet);
         array_push($schemaArr,  $shemaEntry);
         return $schemaArr;
     }
