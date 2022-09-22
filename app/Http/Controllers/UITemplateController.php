@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Form;
 use App\Models\Round;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -39,6 +40,7 @@ class UITemplateController extends Controller
                 "dataDictionary" => []
             ];
         }
+
         $rowSet = $rowSet[0];
         $program = [
             "name" => $rowSet->program_name,
@@ -59,7 +61,15 @@ class UITemplateController extends Controller
             ]
         ];
 
-        // $program['forms'] = $this->addFormData($program['forms'], $rowSet);
+        $formSet = Form::select(
+            "forms.name as form_name",
+            "forms.description as form_description",
+            "forms.target_type as form_targettype",
+            "forms.uuid as form_code",
+            "forms.meta as form_meta"
+        )->where("forms.uuid", "=", $rowSet->round_form)->get();
+
+        $program['forms'] = $this->addFormData($program['forms'], $formSet[0]);
         $program['rounds'] = $this->addRound($program['rounds'], $rowSet);
         // $program['schema'] = $this->addShema($program['schema'], $rowSet);
 
