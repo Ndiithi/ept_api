@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Form;
 use App\Models\Round;
+use App\Models\Sample;
 use App\Models\Schema;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -80,6 +81,7 @@ class UITemplateController extends Controller
         )->where("forms.uuid", "=", $rowSet->round_form)->get();
 
         $schemaSet = Schema::select(
+            "schemaas.uuid as uuid",
             "schemaas.name as schema_name",
             "schemaas.description as shema_description",
             "schemaas.scoringCriteria as schema_scoringcriteria",
@@ -257,37 +259,39 @@ class UITemplateController extends Controller
             "metadata" => $rowSet->schema_meta,
         ];
 
-        // $shemaEntry["samples"] = $this->addSample($shemaEntry["samples"], $rowSet);
+        $shemaEntry["samples"] = $this->addSample($shemaEntry["samples"], $rowSet->uuid);
         // $shemaEntry["tests"] = $this->addTest($shemaEntry["tests"], $rowSet);
         array_push($schemaArr,  $shemaEntry);
         return $schemaArr;
     }
 
 
-    private function addSample($samplesArr, $rowSet)
+    private function addSample($samplesArr, $schemaUUID)
     {
-        $sampleAdded = false;
-        if (!empty($samplesArr)) {
-            foreach ($samplesArr as $index => $sample) {
-                if (strcmp($sample["sample_id"], $rowSet->sample_code) == 0) {
-                    $sampleAdded = true;
-                    break;
-                }
-            }
-            if ($sampleAdded) {
-                return $samplesArr;
-            }
+
+        $sampleSet = Sample::select(
+            "samples.uuid as sample_code",
+            "samples.name as sample_name",
+            "samples.description as sample_description",
+            "samples.expected_outcome as sample_expected_outcome",
+            "samples.expected_outcome_notes as sample_expected_outcome_notes",
+            "samples.expected_interpretation as sample_expected_interpretation",
+            "samples.expected_interpretation_notes as sample_eexpected_interpretation_notes",
+            "samples.meta as sample_expected_meta"
+        )->where("samples.schema", "=", $schemaUUID)->get();
+        
+        foreach ($sampleSet as $sample) {
+            array_push(
+                $samplesArr,
+                [
+                    "sample_id" => $sample->sample_code,
+                    "sample_name" => $sample->sample_name,
+                    "interpretation" => $sample->sample_expected_interpretation,
+                    "meta" => $sample->sample_expected_meta,
+                ]
+            );
         }
 
-        array_push(
-            $samplesArr,
-            [
-                "sample_id" => $rowSet->sample_code,
-                "sample_name" => $rowSet->sample_name,
-                "interpretation" => $rowSet->sample_expected_interpretation,
-                "meta" => $rowSet->sample_expected_meta,
-            ]
-        );
         return $samplesArr;
     }
 
