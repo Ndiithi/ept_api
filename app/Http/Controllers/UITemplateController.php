@@ -6,6 +6,7 @@ use App\Models\Form;
 use App\Models\Round;
 use App\Models\Sample;
 use App\Models\Schema;
+use App\Models\Test;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -260,7 +261,7 @@ class UITemplateController extends Controller
         ];
 
         $shemaEntry["samples"] = $this->addSample($shemaEntry["samples"], $rowSet->uuid);
-        // $shemaEntry["tests"] = $this->addTest($shemaEntry["tests"], $rowSet);
+        $shemaEntry["tests"] = $this->addTest($shemaEntry["tests"], $rowSet->uuid);
         array_push($schemaArr,  $shemaEntry);
         return $schemaArr;
     }
@@ -268,7 +269,6 @@ class UITemplateController extends Controller
 
     private function addSample($samplesArr, $schemaUUID)
     {
-
         $sampleSet = Sample::select(
             "samples.uuid as sample_code",
             "samples.name as sample_name",
@@ -279,7 +279,7 @@ class UITemplateController extends Controller
             "samples.expected_interpretation_notes as sample_eexpected_interpretation_notes",
             "samples.meta as sample_expected_meta"
         )->where("samples.schema", "=", $schemaUUID)->get();
-        
+
         foreach ($sampleSet as $sample) {
             array_push(
                 $samplesArr,
@@ -295,33 +295,31 @@ class UITemplateController extends Controller
         return $samplesArr;
     }
 
-    private function addTest($testArr, $rowSet)
+    private function addTest($testArr, $schemaUUID)
     {
-        $testAdded = false;
-        if (!empty($testArr)) {
-            foreach ($testArr as $index => $test) {
-                if (strcmp($test["id"], $rowSet->test_id) == 0) {
-                    $testAdded = true;
-                    break;
-                }
-            }
-            if ($testAdded) {
-                return $testArr;
-            }
+        //  test_schema.uuid test_id, test_schema.name test_name, test_schema.target_type test_targettype,
+        //test_schema.overall_result test_overall_result,
+        $testsSet = Test::select(
+            "tests.uuid as test_id",
+            "tests.name as test_name",
+            "tests.target_type as test_targettype",
+            "tests.overall_result as test_overall_result",
+        )->where("tests.schema", "=", $schemaUUID)->get();
+
+        foreach ($testsSet as $rowSet) {
+            array_push(
+                $testArr,
+                [
+                    "id" => $rowSet->test_id,
+                    "name" => $rowSet->test_name,
+                    "target_type" => $rowSet->test_targettype,
+                    "targets" => $rowSet->dictionary_meta,
+                    "overall_result" => $rowSet->test_overall_result,
+                    "remarks" => ""
+                ]
+            );
         }
 
-        array_push(
-
-            $testArr,
-            [
-                "id" => $rowSet->test_id,
-                "name" => $rowSet->test_name,
-                "target_type" => $rowSet->test_targettype,
-                "targets" => $rowSet->dictionary_meta,
-                "overall_result" => $rowSet->test_overall_result,
-                "remarks" => ""
-            ]
-        );
         return $testArr;
     }
 }
