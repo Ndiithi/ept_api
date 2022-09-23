@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Form;
+use App\Models\Form_field;
 use App\Models\Form_section;
 use App\Models\Round;
 use App\Models\Sample;
@@ -128,9 +129,8 @@ class UITemplateController extends Controller
     private function addSection($formObject, $formSet)
     {
 
-        //        fs.name section_name, fs.uuid section_code, fs.description section_description, 
-        //fs.next section_next, fs.next_condition section_nextcondition, fs.disabled section_disabled,fs.meta section_meta, 
         $sectionSet = Form_section::select(
+            "form_sections.uuid as uuid",
             "form_sections.name as section_name",
             "form_sections.uuid as section_code",
             "form_sections.description as section_description",
@@ -151,41 +151,38 @@ class UITemplateController extends Controller
                 "metadata" => $rowSet->section_meta,
                 "fields" => []
             ];
-          //  $sectionEntry = $this->addField($sectionEntry, $rowSet);
+            $sectionEntry = $this->addField($sectionEntry, $rowSet);
             array_push($formObject["sections"],  $sectionEntry);
-            
         }
-       
-        
+
         return $formObject;
     }
 
-    private function addField($sectionObject, $rowSet)
+    private function addField($sectionObject, $sectionSet)
     {
-        $fieldAdded = false;
-        if (!empty($sectionObject["fields"])) {
-            foreach ($sectionObject["fields"]  as $index => $field) {
-                if (strcmp($field["code"], $rowSet->field_code) == 0) {
-                    $fieldAdded = true;
-                    break;
-                }
-            }
-            if ($fieldAdded) {
-                return $sectionObject;
-            }
+
+        $fieldSet = Form_field::select(
+            "form_fields.uuid as field_code",
+            "form_fields.name as field_name",
+            "form_fields.description as field_description",
+            "form_fields.type as field_type",
+            "form_fields.actions as field_actions",
+            "form_fields.meta as field_meta",
+        )->where("form_fields.form_section", "=", $sectionSet->uuid)->get();
+
+        foreach ($fieldSet as $rowSet) {
+            array_push(
+                $sectionObject["fields"],
+                [
+                    "code" => $rowSet->field_code,
+                    "description" => $rowSet->field_description,
+                    "type" => $rowSet->field_type,
+                    "meta" => $rowSet->field_meta,
+                    "actions" => $rowSet->field_actions
+                ]
+            );
         }
-        Log::info("field code is: ");
-        Log::info($rowSet->field_code);
-        array_push(
-            $sectionObject["fields"],
-            [
-                "code" => $rowSet->field_code,
-                "description" => $rowSet->field_description,
-                "type" => $rowSet->field_type,
-                "meta" => $rowSet->field_meta,
-                "actions" => $rowSet->field_actions
-            ]
-        );
+
         return $sectionObject;
     }
 
