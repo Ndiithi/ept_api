@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Form;
+use App\Models\Form_section;
 use App\Models\Round;
 use App\Models\Sample;
 use App\Models\Schema;
@@ -74,6 +75,7 @@ class UITemplateController extends Controller
 
 
         $formSet = Form::select(
+            "forms.uuid as uuid",
             "forms.name as form_name",
             "forms.description as form_description",
             "forms.target_type as form_targettype",
@@ -106,64 +108,55 @@ class UITemplateController extends Controller
     private function addFormData($formsArr, $rowSet)
     {
         Log::info("Adding form data");
-        $formAdded = false;
-        if (!empty($formsArr)) {
+        if (!empty($rowSet)) {
+            //case if form is not added to payload
+            $formEtry = [
+                "name" => $rowSet->form_name,
+                "code" => $rowSet->form_code,
+                "meta" => $rowSet->form_meta,
+                "description" => $rowSet->form_description,
+                "sections" => []
+            ];
 
-
-            foreach ($formsArr  as $index => $form) {
-                if (strcmp($form["code"], $rowSet->form_code) == 0) {
-                    $formsArr[$index] = $this->addSection($form, $rowSet);
-                    $formAdded = true;
-                    break;
-                }
-            }
-            if ($formAdded) {
-                return $formsArr;
-            }
+            $formEtry = $this->addSection($formEtry, $rowSet);
+            array_push($formsArr, $formEtry);
         }
-        //case if form is not added to payload
-        $formEtry = [
-            "name" => $rowSet->form_name,
-            "code" => $rowSet->form_code,
-            "meta" => $rowSet->form_meta,
-            "description" => $rowSet->form_description,
-            "sections" => []
-        ];
 
-        $formEtry = $this->addSection($formEtry, $rowSet);
-        array_push($formsArr, $formEtry);
         return $formsArr;
     }
 
-    private function addSection($formObject, $rowSet)
+    private function addSection($formObject, $formSet)
     {
-        $sectionAdded = false;
-        if (!empty($formObject["sections"])) {
 
-            foreach ($formObject["sections"]  as $index => $section) {
-                if (strcmp($section["code"], $rowSet->section_code) == 0) {
-                    $formObject["sections"][$index] = $this->addField($section, $rowSet);
-                    $sectionAdded = true;
-                    break;
-                }
-            }
-            if ($sectionAdded) {
-                return $formObject;
-            }
+        //        fs.name section_name, fs.uuid section_code, fs.description section_description, 
+        //fs.next section_next, fs.next_condition section_nextcondition, fs.disabled section_disabled,fs.meta section_meta, 
+        $sectionSet = Form_section::select(
+            "form_sections.name as section_name",
+            "form_sections.uuid as section_code",
+            "form_sections.description as section_description",
+            "form_sections.next as section_next",
+            "form_sections.next_condition as section_nextcondition",
+            "form_sections.disabled as section_disabled",
+            "form_sections.meta as section_meta",
+        )->where("form_sections.form", "=", $formSet->uuid)->get();
+
+        foreach ($sectionSet as $rowSet) {
+            $sectionEntry = [
+                "name" => $rowSet->section_name,
+                "code" => $rowSet->section_code,
+                "description" => $rowSet->section_description,
+                "next" => $rowSet->section_next,
+                "nextCondition" => $rowSet->section_nextcondition,
+                "disabled" => $rowSet->section_disabled,
+                "metadata" => $rowSet->section_meta,
+                "fields" => []
+            ];
+          //  $sectionEntry = $this->addField($sectionEntry, $rowSet);
+            array_push($formObject["sections"],  $sectionEntry);
+            
         }
-        $sectionEntry = [
-            "name" => $rowSet->section_name,
-            "code" => $rowSet->section_code,
-            "description" => $rowSet->section_description,
-            "next" => $rowSet->section_next,
-            "nextCondition" => $rowSet->section_nextcondition,
-            "disabled" => $rowSet->section_disabled,
-            "metadata" => $rowSet->section_meta,
-            "fields" => []
-        ];
-
-        $sectionEntry = $this->addField($sectionEntry, $rowSet);
-        array_push($formObject["sections"],  $sectionEntry);
+       
+        
         return $formObject;
     }
 
