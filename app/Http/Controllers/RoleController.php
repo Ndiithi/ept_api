@@ -34,6 +34,18 @@ class RoleController extends Controller
         return  $roles;
     }
 
+    public function getRole(Request $request)
+    {
+        if (!Gate::allows(SystemAuthorities::$authorities['view_role'])) {
+            return response()->json(['Message' => 'Not allowed to view role: '], 500);
+        }
+        $role = Role::find($request->id);
+        if($role == null){
+            return response()->json(['Message' => 'Role not found: '], 404);
+        }
+        return  $role;
+    }
+
     public function createRole(Request $request)
     {
         if (!Gate::allows(SystemAuthorities::$authorities['add_role'])) {

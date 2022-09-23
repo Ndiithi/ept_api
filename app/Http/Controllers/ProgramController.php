@@ -27,6 +27,17 @@ class ProgramController extends Controller
 
         return  $programs;
     }
+    public function getProgram(Request $request)
+    {
+        if (!Gate::allows(SystemAuthorities::$authorities['view_program'])) {
+            return response()->json(['Message' => 'Not allowed to view program: '], 500);
+        }
+        $program = Program::find($request->id);
+        if($program == null){
+            return response()->json(['Message' => 'Program not found: '], 404);
+        }
+        return  $program;
+    }
     
     public function createEntry(Request $request)
     {
