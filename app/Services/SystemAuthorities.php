@@ -32,6 +32,10 @@ class SystemAuthorities
         'edit_Permission' => 'edit_Permission',
         'view_user_program' => 'view_user_program',
         'add_user_program' => 'add_user_program',
-        'delete_user_program' => 'delete_user_program'
+        'delete_user_program' => 'delete_user_program',
+        'edit_form' => 'edit_form',
+        'view_form' => 'view_form',
+        'delete_form' => 'delete_form',
+        'add_form' => 'add_form',
     ];
 }
