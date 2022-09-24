@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\DictionaryController;
+use App\Http\Controllers\FormController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\RoleController;
@@ -53,3 +54,8 @@ Route::post('/program/update', [ProgramController::class, 'updateProgram'])->mid
 Route::put('/user_program/create', [UserProgramController::class, 'mapUserProgram'])->middleware('auth:sanctum');
 Route::get('/user_program/get', [UserProgramController::class, 'getUserPrograms'])->middleware('auth:sanctum');
 Route::delete('/user_program/delete/{id}', [UserProgramController::class, 'deleteUserPrograms'])->middleware('auth:sanctum');
+
+Route::put('/form/create', [FormController::class, 'createForm'])->middleware('auth:sanctum');
+Route::get('/form/get', [FormController::class, 'getForms'])->middleware('auth:sanctum');
+Route::delete('/form/delete/{id}', [FormController::class, 'deleteForm'])->middleware('auth:sanctum');
+Route::post('/program/update', [FormController::class, 'updateForm'])->middleware('auth:sanctum');
