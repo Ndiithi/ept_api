@@ -26,6 +26,21 @@ class UserProgramController extends Controller
         return  $userProgram;
     }
     
+    public function getUserProgram(Request $request)
+    {
+        if (!Gate::allows(SystemAuthorities::$authorities['view_user_program'])) {
+            return response()->json(['Message' => 'Not allowed to view user programs: '], 500);
+        }
+
+        $userProgram = UserProgram::find($request->id);
+        if($userProgram == null){
+            return response()->json(['Message' => 'User program not found: '], 404);
+        }
+
+        return  $userProgram;
+    }
+    
+
     public function mapUserProgram(Request $request)
     {
         if (!Gate::allows(SystemAuthorities::$authorities['add_user_program'])) {

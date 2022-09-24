@@ -31,6 +31,18 @@ class PermissionController extends Controller
         return  $permissions;
     }
 
+    public function getPermission(Request $request)
+    {
+        if (!Gate::allows(SystemAuthorities::$authorities['view_permission'])) {
+            return response()->json(['Message' => 'Not allowed to view permission: '], 500);
+        }
+        $permission = Permission::find($request->id);
+        if($permission == null){
+            return response()->json(['Message' => 'Permission not found: '], 404);
+        }
+        return  $permission;
+    }
+
     public function createPermission(Request $request)
     {
         if (!Gate::allows(SystemAuthorities::$authorities['add_Permission'])) {

@@ -32,27 +32,32 @@ Route::post('/auth/register', [AuthController::class, 'createUser'])->name('regi
 Route::post('/auth/login', [AuthController::class, 'loginUser'])->name('login');
 
 Route::put('/role/create', [RoleController::class, 'createRole'])->middleware('auth:sanctum');
-Route::get('/role/get', [RoleController::class, 'getRoles'])->middleware('auth:sanctum');
+Route::get('/roles', [RoleController::class, 'getRoles'])->middleware('auth:sanctum');
+Route::get('/role/{id}', [RoleController::class, 'getRole'])->middleware('auth:sanctum');
 Route::delete('/role/delete/{id}', [RoleController::class, 'deleteRole'])->middleware('auth:sanctum');
 Route::post('/role/update', [RoleController::class, 'updateRole'])->middleware('auth:sanctum');
 
 Route::put('/permission/create', [PermissionController::class, 'createPermission'])->middleware('auth:sanctum');
-Route::get('/permission/get', [PermissionController::class, 'getPermissions'])->middleware('auth:sanctum');
+Route::get('/permissions', [PermissionController::class, 'getPermissions'])->middleware('auth:sanctum');
+Route::get('/permission/{id}', [PermissionController::class, 'getPermission'])->middleware('auth:sanctum');
 Route::delete('/permission/delete/{id}', [PermissionController::class, 'deletePermission'])->middleware('auth:sanctum');
 Route::post('/permission/update', [PermissionController::class, 'updatePermission'])->middleware('auth:sanctum');
 
 Route::put('/dictionary/create', [DictionaryController::class, 'createEntry'])->middleware('auth:sanctum');
-Route::get('/dictionary/get', [DictionaryController::class, 'getAll'])->middleware('auth:sanctum');
+Route::get('/dictionary', [DictionaryController::class, 'getAll'])->middleware('auth:sanctum');
+Route::get('/dictionary/{id}', [DictionaryController::class, 'getItem'])->middleware('auth:sanctum');
 Route::delete('/dictionary/delete/{id}', [DictionaryController::class, 'deleteItem'])->middleware('auth:sanctum');
 Route::post('/dictionary/update', [DictionaryController::class, 'updateItem'])->middleware('auth:sanctum');
 
 Route::put('/program/create', [ProgramController::class, 'createEntry'])->middleware('auth:sanctum');
-Route::get('/program/get', [ProgramController::class, 'getPrograms'])->middleware('auth:sanctum');
+Route::get('/programs', [ProgramController::class, 'getPrograms'])->middleware('auth:sanctum');
+Route::get('/program/{id}', [ProgramController::class, 'getProgram'])->middleware('auth:sanctum');
 Route::delete('/program/delete/{id}', [ProgramController::class, 'deleteProgram'])->middleware('auth:sanctum');
 Route::post('/program/update', [ProgramController::class, 'updateProgram'])->middleware('auth:sanctum');
 
 Route::put('/user_program/create', [UserProgramController::class, 'mapUserProgram'])->middleware('auth:sanctum');
-Route::get('/user_program/get', [UserProgramController::class, 'getUserPrograms'])->middleware('auth:sanctum');
+Route::get('/user_programs', [UserProgramController::class, 'getUserPrograms'])->middleware('auth:sanctum');
+Route::get('/user_program/{id}', [UserProgramController::class, 'getUserProgram'])->middleware('auth:sanctum');
 Route::delete('/user_program/delete/{id}', [UserProgramController::class, 'deleteUserPrograms'])->middleware('auth:sanctum');
 
 Route::put('/form/create', [FormController::class, 'createForm'])->middleware('auth:sanctum');

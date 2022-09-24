@@ -23,6 +23,18 @@ class DictionaryController extends Controller
         $data = Dictionary::paginate(request()->all());
         return Response::json($data, 200);
     }
+
+    public function getItem(Request $request)
+    {
+        if (!Gate::allows(SystemAuthorities::$authorities['view_dictionary'])) {
+            return response()->json(['Message' => 'Not allowed to view dictionary entry: '], 500);
+        }
+        $entry = Dictionary::find($request->uuid);
+        if($entry == null){
+            return response()->json(['Message' => 'Dictionary entry not found: '], 404);
+        }
+        return  $entry;
+    }
     
     public function createEntry(Request $request)
     {
