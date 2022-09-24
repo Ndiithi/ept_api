@@ -20,15 +20,15 @@ class AuthController extends Controller
     public function createUser(Request $request)
     {
         try {
-            
+
             $validateUser = Validator::make(
                 $request->all(),
-                [   
-                    'uuid' => 'nullable',
+                [
+                    // 'uuid' => 'nullable',
                     'name' => 'required',
                     'email' => 'required|email|unique:users,email',
                     'password' => 'required',
-                    'role'=> 'required'
+                    'role' => 'required'
                 ]
             );
 
@@ -41,10 +41,10 @@ class AuthController extends Controller
             }
 
             $user = User::create([
-                'uuid'=> Str::uuid(),
+                'uuid' => Str::uuid(),
                 'name' => $request->name,
                 'email' => $request->email,
-                'role'=> $request->role,
+                'role' => $request->role,
                 'password' => Hash::make($request->password),
             ]);
 
@@ -107,5 +107,48 @@ class AuthController extends Controller
         }
     }
 
-    
+
+    /**
+     * Logout The User
+     * @param Request $request
+     * @return null
+     */
+    public function logoutUser(Request $request)
+    {
+        try {
+            $request->user()->currentAccessToken()->delete();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'User Logged Out Successfully',
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
+
+
+    /**
+     * Get User Details
+     * @param Request $request
+     * @return User
+     */
+    public function getUser(Request $request)
+    {
+        try {
+            return response()->json([
+                'status' => true,
+                'message' => 'User Details',
+                'user' => $request->user()
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
 }

@@ -30,6 +30,8 @@ Route::get('/getUITemplates/{round}/{schema}', [UITemplateController::class, 'ge
 
 Route::post('/auth/register', [AuthController::class, 'createUser'])->name('register');;
 Route::post('/auth/login', [AuthController::class, 'loginUser'])->name('login');
+Route::post('/auth/logout', [AuthController::class, 'logoutUser'])->name('logout')->middleware('auth:sanctum');
+Route::get('/auth/user', [AuthController::class, 'getUser'])->name('user')->middleware('auth:sanctum');
 
 Route::put('/role/create', [RoleController::class, 'createRole'])->middleware('auth:sanctum');
 Route::get('/roles', [RoleController::class, 'getRoles'])->middleware('auth:sanctum');
