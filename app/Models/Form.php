@@ -16,6 +16,6 @@ class Form extends Model
      * @var array
      */
     protected $fillable = [
-        'uuid', 'name', 'description', 'name', 'meta', 'actions','target_type', 'created_at', 'updated_at'
+        'uuid', 'name', 'description', 'meta', 'actions','target_type', 'created_at', 'updated_at'
     ];
 }
