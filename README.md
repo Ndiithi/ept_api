@@ -62,3 +62,16 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+
+# Todo
+
+1. Log in, Signup etc
+
+2. Pick a program (COV, Onco, Recency etc)
+
+3. Surveys (Readiness Checklists) - list, fill, edit, submit
+
+4. Evaluation (PT, QC) - list, fill, edit, submit
+
+5. Reports (PT, QC) - list, view, download

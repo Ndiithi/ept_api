@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -28,7 +29,7 @@ class AuthController extends Controller
                     'name' => 'required',
                     'email' => 'required|email|unique:users,email',
                     'password' => 'required',
-                    'role' => 'required'
+                    // 'role' => 'required'
                 ]
             );
 
@@ -44,7 +45,7 @@ class AuthController extends Controller
                 'uuid' => Str::uuid(),
                 'name' => $request->name,
                 'email' => $request->email,
-                'role' => $request->role,
+                'role' => Role::where('name', 'like', '%guest%')->first()->id ?? 2,         //$request->role,
                 'password' => Hash::make($request->password),
             ]);
 
