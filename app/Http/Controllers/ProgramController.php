@@ -14,17 +14,11 @@ class ProgramController extends Controller
     
     public function getPrograms(Request $request)
     {
+        //show user permissions first
         if (!Gate::allows(SystemAuthorities::$authorities['view_program'])) {
             return response()->json(['Message' => 'Not allowed to view program: '], 500);
         }
-        $programs = Program::select(
-            "roles.name",
-            "roles.updated_at as updated_at",
-            "roles.meta as meta",
-            "roles.description",
-            "roles.uuid as uuid"
-        );
-
+        $programs = Program::where('deleted_at', null)->get();
         return  $programs;
     }
     public function getProgram(Request $request)

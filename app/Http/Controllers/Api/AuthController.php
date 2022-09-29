@@ -140,10 +140,13 @@ class AuthController extends Controller
     public function getUser(Request $request)
     {
         try {
+            $user = $request->user();
             return response()->json([
                 'status' => true,
                 'message' => 'User Details',
-                'user' => $request->user()
+                'user' => $request->user(),
+                'role' => Role::where('uuid',$user->role)->first(),
+                'permissions' => $user->permissions()
             ], 200);
         } catch (\Throwable $th) {
             return response()->json([

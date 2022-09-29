@@ -19,4 +19,28 @@ class Program extends Model
         'uuid', 'name', 'description', 'created_at', 'updated_at'
     ];
 
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'created_at', 'updated_at', 'deleted_at'
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
+
+    // id = uuid;
+    public $incrementing = false;
+    protected $keyType = 'string';
+    protected $primaryKey = 'uuid';
+
 }

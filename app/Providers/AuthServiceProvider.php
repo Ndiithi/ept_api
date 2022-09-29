@@ -4,11 +4,13 @@ namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
 
+use App\Models\Permission;
 use App\Models\User;
 use App\Services\SystemAuthorities;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Log;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -30,39 +32,72 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Gate::define(SystemAuthorities::$authorities['edit_user'], function ($user) {
-            return $this->runAthurizationQuery(SystemAuthorities::$authorities['edit_user']);
-        });
-        Gate::define(SystemAuthorities::$authorities['edit_role'], function ($user) {
-            return $this->runAthurizationQuery(SystemAuthorities::$authorities['edit_role']);
-        });
+        $permissions = Permission::where('deleted_at', null)->get();
+        foreach ($permissions as $permission) {
+            Gate::define($permission->name, function (User $user) use ($permission) {
+                $rt = $this->runAthurizationQuery($user, SystemAuthorities::$authorities[$permission->name]);
+                // Log::debug('AuthServiceProvider:::: Perm:' . $permission->name . ', User: '.$user->name.' = ' . json_encode($rt));
+                return $rt;
+            });
+        }
+        // Gate::define(SystemAuthorities::$authorities['edit_user'], function ($user) {
+        //     return $this->runAthurizationQuery($user, SystemAuthorities::$authorities['edit_user']);
+        // });
+        // Gate::define(SystemAuthorities::$authorities['edit_role'], function ($user) {
+        //     return $this->runAthurizationQuery($user, SystemAuthorities::$authorities['edit_role']);
+        // });
 
-        Gate::define(SystemAuthorities::$authorities['delete_user'], function ($user) {
-            return $this->runAthurizationQuery(SystemAuthorities::$authorities['delete_user']);
-        });
-        Gate::define(SystemAuthorities::$authorities['delete_role'], function ($user) {
-            return $this->runAthurizationQuery(SystemAuthorities::$authorities['delete_role']);
-        });
+        // Gate::define(SystemAuthorities::$authorities['delete_user'], function ($user) {
+        //     return $this->runAthurizationQuery($user, SystemAuthorities::$authorities['delete_user']);
+        // });
+        // Gate::define(SystemAuthorities::$authorities['delete_role'], function ($user) {
+        //     return $this->runAthurizationQuery($user, SystemAuthorities::$authorities['delete_role']);
+        // });
 
-        Gate::define(SystemAuthorities::$authorities['add_user'], function ($user) {
-            return $this->runAthurizationQuery(SystemAuthorities::$authorities['add_user']);
-        });
-        Gate::define(SystemAuthorities::$authorities['add_role'], function ($user) {
-            return $this->runAthurizationQuery(SystemAuthorities::$authorities['add_role']);
-        });
+        // Gate::define(SystemAuthorities::$authorities['add_user'], function ($user) {
+        //     return $this->runAthurizationQuery($user, SystemAuthorities::$authorities['add_user']);
+        // });
+        // Gate::define(SystemAuthorities::$authorities['add_role'], function ($user) {
+        //     return $this->runAthurizationQuery($user, SystemAuthorities::$authorities['add_role']);
+        // });
+        // Gate::define(SystemAuthorities::$authorities['view_user'], function ($user) {
+        //     return $this->runAthurizationQuery($user, SystemAuthorities::$authorities['view_user']);
+        // });
+        // Gate::define(SystemAuthorities::$authorities['view_role'], function ($user) {
+        //     return $this->runAthurizationQuery($user, SystemAuthorities::$authorities['view_role']);
+        // });
 
-        Gate::define(SystemAuthorities::$authorities['view_user'], function ($user) {
-            return $this->runAthurizationQuery(SystemAuthorities::$authorities['view_user']);
-        });
-        Gate::define(SystemAuthorities::$authorities['view_role'], function ($user) {
-            return $this->runAthurizationQuery(SystemAuthorities::$authorities['view_role']);
-        });
+        // Gate::define(SystemAuthorities::$authorities['add_permission'], function ($user) {
+        //     return $this->runAthurizationQuery($user, SystemAuthorities::$authorities['add_permission']);
+        // });
+        // Gate::define(SystemAuthorities::$authorities['edit_permission'], function ($user) {
+        //     return $this->runAthurizationQuery($user, SystemAuthorities::$authorities['edit_permission']);
+        // });
+        // Gate::define(SystemAuthorities::$authorities['view_permission'], function ($user) {
+        //     return $this->runAthurizationQuery($user, SystemAuthorities::$authorities['view_permission']);
+        // });
+        // Gate::define(SystemAuthorities::$authorities['delete_permission'], function ($user) {
+        //     return $this->runAthurizationQuery($user, SystemAuthorities::$authorities['delete_permission']);
+        // });
+
+        // Gate::define(SystemAuthorities::$authorities['add_program'], function ($user) {
+        //     return $this->runAthurizationQuery($user, SystemAuthorities::$authorities['add_program']);
+        // });
+        // Gate::define(SystemAuthorities::$authorities['edit_program'], function ($user) {
+        //     return $this->runAthurizationQuery($user, SystemAuthorities::$authorities['edit_program']);
+        // });
+        // Gate::define(SystemAuthorities::$authorities['view_program'], function ($user) {
+        //     return $this->runAthurizationQuery($user, SystemAuthorities::$authorities['view_program']);
+        // });
+        // Gate::define(SystemAuthorities::$authorities['delete_program'], function ($user) {
+        //     return $this->runAthurizationQuery($user, SystemAuthorities::$authorities['delete_program']);
+        // });
 
     }
 
-    private function runAthurizationQuery($authority)
+    private function runAthurizationQuery($user, $authority)
     {
-        $curUser = Auth::user();
+        $curUser = $user;
         $user = User::select(
             "users.id as id"
         )->join('roles', 'roles.uuid', '=', 'users.role')

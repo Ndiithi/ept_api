@@ -45,7 +45,7 @@ class PermissionController extends Controller
 
     public function createPermission(Request $request)
     {
-        if (!Gate::allows(SystemAuthorities::$authorities['add_Permission'])) {
+        if (!Gate::allows(SystemAuthorities::$authorities['add_permission'])) {
             return response()->json(['Message' => 'Not allowed to create permissions: '], 500);
         }
         try {
@@ -66,7 +66,7 @@ class PermissionController extends Controller
 
     public function deletePermission(Request $request)
     {
-        if (!Gate::allows(SystemAuthorities::$authorities['delete_Permission'])) {
+        if (!Gate::allows(SystemAuthorities::$authorities['delete_permission'])) {
             return response()->json(['Message' => 'Not allowed to delete permissions: '], 500);
         }
         try {
@@ -88,7 +88,7 @@ class PermissionController extends Controller
 
     public function updatePermission(Request $request)
     {
-        if (!Gate::allows(SystemAuthorities::$authorities['edit_Permission'])) {
+        if (!Gate::allows(SystemAuthorities::$authorities['edit_permission'])) {
             return response()->json(['Message' => 'Not allowed to edit permission: '], 500);
         }
 
