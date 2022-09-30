@@ -56,7 +56,6 @@ class UITemplateController extends Controller
             "schema" => [],
             "reports" => [],
             "dataDictionary" => [
-
                 "GENDER_OPTIONS" => [
                     [
                         "name" => "Male",
@@ -85,13 +84,13 @@ class UITemplateController extends Controller
         )->where("forms.uuid", "=", $rowSet->round_form)->get();
 
         $schemaSet = Schema::select(
-            "schemaas.uuid as uuid",
-            "schemaas.name as schema_name",
-            "schemaas.description as shema_description",
-            "schemaas.scoringCriteria as schema_scoringcriteria",
-            "schemaas.meta as schema_meta"
+            "schemes.uuid as uuid",
+            "schemes.name as schema_name",
+            "schemes.description as shema_description",
+            "schemes.scoringCriteria as schema_scoringcriteria",
+            "schemes.meta as schema_meta"
 
-        )->where("schemaas.uuid", "=", $request->schema)->get();
+        )->where("schemes.uuid", "=", $request->schema)->get();
 
         $program['rounds'] = $this->addRound($program['rounds'], $rowSet);
 

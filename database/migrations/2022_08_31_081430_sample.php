@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('samples', function (Blueprint $table) {
-            $table->uuid('uuid');
+            $table->uuid('uuid')->primary()->unique();
             $table->uuid('round');
             $table->uuid('schema');
             $table->string('name');
@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('expected_interpretation_notes');
             $table->json('meta');
             $table->timestamps();
-$table->softDeletes();
+            $table->softDeletes();
         });
     }
 

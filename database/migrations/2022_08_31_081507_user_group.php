@@ -14,11 +14,11 @@ return new class extends Migration
     public function up()
     {
         Schema::create('user_groups', function (Blueprint $table) {
-            $table->uuid('uuid');
+            $table->uuid('uuid')->primary()->unique();
             $table->string('name');
             $table->string('description');
             $table->timestamps();
-$table->softDeletes();
+            $table->softDeletes();
         });
     }
 

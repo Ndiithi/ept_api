@@ -14,15 +14,16 @@ return new class extends Migration
     public function up()
     {
         Schema::create('forms', function (Blueprint $table) {
-            $table->uuid('uuid');
+            $table->uuid('uuid')->primary()->unique();
             $table->string('name');
             $table->string('description');
+            $table->uuid('program');
             $table->string('target_type');
             $table->json('meta');
             $table->json('actions');
             $table->json('content');
             $table->timestamps();
-$table->softDeletes();
+            $table->softDeletes();
         });
     }
 

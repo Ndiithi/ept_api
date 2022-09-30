@@ -16,7 +16,14 @@ class Form extends Model
      * @var array
      */
     protected $fillable = [
-        'uuid', 'name', 'description', 'meta', 'actions','target_type', 'created_at', 'updated_at'
+        'uuid',
+        'name',
+        'description',
+        'program',
+        'meta',
+        'actions','target_type',
+        'created_at',
+        'updated_at', 
     ];
 
     /**
@@ -25,7 +32,9 @@ class Form extends Model
      * @var array
      */
     protected $hidden = [
-        'created_at', 'updated_at', 'deleted_at'
+        'created_at',
+        'updated_at',
+        'deleted_at'
     ];
 
     /**

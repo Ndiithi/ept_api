@@ -15,7 +15,7 @@ return new class extends Migration
     {
 
         Schema::create('form_sections', function (Blueprint $table) {
-            $table->uuid('uuid');
+            $table->uuid('uuid')->primary()->unique();
             $table->uuid('form');
             $table->string('name');
             $table->string('description');
@@ -25,7 +25,7 @@ return new class extends Migration
             $table->boolean('next_condition');
             $table->boolean('disabled');
             $table->timestamps();
-$table->softDeletes();
+            $table->softDeletes();
         });
     }
 

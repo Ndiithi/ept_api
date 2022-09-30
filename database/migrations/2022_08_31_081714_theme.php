@@ -14,12 +14,12 @@ return new class extends Migration
     public function up()
     {
         Schema::create('themes', function (Blueprint $table) {
-            $table->uuid('uuid');
+            $table->uuid('uuid')->primary()->unique();
             $table->string('name');
             $table->string('description');
             $table->json('meta');
             $table->timestamps();
-$table->softDeletes();
+            $table->softDeletes();
         });
     }
 

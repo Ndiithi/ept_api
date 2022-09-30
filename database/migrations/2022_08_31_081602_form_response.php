@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('form_responses', function (Blueprint $table) {
-            $table->uuid('uuid');
+            $table->uuid('uuid')->primary()->unique();
             $table->uuid('user');
             $table->uuid('form');
             $table->uuid('form_section');
@@ -23,7 +23,7 @@ return new class extends Migration
             $table->json('meta');
             $table->json('value');
             $table->timestamps();
-$table->softDeletes();
+            $table->softDeletes();
         });
     }
 

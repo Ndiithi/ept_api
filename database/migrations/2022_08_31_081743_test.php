@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('tests', function (Blueprint $table) {
-            $table->uuid('uuid');
+            $table->uuid('uuid')->primary()->unique();
             $table->uuid('round');
             $table->uuid('schema');
             $table->string('name');
@@ -24,11 +24,10 @@ return new class extends Migration
             $table->string('target_code');
             $table->string('target_type');
             $table->timestamps();
-$table->softDeletes();
-            
+            $table->softDeletes();
         });
     }
-    
+
     /*
      * Reverse the migrations.
      *

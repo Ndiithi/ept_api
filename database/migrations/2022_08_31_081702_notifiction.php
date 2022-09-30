@@ -14,14 +14,14 @@ return new class extends Migration
     public function up()
     {
         Schema::create('notifications', function (Blueprint $table) {
-            $table->uuid('uuid');
+            $table->uuid('uuid')->primary()->unique();
             $table->string('category');
             $table->string('message');
             $table->string('description');
             $table->string('mode');
             $table->json('meta');
             $table->timestamps();
-$table->softDeletes();
+            $table->softDeletes();
         });
     }
 

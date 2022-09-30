@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('shipments', function (Blueprint $table) {
-            $table->uuid('uuid');
+            $table->uuid('uuid')->primary()->unique();
             $table->uuid('round');
             $table->string('name');
             $table->uuid('regions');
@@ -26,8 +26,7 @@ return new class extends Migration
             $table->string('description');
             $table->json('meta');
             $table->timestamps();
-$table->softDeletes();
-
+            $table->softDeletes();
         });
     }
 

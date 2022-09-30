@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('form_fields', function (Blueprint $table) {
-            $table->uuid('uuid');
+            $table->uuid('uuid')->primary()->unique();
             $table->uuid('form_section');
             $table->string('name');
             $table->string('type');

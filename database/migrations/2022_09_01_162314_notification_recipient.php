@@ -14,11 +14,11 @@ return new class extends Migration
     public function up()
     {
         Schema::create('notification_recipients', function (Blueprint $table) {
-            $table->uuid('uuid');
+            $table->uuid('uuid')->primary()->unique();
             $table->uuid('notification');
             $table->string('recipient');
             $table->timestamps();
-$table->softDeletes();
+            $table->softDeletes();
         });
     }
 

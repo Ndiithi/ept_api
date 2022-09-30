@@ -13,16 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('schemaas', function (Blueprint $table) {
-            $table->uuid('uuid');
+        Schema::create('schemes', function (Blueprint $table) {
+            $table->uuid('uuid')->primary()->unique();
             $table->string('name');
             $table->string('description');
+            $table->uuid('program');
             $table->json('meta');
             $table->timestamps();
-$table->softDeletes();
+            $table->softDeletes();
             // $table->integer("sample");
             $table->string('scoringCriteria');
-            
         });
     }
 
@@ -33,6 +33,6 @@ $table->softDeletes();
      */
     public function down()
     {
-        Schema::dropIfExists('schemaas');
+        Schema::dropIfExists('schemes');
     }
 };

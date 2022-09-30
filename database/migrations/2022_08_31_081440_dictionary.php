@@ -14,12 +14,12 @@ return new class extends Migration
     public function up()
     {
         Schema::create('dictionaries', function (Blueprint $table) {
-            $table->uuid('uuid');
+            $table->uuid('uuid')->primary()->unique();
             $table->string('description');
             $table->string('name');
             $table->json('meta');
             $table->timestamps();
-$table->softDeletes();
+            $table->softDeletes();
         });
     }
 

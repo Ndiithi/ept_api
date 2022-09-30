@@ -14,11 +14,11 @@ return new class extends Migration
     public function up()
     {
         Schema::create('role_permissions', function (Blueprint $table) {
-            $table->uuid('uuid');
+            $table->uuid('uuid')->primary()->unique();
             $table->uuid('role');
             $table->string('permission');
             $table->timestamps();
-$table->softDeletes();
+            $table->softDeletes();
         });
     }
 

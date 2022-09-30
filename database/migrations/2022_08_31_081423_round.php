@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('rounds', function (Blueprint $table) {
-            $table->uuid('uuid');
+            $table->uuid('uuid')->primary()->unique();
             $table->uuid('program');
             $table->uuid('user_group');
             $table->string('description');
@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string('testing_instructions');
             $table->json('meta');
             $table->timestamps();
-$table->softDeletes();
+            $table->softDeletes();
         });
     }
 

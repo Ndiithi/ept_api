@@ -14,15 +14,15 @@ return new class extends Migration
     public function up()
     {
         Schema::create('roles', function (Blueprint $table) {
-            $table->uuid('uuid');
+            $table->uuid('uuid')->primary()->unique();
             $table->string('name');
             $table->string('description')->nullable();
             $table->json('meta')->nullable();
             $table->timestamps();
-$table->softDeletes();
+            $table->softDeletes();
         });
     }
- 
+
     /**
      * Reverse the migrations.
      *
