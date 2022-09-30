@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Dictionary;
 use App\Services\SystemAuthorities;
 use Exception;
+use Faker\Provider\Uuid;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -17,7 +18,7 @@ class DictionaryController extends Controller
     public function getAll(Request $request)
     {
         if (!Gate::allows(SystemAuthorities::$authorities['view_dictionary'])) {
-            return response()->json(['Message' => 'Not allowed to view dictionary items: '], 500);
+            return response()->json(['message' => 'Not allowed to view dictionary items: '], 500);
         }
 
         $data = Dictionary::paginate(request()->all());
@@ -27,11 +28,15 @@ class DictionaryController extends Controller
     public function getItem(Request $request)
     {
         if (!Gate::allows(SystemAuthorities::$authorities['view_dictionary'])) {
-            return response()->json(['Message' => 'Not allowed to view dictionary entry: '], 500);
+            return response()->json(['message' => 'Not allowed to view dictionary entry: '], 500);
         }
-        $entry = Dictionary::find($request->uuid);
+        if ($request->uuid) {
+            $entry = Dictionary::where('uuid', $request->uuid)->first();
+        } else {
+            $entry = Dictionary::find($request->id);
+        }
         if($entry == null){
-            return response()->json(['Message' => 'Dictionary entry not found: '], 404);
+            return response()->json(['message' => 'Dictionary entry not found. '], 404);
         }
         return  $entry;
     }
@@ -39,53 +44,71 @@ class DictionaryController extends Controller
     public function createEntry(Request $request)
     {
         if (!Gate::allows(SystemAuthorities::$authorities['add_dictionary'])) {
-            return response()->json(['Message' => 'Not allowed to create dictionary item: '], 500);
+            return response()->json(['message' => 'Not allowed to create dictionary item: '], 500);
         }
         try {
-
+            // validate
+            $this->validate($request, [
+                'name' => 'required',
+                'description' => 'required',
+            ]);
             $dictionary = new Dictionary([
+                'uuid' => Uuid::uuid(),
                 'name' => $request->name,
                 'description' => $request->description,
-                'meta' => $request->meta,
+                'meta' => $request->meta ?? json_decode('{}'),
             ]);
             $dictionary->save();
 
-            return response()->json(['Message' => 'Created successfully'], 200);
+            return response()->json(['message' => 'Created successfully'], 200);
         } catch (Exception $ex) {
 
-            return ['Error' => '500', 'Message' => 'Could not save dictionary item ' . $ex->getMessage()];
+            return ['Error' => '500', 'message' => 'Could not save dictionary item ' . $ex->getMessage()];
         }
     }
     
     public function deleteItem(Request $request)
     {
         if (!Gate::allows(SystemAuthorities::$authorities['delete_dictionary'])) {
-            return response()->json(['Message' => 'Not allowed to delete item from dictionary: '], 500);
+            return response()->json(['message' => 'Not allowed to delete item from dictionary: '], 500);
         }
         try {
-            DB::delete('delete from dictionaries where uuid=?)', [$request->id]);
-            return response()->json(['Message' => 'Deleted successfully'], 200);
+            // DB::delete('delete from dictionaries where uuid=?)', [$request->id]);
+            if ($request->uuid) {
+                $entry = Dictionary::where('uuid', $request->uuid)->first();
+            } else {
+                $entry = Dictionary::find($request->id);
+            }
+            if($entry == null){
+                return response()->json(['message' => 'Entry not found. '], 404);
+            }else{
+                $entry->delete();
+                return response()->json(['message' => 'Deleted successfully'], 200);
+            }
         } catch (Exception $ex) {
-            return response()->json(['Message' => 'Delete failed.  Error code' . $ex->getMessage()], 500);
+            return response()->json(['message' => 'Delete failed.  Error code' . $ex->getMessage()], 500);
         }
     }
     
     public function updateItem(Request $request)
     {
         if (!Gate::allows(SystemAuthorities::$authorities['edit_dictionary'])) {
-            return response()->json(['Message' => 'Not allowed to edit dictionary item: '], 500);
+            return response()->json(['message' => 'Not allowed to edit dictionary item: '], 500);
         }
         try {
-
-            $dictionary =  Dictionary::where('uuid', '=', $request->id)->first();
-            $dictionary->name->$request->name;
-            $dictionary->description->$request->description;
-            $dictionary->meta->$request->meta;
+            if ($request->uuid) {
+                $dictionary = Dictionary::where('uuid', $request->uuid)->first();
+            } else {
+                $dictionary = Dictionary::find($request->id);
+            }
+            $dictionary->name = $request->name ?? $dictionary->name;
+            $dictionary->description = $request->description ?? $dictionary->description;
+            $dictionary->meta = $request->meta ?? $dictionary->meta;
             $dictionary->save();
 
-            return response()->json(['Message' => 'Updated successfully'], 200);
+            return response()->json(['message' => 'Updated successfully'], 200);
         } catch (Exception $ex) {
-            return response()->json(['Message' => 'Could not save dictionary item: '  . $ex->getMessage()], 500);
+            return response()->json(['message' => 'Could not save dictionary item: '  . $ex->getMessage()], 500);
         }
     }
 }

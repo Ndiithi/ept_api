@@ -18,4 +18,36 @@ class Form_section extends Model
         'uuid','form','name', 'description', 'name','meta','actions','created_at', 'updated_at','next','next_condition','disabled'
     ];
 
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'created_at', 'updated_at', 'deleted_at'
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'deleted_at' => 'datetime',
+        'meta' => 'array'
+    ];
+
+    public function form()
+    {
+        return $this->belongsTo('App\Models\Form');
+    }
+
+    // fields
+    public function form_fields()
+    {
+        return $this->hasMany('App\Models\Form_field');
+    }
+
 }

@@ -20,7 +20,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'uuid','name','role', 'description', 'email', 'meta', 'password', 'created_at', 'updated_at'
+        'uuid', 'name', 'role', 'description', 'email', 'meta', 'password', 'created_at', 'updated_at'
     ];
 
 
@@ -48,6 +48,10 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'deleted_at' => 'datetime',
+        'meta' => 'array'
     ];
 
     /**
@@ -65,6 +69,28 @@ class User extends Authenticatable
             }
         }
         return $perms;
+    }
+
+    /**
+     * get the programs the user has access to
+     * @return Program[]
+     */
+    public function programs()
+    {
+        // if user is admin, return all programs
+        if (Role::where('uuid', $this->role)->where('name', 'like', '%admin%')->first()) {
+            return Program::where('deleted_at', null)->get();
+        } else {
+            $programs = [];
+            $program_ids = DB::table('user_programs')->where('user', $this->uuid)->pluck('program');
+            foreach ($program_ids as $program_id) {
+                $pr = Program::where('uuid', $program_id)->first();
+                if ($pr) {
+                    $programs[] = $pr;
+                }
+            }
+            return $programs;
+        }
     }
 
     /**

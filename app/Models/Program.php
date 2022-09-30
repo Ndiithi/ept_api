@@ -16,7 +16,7 @@ class Program extends Model
      * @var array
      */
     protected $fillable = [
-        'uuid', 'name', 'description', 'created_at', 'updated_at'
+        'uuid', 'name', 'description', 'created_at', 'updated_at', 'meta'
     ];
 
     /**
@@ -36,6 +36,8 @@ class Program extends Model
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'deleted_at' => 'datetime',
+        'meta' => 'array'
     ];
 
     // id = uuid;

@@ -15,7 +15,7 @@ class Role extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'name', 'description', 'meta', 'created_at', 'updated_at'
+        'uuid', 'name', 'description', 'meta', 'created_at', 'updated_at'
     ];
 
     /**
@@ -40,6 +40,8 @@ class Role extends Model
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'deleted_at' => 'datetime',
+        'meta' => 'array'
     ];
 
     /**
@@ -48,6 +50,7 @@ class Role extends Model
      */
     public function permissions()
     {
-        return $this->belongsToMany(Permission::class);
+        // return $this->belongsToMany(Permission::class);
+        return $this->belongsToMany(Permission::class, 'role_permissions', 'role', 'permission');
     }
 }

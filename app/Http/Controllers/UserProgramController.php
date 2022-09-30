@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\UserProgram;
 use App\Services\SystemAuthorities;
 use Exception;
+use Faker\Provider\Uuid;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
@@ -14,7 +15,7 @@ class UserProgramController extends Controller
     public function getUserPrograms()
     {
         if (!Gate::allows(SystemAuthorities::$authorities['view_user_program'])) {
-            return response()->json(['Message' => 'Not allowed to view user programs: '], 500);
+            return response()->json(['message' => 'Not allowed to view user programs: '], 500);
         }
 
         $userProgram = UserProgram::select(
@@ -25,55 +26,67 @@ class UserProgramController extends Controller
 
         return  $userProgram;
     }
-    
+
     public function getUserProgram(Request $request)
     {
         if (!Gate::allows(SystemAuthorities::$authorities['view_user_program'])) {
-            return response()->json(['Message' => 'Not allowed to view user programs: '], 500);
+            return response()->json(['message' => 'Not allowed to view user programs: '], 500);
         }
-
-        $userProgram = UserProgram::find($request->id);
-        if($userProgram == null){
-            return response()->json(['Message' => 'User program not found: '], 404);
+        if ($request->uuid) {
+            $userProgram = UserProgram::where('uuid', $request->uuid)->first();
+        } else {
+            $userProgram = UserProgram::find($request->id);
+        }
+        if ($userProgram == null) {
+            return response()->json(['message' => 'User program not found. '], 404);
         }
 
         return  $userProgram;
     }
-    
+
 
     public function mapUserProgram(Request $request)
     {
         if (!Gate::allows(SystemAuthorities::$authorities['add_user_program'])) {
-            return response()->json(['Message' => 'Not allowed to create user programs: '], 500);
+            return response()->json(['message' => 'Not allowed to create user programs: '], 500);
         }
         try {
 
             $userProgram = new UserProgram([
+                'uuid' => Uuid::uuid(),
                 'program' => $request->program,
                 'user' => $request->user,
             ]);
             $userProgram->save();
 
-            return response()->json(['Message' => 'Created successfully'], 200);
+            return response()->json(['message' => 'Created successfully'], 200);
         } catch (Exception $ex) {
 
-            return ['Error' => '500', 'Message' => 'Could not save  user program ' . $ex->getMessage()];
+            return ['Error' => '500', 'message' => 'Could not save  user program ' . $ex->getMessage()];
         }
     }
-    
+
     public function deleteUserPrograms(Request $request)
     {
         if (!Gate::allows(SystemAuthorities::$authorities['delete_user_program'])) {
-            return response()->json(['Message' => 'Not allowed to delete user program: '], 500);
+            return response()->json(['message' => 'Not allowed to delete user program: '], 500);
         }
         try {
-            //SELECT uuid, `user`, program, created_at, updated_at, deleted_at //user_programs
-            $userProgram = UserProgram::find($request->id);
-            $userProgram->delete();
+            if ($request->uuid) {
+                $userProgram = UserProgram::where('uuid', $request->uuid)->first();
+            } else {
+                $userProgram = UserProgram::find($request->id);
+            }
+            if ($userProgram == null) {
+                return response()->json(['message' => 'User program not found. '], 404);
+            } else {
+                $userProgram->delete();
+                return response()->json(['message' => 'Deleted successfully'], 200);
+            }
 
-            return response()->json(['Message' => 'Deleted successfully'], 200);
+            return response()->json(['message' => 'Deleted successfully'], 200);
         } catch (Exception $ex) {
-            return response()->json(['Message' => 'Delete failed.  Error code' . $ex->getMessage()], 500);
+            return response()->json(['message' => 'Delete failed.  Error code' . $ex->getMessage()], 500);
         }
     }
 }
