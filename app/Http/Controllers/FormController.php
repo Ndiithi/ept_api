@@ -18,16 +18,20 @@ class FormController extends Controller
         if (!Gate::allows(SystemAuthorities::$authorities['view_form'])) {
             return response()->json(['message' => 'Not allowed to view form: '], 500);
         }
-        $forms = Form::select(
-            "forms.name",
-            "forms.updated_at as updated_at",
-            "forms.target_type as target_type",
-            "forms.meta as meta",
-            "forms.actions as forms",
-            "forms.description",
-            "forms.uuid as uuid"
-        );
+        // $forms = Form::select(
+        //     "forms.name",
+        //     "forms.updated_at as updated_at",
+        //     "forms.target_type as target_type",
+        //     "forms.meta as meta",
+        //     "forms.actions as forms",
+        //     "forms.description",
+        //     "forms.uuid as uuid"
+        // );
 
+        $forms = Form::where('deleted_at', null)->get();
+        if ($forms == null) {
+            return response()->json(['message' => 'Forms not found. '], 404);
+        }
         return  $forms;
     }
 
@@ -46,6 +50,13 @@ class FormController extends Controller
             if ($form == null) {
                 return response()->json(['message' => 'Form not found. '], 404);
             }
+            // TODO: check if user has permission to view the program which this form belongs to
+            $user = $request->user();
+            $user_programs = $user->programs()->pluck('uuid');
+            if (!$user_programs->contains($form->program)) {
+                return response()->json(['message' => 'Not allowed to view form: '], 500);
+            }
+            // TODO: append form sections (& fields), schemes, rounds and reports
             return  $form;
         } catch (Exception $ex) {
             return ['Error' => '500', 'message' => 'Could not get form  ' . $ex->getMessage()];
