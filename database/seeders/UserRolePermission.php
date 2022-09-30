@@ -55,7 +55,8 @@ class UserRolePermission extends Seeder
 
 
         $data = array(
-            array('uuid' =>  '1', 'name' => 'super admin', 'created_at' => new \dateTime, 'updated_at' => new \dateTime),
+            array('uuid' =>  '0', 'name' => 'super_admin', 'created_at' => new \dateTime, 'updated_at' => new \dateTime),
+            array('uuid' =>  '2', 'name' => 'admin', 'created_at' => new \dateTime, 'updated_at' => new \dateTime),
             array('uuid' =>  '2', 'name' => 'guest', 'created_at' => new \dateTime, 'updated_at' => new \dateTime),
         );
 

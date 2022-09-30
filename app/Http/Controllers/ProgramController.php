@@ -7,6 +7,7 @@ use App\Services\SystemAuthorities;
 use Exception;
 use Faker\Provider\Uuid;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
@@ -35,6 +36,13 @@ class ProgramController extends Controller
         if ($program == null) {
             return response()->json(['message' => 'Program not found. '], 404);
         }
+        // TODO: check if current user has permission to view this program
+        $user = $request->user();
+        $user_programs = $user->programs()->pluck('uuid');
+        if (!$user_programs->contains($program->uuid)) {
+            return response()->json(['message' => 'Not allowed to view program: '], 500);
+        }
+        // TODO: append program forms (& sections & fields), schemes, rounds and reports
         return  $program;
     }
 
