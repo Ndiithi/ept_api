@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -31,17 +32,21 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
-
-        $permissions = Permission::where('deleted_at', null)->get();
-        if (count($permissions) > 0) {
-            foreach ($permissions as $permission) {
-                Gate::define($permission->name, function (User $user) use ($permission) {
-                    $rt = $this->runAthurizationQuery($user, SystemAuthorities::$authorities[$permission->name]);
-                    // Log::debug('AuthServiceProvider:::: Perm:' . $permission->name . ', User: '.$user->name.' = ' . json_encode($rt));
-                    return $rt;
-                });
+        if (Schema::hasTable('permissions')) {
+            $permissions = Permission::where('deleted_at', null)->get();
+            if (count($permissions) > 0) {
+                foreach ($permissions as $permission) {
+                    Gate::define($permission->name, function (User $user) use ($permission) {
+                        $rt = $this->runAthurizationQuery($user, SystemAuthorities::$authorities[$permission->name]);
+                        // Log::debug('AuthServiceProvider:::: Perm:' . $permission->name . ', User: '.$user->name.' = ' . json_encode($rt));
+                        return $rt;
+                    });
+                }
             }
         }
+
+
+
         // Gate::define(SystemAuthorities::$authorities['edit_user'], function ($user) {
         //     return $this->runAthurizationQuery($user, SystemAuthorities::$authorities['edit_user']);
         // });
