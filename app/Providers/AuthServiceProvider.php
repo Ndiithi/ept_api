@@ -33,12 +33,14 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         $permissions = Permission::where('deleted_at', null)->get();
-        foreach ($permissions as $permission) {
-            Gate::define($permission->name, function (User $user) use ($permission) {
-                $rt = $this->runAthurizationQuery($user, SystemAuthorities::$authorities[$permission->name]);
-                // Log::debug('AuthServiceProvider:::: Perm:' . $permission->name . ', User: '.$user->name.' = ' . json_encode($rt));
-                return $rt;
-            });
+        if (count($permissions) > 0) {
+            foreach ($permissions as $permission) {
+                Gate::define($permission->name, function (User $user) use ($permission) {
+                    $rt = $this->runAthurizationQuery($user, SystemAuthorities::$authorities[$permission->name]);
+                    // Log::debug('AuthServiceProvider:::: Perm:' . $permission->name . ', User: '.$user->name.' = ' . json_encode($rt));
+                    return $rt;
+                });
+            }
         }
         // Gate::define(SystemAuthorities::$authorities['edit_user'], function ($user) {
         //     return $this->runAthurizationQuery($user, SystemAuthorities::$authorities['edit_user']);

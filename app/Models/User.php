@@ -25,9 +25,9 @@ class User extends Authenticatable
 
 
     // id = uuid
-    // public $incrementing = false;
-    // protected $keyType = 'string';
-    // protected $primaryKey = 'uuid';
+    public $incrementing = false;
+    protected $keyType = 'string';
+    protected $primaryKey = 'uuid';
 
     /**
      * The attributes that should be hidden for serialization.
