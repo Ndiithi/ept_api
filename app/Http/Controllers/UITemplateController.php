@@ -113,7 +113,7 @@ class UITemplateController extends Controller
             $formEtry = [
                 "name" => $rowSet->form_name,
                 "code" => $rowSet->form_code,
-                "meta" => $rowSet->form_meta,
+                "meta" => json_decode($rowSet->form_meta),
                 "description" => $rowSet->form_description,
                 "sections" => []
             ];
@@ -147,7 +147,7 @@ class UITemplateController extends Controller
                 "next" => $rowSet->section_next,
                 "nextCondition" => $rowSet->section_nextcondition,
                 "disabled" => $rowSet->section_disabled,
-                "metadata" => $rowSet->section_meta,
+                "metadata" => json_decode($rowSet->section_meta),
                 "fields" => []
             ];
             $sectionEntry = $this->addField($sectionEntry, $rowSet);
@@ -176,7 +176,7 @@ class UITemplateController extends Controller
                     "code" => $rowSet->field_code,
                     "description" => $rowSet->field_description,
                     "type" => $rowSet->field_type,
-                    "meta" => $rowSet->field_meta,
+                    "meta" => json_decode($rowSet->field_meta),
                     "actions" => $rowSet->field_actions
                 ]
             );
@@ -213,7 +213,7 @@ class UITemplateController extends Controller
             "form" => $rowSet->round_form,
             "schema" => $rowSet->round_schema,
             "active" => $rowSet->round_active,
-            "metadata" => $rowSet->round_meta
+            "metadata" => json_decode($rowSet->round_meta)
         ];
 
         array_push($roundsArr, $roundEtry);
@@ -246,7 +246,7 @@ class UITemplateController extends Controller
             "description" => $rowSet->shema_description,
             "samples" => [],
             "tests" => [],
-            "metadata" => $rowSet->schema_meta,
+            "metadata" => json_decode($rowSet->schema_meta),
         ];
 
         $shemaEntry["samples"] = $this->addSample($shemaEntry["samples"], $rowSet->uuid);
@@ -276,7 +276,7 @@ class UITemplateController extends Controller
                     "sample_id" => $sample->sample_code,
                     "sample_name" => $sample->sample_name,
                     "interpretation" => $sample->sample_expected_interpretation,
-                    "meta" => $sample->sample_expected_meta,
+                    "meta" => json_decode($sample->sample_expected_meta),
                 ]
             );
         }
@@ -302,7 +302,7 @@ class UITemplateController extends Controller
                     "id" => $rowSet->test_id,
                     "name" => $rowSet->test_name,
                     "target_type" => $rowSet->test_targettype,
-                    "targets" => $rowSet->dictionary_meta,
+                    "targets" => json_decode($rowSet->dictionary_meta),
                     "overall_result" => $rowSet->test_overall_result,
                     "remarks" => ""
                 ]
