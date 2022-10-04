@@ -177,7 +177,7 @@ class UITemplateController extends Controller
                     "description" => $rowSet->field_description,
                     "type" => $rowSet->field_type,
                     "meta" => json_decode($rowSet->field_meta),
-                    "actions" => $rowSet->field_actions
+                    "actions" => json_decode($rowSet->field_actions)
                 ]
             );
         }
