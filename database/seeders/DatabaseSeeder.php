@@ -169,6 +169,7 @@ class DatabaseSeeder extends Seeder
         $schema = array(
             array(
                 'uuid' =>  'schema1',
+                'program' => 'program1',
                 'name' => 'SARS-CoV-2-PT-RA-Aug22-Primary-Entry-Form',
                 'description' => 'Section 1: General Information',
                 'meta' => '{"": ""}',
@@ -242,6 +243,7 @@ class DatabaseSeeder extends Seeder
         $form = array(
             array(
                 'uuid' =>  'form1',
+                'program' => 'program1',
                 'description' =>  "for covid test",
                 'name' => 'HPV 16',
                 'target_type' => 'dropdown',
