@@ -40,12 +40,59 @@ class AuthController extends Controller
                     'errors' => $validateUser->errors()
                 ], 401);
             }
-
             $user = User::create([
                 'uuid' => Str::uuid(),
                 'name' => $request->name,
                 'email' => $request->email,
                 'role' => Role::where('name', 'like', '%guest%')->first()->id ?? 2,         //$request->role,
+                'password' => Hash::make($request->password),
+            ]);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'User Created Successfully',
+                'token' => $user->createToken("API TOKEN")->plainTextToken
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Add User
+     * @param Request $request
+     * @return User 
+     */
+    public function addUser(Request $request)
+    {
+        try {
+
+            $validateUser = Validator::make(
+                $request->all(),
+                [
+                    // 'uuid' => 'nullable',
+                    'name' => 'required',
+                    'email' => 'required|email|unique:users,email',
+                    'password' => 'required',
+                    'role' => 'required'
+                ]
+            );
+
+            if ($validateUser->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'validation error',
+                    'errors' => $validateUser->errors()
+                ], 401);
+            }
+            $user = User::create([
+                'uuid' => Str::uuid(),
+                'name' => $request->name,
+                'email' => $request->email,
+                'role' => Role::find($request->role)->uuid ?? Role::where('name', 'like', '%guest%')->first()->id,         //$request->role,
                 'password' => Hash::make($request->password),
             ]);
 
