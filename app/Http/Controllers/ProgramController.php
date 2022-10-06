@@ -38,8 +38,12 @@ class ProgramController extends Controller
         }
         // TODO: check if current user has permission to view this program
         $user = $request->user();
-        $user_programs = $user->programs()->pluck('uuid');
-        if (!$user_programs->contains($program->uuid)) {
+        $user_program_ids = [];
+        $user_programs = $user->programs();
+        foreach ($user_programs as $user_program) {
+            $user_program_ids[] = $user_program->uuid;
+        }
+        if (!in_array($program->uuid, $user_program_ids)) {
             return response()->json(['message' => 'Not allowed to view program: '], 500);
         }
         // TODO: append program forms (& sections & fields), schemes, rounds and reports
