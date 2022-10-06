@@ -69,6 +69,7 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 1. Log in, Signup, session details (user, role, program) - Done
 
 2. Assign a program (COV, Onco, Recency etc) - user_programs
+2b. Append program forms (& sections & fields), schemes, rounds and reports in the ProgramController::getProgram() method
 
 3. Surveys (Readiness Checklists) - list, fill, edit, submit
 
