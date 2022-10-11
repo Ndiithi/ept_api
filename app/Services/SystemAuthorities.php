@@ -20,6 +20,11 @@ class SystemAuthorities
         'edit_role' => 'edit_role',
         'add_role' => 'add_role',
 
+        'delete_response' => 'delete_response',
+        'view_response' => 'view_response',
+        'edit_response' => 'edit_response',
+        'add_response' => 'add_response',
+
         'delete_form' => 'delete_form',
         'view_form' => 'view_form',
         'edit_form' => 'edit_form',
@@ -28,6 +33,7 @@ class SystemAuthorities
 
         'view_program' => 'view_program',
         'add_program' => 'add_program',
+        'assign_program' => 'assign_program',
         'delete_program' => 'delete_program',
         'edit_program' => 'edit_program',
 
@@ -41,9 +47,9 @@ class SystemAuthorities
         'delete_permission' => 'delete_permission',
         'edit_permission' => 'edit_permission',
 
-        'view_user_program' => 'view_user_program',
-        'add_user_program' => 'add_user_program',
-        'delete_user_program' => 'delete_user_program',
-        'edit_user_program' => 'edit_user_program',
+        // 'view_user_program' => 'view_user_program',
+        // 'add_user_program' => 'add_user_program',
+        // 'delete_user_program' => 'delete_user_program',
+        // 'edit_user_program' => 'edit_user_program',
     ];
 }

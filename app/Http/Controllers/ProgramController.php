@@ -135,7 +135,7 @@ class ProgramController extends Controller
                 return response()->json(['message' => 'Updated successfully'], 200);
             }
         } catch (Exception $ex) {
-            return response()->json(['message' => 'Could not save program : '  . $ex->getMessage()], 500);
+            return response()->json(['message' => 'Could not update program : '  . $ex->getMessage()], 500);
         }
     }
 }

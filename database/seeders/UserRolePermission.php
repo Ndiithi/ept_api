@@ -23,13 +23,53 @@ class UserRolePermission extends Seeder
     {
         //add permissions/authorities
         $permmissions = array(
+            // user
             array('uuid' => Uuid::uuid(), 'name' => 'add_user',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
             array('uuid' => Uuid::uuid(), 'name' => 'edit_user',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
+            array('uuid' => Uuid::uuid(), 'name' => 'view_user',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
             array('uuid' => Uuid::uuid(), 'name' => 'delete_user',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
+            // role
             array('uuid' => Uuid::uuid(), 'name' => 'view_role',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
             array('uuid' => Uuid::uuid(), 'name' => 'add_role',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
             array('uuid' => Uuid::uuid(), 'name' => 'delete_role',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
-            array('uuid' => Uuid::uuid(), 'name' => 'edit_role',  'created_at' => new \dateTime, 'updated_at' => new \dateTime)
+            array('uuid' => Uuid::uuid(), 'name' => 'edit_role',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
+            // permission
+            array('uuid' => Uuid::uuid(), 'name' => 'view_permission',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
+            array('uuid' => Uuid::uuid(), 'name' => 'add_permission',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
+            array('uuid' => Uuid::uuid(), 'name' => 'delete_permission',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
+            array('uuid' => Uuid::uuid(), 'name' => 'edit_permission',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
+            // response
+            array('uuid' => Uuid::uuid(), 'name' => 'view_response',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
+            array('uuid' => Uuid::uuid(), 'name' => 'add_response',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
+            array('uuid' => Uuid::uuid(), 'name' => 'delete_response',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
+            array('uuid' => Uuid::uuid(), 'name' => 'edit_response',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
+            // program
+            array('uuid' => Uuid::uuid(), 'name' => 'view_program',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
+            array('uuid' => Uuid::uuid(), 'name' => 'add_program',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
+            array('uuid' => Uuid::uuid(), 'name' => 'assign_program',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
+            array('uuid' => Uuid::uuid(), 'name' => 'delete_program',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
+            array('uuid' => Uuid::uuid(), 'name' => 'edit_program',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
+            // scheme
+            array('uuid' => Uuid::uuid(), 'name' => 'view_scheme',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
+            array('uuid' => Uuid::uuid(), 'name' => 'add_scheme',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
+            array('uuid' => Uuid::uuid(), 'name' => 'delete_scheme',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
+            array('uuid' => Uuid::uuid(), 'name' => 'edit_scheme',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
+            // round
+            array('uuid' => Uuid::uuid(), 'name' => 'view_round',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
+            array('uuid' => Uuid::uuid(), 'name' => 'add_round',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
+            array('uuid' => Uuid::uuid(), 'name' => 'delete_round',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
+            array('uuid' => Uuid::uuid(), 'name' => 'edit_round',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
+            // dictionary
+            array('uuid' => Uuid::uuid(), 'name' => 'view_dictionary',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
+            array('uuid' => Uuid::uuid(), 'name' => 'add_dictionary',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
+            array('uuid' => Uuid::uuid(), 'name' => 'delete_dictionary',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
+            array('uuid' => Uuid::uuid(), 'name' => 'edit_dictionary',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
+            // form
+            array('uuid' => Uuid::uuid(), 'name' => 'view_form',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
+            array('uuid' => Uuid::uuid(), 'name' => 'add_form',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
+            array('uuid' => Uuid::uuid(), 'name' => 'fill_form',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
+            array('uuid' => Uuid::uuid(), 'name' => 'delete_form',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
+            array('uuid' => Uuid::uuid(), 'name' => 'edit_form',  'created_at' => new \dateTime, 'updated_at' => new \dateTime)
 
         );
         $authObj = new Permission();

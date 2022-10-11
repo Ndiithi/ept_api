@@ -14,7 +14,8 @@ class UserProgramController extends Controller
 
     public function getUserPrograms()
     {
-        if (!Gate::allows(SystemAuthorities::$authorities['view_user_program'])) {
+        // if (!Gate::allows(SystemAuthorities::$authorities['view_user_program'])) {
+        if (!Gate::allows(SystemAuthorities::$authorities['view_program']) || !Gate::allows(SystemAuthorities::$authorities['view_user'])) {
             return response()->json(['message' => 'Not allowed to view user programs: '], 500);
         }
 
@@ -29,7 +30,8 @@ class UserProgramController extends Controller
 
     public function getUserProgram(Request $request)
     {
-        if (!Gate::allows(SystemAuthorities::$authorities['view_user_program'])) {
+        // if (!Gate::allows(SystemAuthorities::$authorities['view_user_program'])) {
+        if (!Gate::allows(SystemAuthorities::$authorities['view_program']) || !Gate::allows(SystemAuthorities::$authorities['view_user'])) {
             return response()->json(['message' => 'Not allowed to view user programs: '], 500);
         }
         if ($request->uuid) {
@@ -47,7 +49,8 @@ class UserProgramController extends Controller
 
     public function mapUserProgram(Request $request)
     {
-        if (!Gate::allows(SystemAuthorities::$authorities['add_user_program'])) {
+        // if (!Gate::allows(SystemAuthorities::$authorities['add_user_program'])) {
+        if (!Gate::allows(SystemAuthorities::$authorities['assign_program']) || !Gate::allows(SystemAuthorities::$authorities['edit_user'])) {
             return response()->json(['message' => 'Not allowed to create user programs: '], 500);
         }
         try {
@@ -68,7 +71,8 @@ class UserProgramController extends Controller
 
     public function deleteUserPrograms(Request $request)
     {
-        if (!Gate::allows(SystemAuthorities::$authorities['delete_user_program'])) {
+        // if (!Gate::allows(SystemAuthorities::$authorities['delete_user_program'])) {
+        if (!Gate::allows(SystemAuthorities::$authorities['assign_program']) || !Gate::allows(SystemAuthorities::$authorities['edit_user'])) {
             return response()->json(['message' => 'Not allowed to delete user program: '], 500);
         }
         try {

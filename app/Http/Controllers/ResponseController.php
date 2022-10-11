@@ -18,41 +18,41 @@ class ResponseController extends Controller
     public function getResponses(Request $request)
     {
 
-        if (!Gate::allows(SystemAuthorities::$authorities['view_form_response'])) {
+        if (!Gate::allows(SystemAuthorities::$authorities['view_response'])) {
             return response()->json(['message' => 'Not allowed to view form response: '], 500);
         }
 
-        $formresponses = Form_response::where('deleted_at', null)->get();
+        $responses = Form_response::where('deleted_at', null)->get();
         // TODO: for users, only return responses that belong to the programs they have access to
-        if ($formresponses == null) {
-            return response()->json(['message' => 'Forms not found. '], 404);
+        if ($responses == null) {
+            return response()->json(['message' => 'Responses not found. '], 404);
         }
-        return  $formresponses;
+        return  $responses;
     }
 
     public function getResponse(Request $request)
     {
         try {
-            if (!Gate::allows(SystemAuthorities::$authorities['view_form_response'])) {
-                return response()->json(['message' => 'Not allowed to view form response: '], 500);
+            if (!Gate::allows(SystemAuthorities::$authorities['view_response'])) {
+                return response()->json(['message' => 'Not allowed to view response: '], 500);
             }
             // if request has uuid
             if ($request->uuid) {
-                $formresponse = Form_response::where('uuid', $request->uuid)->first();
+                $response = Form_response::where('uuid', $request->uuid)->first();
             } else {
-                $formresponse = Form_response::find($request->id);
+                $response = Form_response::find($request->id);
             }
-            if ($formresponse == null) {
+            if ($response == null) {
                 return response()->json(['message' => 'Form not found. '], 404);
             }
-            // TODO: check if user has permission to view the program which this form belongs to
+            // TODO: check if user has permission to view the program which this response belongs to
             $user = $request->user();
             $user_programs = $user->programs()->pluck('uuid');
-            if (!$user_programs->contains($formresponse->program)) {
-                return response()->json(['message' => 'Not allowed to view form response: '], 500);
+            if (!$user_programs->contains($response->program)) {
+                return response()->json(['message' => 'Not allowed to view response: '], 500);
             }
             // TODO: append form sections (& fields), schemes, rounds and reports
-            return  $formresponse;
+            return  $response;
         } catch (Exception $ex) {
             return ['Error' => '500', 'message' => 'Could not get form  ' . $ex->getMessage()];
         }
@@ -60,47 +60,49 @@ class ResponseController extends Controller
 
     public function createResponse(Request $request)
     {
-        if (!Gate::allows(SystemAuthorities::$authorities['add_form_response'])) {
-            return response()->json(['message' => 'Not allowed to create form response: '], 500);
+        if (!Gate::allows(SystemAuthorities::$authorities['add_response'])) {
+            return response()->json(['message' => 'Not allowed to create response: '], 500);
         }
         try {
 
             //validate
             $request->validate([
-                'name' => 'required',
-                'description' => 'required',
+                'form' => 'required',
+                'form_field' => 'required',
+                'value' => 'required',
             ]);
-            $formresponse = new Form([
-                'name' => $request->name,
-                'description' => $request->description,
-                'meta' => $request->meta ?? json_decode('{}'),
-                'target_type' => $request->target_type ?? 'survey', // survey, evaluation, etc
-                'actions' => $request->actions ?? json_decode('{}'),
+            $response = new Form([
+                'form' => $request->form, 
+                'form_section' => $request->form_section, 
+                'form_field' => $request->form_field, 
+                'value' => $request->value, 
+                'meta' => $request->meta ?? json_decode('{}'), 
+                'user' => $request->user()->uuid,
             ]);
-            $formresponse->save();
+            $response->save();
 
             return response()->json(['message' => 'Created successfully'], 200);
         } catch (Exception $ex) {
 
-            return ['Error' => '500', 'message' => 'Could not save form  ' . $ex->getMessage()];
+            return ['Error' => '500', 'message' => 'Could not save response  ' . $ex->getMessage()];
         }
     }
 
     public function deleteResponse(Request $request)
     {
-        if (!Gate::allows(SystemAuthorities::$authorities['delete_form_response'])) {
-            return response()->json(['message' => 'Not allowed to delete  form response: '], 500);
+        if (!Gate::allows(SystemAuthorities::$authorities['delete_response'])) {
+            return response()->json(['message' => 'Not allowed to delete response: '], 500);
         }
         try {
             if ($request->uuid) {
-                $formresponse = Form_response::where('uuid', $request->uuid)->first();
+                $response = Form_response::where('uuid', $request->uuid)->first();
             } else {
-                $formresponse = Form_response::find($request->id);
+                $response = Form_response::find($request->id);
             }
-            if($formresponse == null){
-                return response()->json(['message' => 'Form not found. '], 404);
+            if($response == null){
+                return response()->json(['message' => 'Response not found. '], 404);
             }else{
-                $formresponse->delete();
+                $response->delete();
                 return response()->json(['message' => 'Deleted successfully'], 200);
             }
             return response()->json(['message' => 'Deleted successfully'], 200);
@@ -111,29 +113,29 @@ class ResponseController extends Controller
 
     public function updateResponse(Request $request)
     {
-        if (!Gate::allows(SystemAuthorities::$authorities['edit_form_response'])) {
-            return response()->json(['message' => 'Not allowed to edit form . '], 500);
+        if (!Gate::allows(SystemAuthorities::$authorities['edit_response'])) {
+            return response()->json(['message' => 'Not allowed to update response . '], 500);
         }
         try {
 
             if ($request->uuid) {
-                $formresponse = Form_response::where('uuid', $request->uuid)->first();
+                $response = Form_response::where('uuid', $request->uuid)->first();
             } else {
-                $formresponse = Form_response::find($request->id);
+                $response = Form_response::find($request->id);
             }
-            if ($formresponse == null) {
-                return response()->json(['message' => 'Form not found. '], 404);
+            if ($response == null) {
+                return response()->json(['message' => 'Response not found. '], 404);
             }else{
-                $formresponse->name = $request->name ?? $formresponse->name;
-                $formresponse->description = $request->description ?? $formresponse->description;
-                $formresponse->target_type = $request->target_type ?? $formresponse->target_type;
-                $formresponse->actions = $request->actions ?? $formresponse->actions;
-                $formresponse->meta = $request->meta ?? $formresponse->meta;
-                $formresponse->save();
+                $response->name = $request->name ?? $response->name;
+                $response->description = $request->description ?? $response->description;
+                $response->target_type = $request->target_type ?? $response->target_type;
+                $response->actions = $request->actions ?? $response->actions;
+                $response->meta = $request->meta ?? $response->meta;
+                $response->save();
                 return response()->json(['message' => 'Updated successfully'], 200);
             }
         } catch (Exception $ex) {
-            return response()->json(['message' => 'Could not save form : '  . $ex->getMessage()], 500);
+            return response()->json(['message' => 'Could not update response : '  . $ex->getMessage()], 500);
         }
     }
 }
