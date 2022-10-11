@@ -45,4 +45,22 @@ class Program extends Model
     protected $keyType = 'string';
     protected $primaryKey = 'uuid';
 
+    // forms
+    public function forms()
+    {
+        return $this->hasMany('App\Models\Form');
+    }
+
+    // schemes
+    public function schemes()
+    {
+        return $this->hasMany('App\Models\Scheme');
+    }
+
+    // rounds
+    public function rounds()
+    {
+        return $this->hasMany('App\Models\Round');
+    }
+
 }

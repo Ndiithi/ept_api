@@ -5,6 +5,7 @@ use App\Http\Controllers\DictionaryController;
 use App\Http\Controllers\FormController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProgramController;
+use App\Http\Controllers\ResponseController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UITemplateController;
 use Illuminate\Http\Request;
@@ -67,3 +68,9 @@ Route::get('/forms', [FormController::class, 'getForms'])->middleware('auth:sanc
 Route::get('/form/{uuid}', [FormController::class, 'getForm'])->middleware('auth:sanctum');
 Route::delete('/form/delete/{uuid}', [FormController::class, 'deleteForm'])->middleware('auth:sanctum');
 Route::put('/form/edit/{uuid}', [FormController::class, 'updateForm'])->middleware('auth:sanctum');
+
+Route::post('/form_response/new', [ResponseController::class, 'createResponse'])->middleware('auth:sanctum');
+Route::get('/form_responses', [ResponseController::class, 'getResponses'])->middleware('auth:sanctum');
+Route::get('/form_response/{uuid}', [ResponseController::class, 'getResponse'])->middleware('auth:sanctum');
+Route::delete('/form_response/delete/{uuid}', [ResponseController::class, 'deleteResponse'])->middleware('auth:sanctum');
+Route::put('/form_response/edit/{uuid}', [ResponseController::class, 'updateResponse'])->middleware('auth:sanctum');

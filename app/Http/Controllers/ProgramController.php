@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Form;
 use App\Models\Program;
 use App\Services\SystemAuthorities;
 use Exception;
@@ -36,7 +37,7 @@ class ProgramController extends Controller
         if ($program == null) {
             return response()->json(['message' => 'Program not found. '], 404);
         }
-        // TODO: check if current user has permission to view this program
+        // TODO: check if current user has permission to view this program - DONE
         $user = $request->user();
         $user_program_ids = [];
         $user_programs = $user->programs();
@@ -47,6 +48,20 @@ class ProgramController extends Controller
             return response()->json(['message' => 'Not allowed to view program: '], 500);
         }
         // TODO: append program forms (& sections & fields), schemes, rounds and reports
+        /*
+        "name"
+        "code"
+        "description"
+        "forms"
+        "rounds"
+        "schema"
+        "reports"
+        "dataDictionary"
+        */
+        $forms = Form::where('program', $program->uuid)->get();
+        if ($forms) {
+            $program->forms = $forms;
+        }
         return  $program;
     }
 
