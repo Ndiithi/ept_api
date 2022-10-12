@@ -49,12 +49,14 @@ class DictionaryController extends Controller
         try {
             // validate
             $this->validate($request, [
-                'name' => 'required',
-                'description' => 'required',
+                'name' => 'required|alpha_dash|unique:dictionary,name|max:255',
+                'value' => 'required|json',
             ]);
+
             $dictionary = new Dictionary([
                 'uuid' => Uuid::uuid(),
                 'name' => $request->name,
+                'value' => json_encode($request->value),
                 'description' => $request->description,
                 'meta' => $request->meta ?? json_decode('{}'),
             ]);

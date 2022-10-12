@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Dictionary;
 use App\Models\Form;
 use App\Models\Program;
+use App\Models\Round;
+use App\Models\Schema;
 use App\Services\SystemAuthorities;
 use Exception;
 use Faker\Provider\Uuid;
@@ -61,6 +64,32 @@ class ProgramController extends Controller
         $forms = Form::where('program', $program->uuid)->get();
         if ($forms) {
             $program->forms = $forms;
+        }
+        // $rounds = $program->rounds()->get();
+        $rounds = Round::where('program', $program->uuid)->get();
+        if ($rounds) {
+            $program->rounds = $rounds;
+        }
+        // $schema = $program->schema()->get();
+        $schema = Schema::where('program', $program->uuid)->get();
+        if ($schema) {
+            $program->schema = $schema;
+        }
+        // $reports = $program->reports()->get();
+        $reports = [];//Report::where('program', $program->uuid)->get();
+        if ($reports) {
+            $program->reports = $reports;
+        }
+        // $dataDictionary = $program->dataDictionary()->get();
+        $dataDictionary = Dictionary::where('deleted_at', null)
+            // ->where('program', $program->uuid)
+            ->get();
+        if ($dataDictionary) {
+            $program_dictionary = [];
+            foreach ($dataDictionary as $dictionary) {
+                $program_dictionary[$dictionary->name] = $dictionary->value ?? $dictionary->meta ?? null;
+            }
+            $program->dataDictionary = $program_dictionary;
         }
         return  $program;
     }

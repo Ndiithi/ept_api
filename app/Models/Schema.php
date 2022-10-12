@@ -16,7 +16,7 @@ class Schema extends Model
      * @var array
      */
     protected $fillable = [
-        'uuid', 'name', 'description', 'meta', 'scoringCriteria', 'created_at', 'updated_at'
+        'uuid', 'name', 'description', 'program', 'meta', 'scoringCriteria', 'created_at', 'updated_at'
     ];
 
 }

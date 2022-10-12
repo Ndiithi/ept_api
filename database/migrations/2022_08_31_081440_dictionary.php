@@ -15,9 +15,10 @@ return new class extends Migration
     {
         Schema::create('dictionaries', function (Blueprint $table) {
             $table->uuid('uuid')->primary()->unique();
-            $table->string('description');
-            $table->string('name');
-            $table->json('meta');
+            $table->string('name')->unique();
+            $table->json('value')->default('[]');
+            $table->string('description')->nullable();
+            $table->json('meta')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
