@@ -109,7 +109,7 @@ class UserRolePermission extends Seeder
                 'uuid' =>  Str::uuid()->toString(), 'name' => 'test', 'email' => 'admin@nphl.go.ke',
                 'password' => '$2y$10$/wAd4G8UpdPOkJ4wDmlQ5OS42R66tfL9mKj18P/oGc.8Cj8n7H8pS',
                 'role' => $superadmin_uid,
-                'meta' => '{"":""}',
+                'meta' => null,
                 'created_at' => new \dateTime, 'updated_at' => new \dateTime
             ),
 

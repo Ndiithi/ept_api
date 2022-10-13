@@ -18,12 +18,12 @@ return new class extends Migration
             $table->uuid('round');
             $table->uuid('schema');
             $table->string('name');
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->string('expected_outcome');
             $table->string('expected_outcome_notes');
             $table->string('expected_interpretation');
             $table->string('expected_interpretation_notes');
-            $table->json('meta');
+            $table->json('meta')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

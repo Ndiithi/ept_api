@@ -18,8 +18,8 @@ return new class extends Migration
             $table->uuid('form_section');
             $table->string('name');
             $table->string('type');
-            $table->string('description');
-            $table->json('meta');
+            $table->string('description')->nullable();
+            $table->json('meta')->nullable();
             $table->json('actions')->nullable();
             $table->json('validation')->nullable();
             $table->integer('index');

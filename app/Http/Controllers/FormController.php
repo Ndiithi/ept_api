@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Form;
 use App\Models\Form_field;
 use App\Models\Form_section;
+use App\Models\Program;
 use App\Services\SystemAuthorities;
 use Exception;
 use Faker\Provider\Uuid;
@@ -76,28 +77,28 @@ class FormController extends Controller
             {
                 "name": "string",
                 "description": "string",
-                "target_type": "string",
-                "meta": "string",
-                "actions": "string",
                 "program": "string",
+                "target_type": "string",
+                "actions": "json|array",
+                "meta": "json",
                 "sections": [
                     {
                         "name": "string",
                         "description": "string",
-                        "meta": "string",
-                        "actions": "string",
                         "index": "integer",
                         "disabled": "boolean",
+                        "actions": "json|array",
+                        "meta": "json",
                         "fields": [
                             {
                                 "name": "string",
                                 "description": "string",
                                 "type": "string",
-                                "meta": "string",
-                                "actions": "string",
-                                "validation": "array",
-                                "options": "string",
                                 "index": "integer",
+                                "validation": "json|array",
+                                "options": "string",
+                                "actions": "json|array",
+                                "meta": "json",
                             }
                         ]
                     }
@@ -110,48 +111,62 @@ class FormController extends Controller
                 'description' => 'required',
             ]);
             $new_form_uuid = Uuid::uuid();
+            $prog = Program::where('uuid', $request->program)->first();
+            if ($prog == null) {
+                return response()->json(['message' => 'Program not found. '], 404);
+            }
             $form = new Form([
                 'uuid' => $new_form_uuid,
                 'name' => $request->name,
-                'description' => $request->description,
-                'meta' => $request->meta ?? json_decode('{}'),
+                'description' => $request->description ?? '',
+                'meta' => json_encode($request->meta) ?? null,
+                'actions' => json_encode($request->actions) ?? null,
+                'program' => $prog->uuid,
                 'target_type' => $request->target_type ?? 'survey', // survey, evaluation, etc
-                'actions' => $request->actions ?? json_decode('{}'),
+                'actions' => $request->actions ?? null,
             ]);
             // form sections
             $form_sections = $request->sections;
             if ($form_sections && count($form_sections) > 0) {
                 foreach ($form_sections as $form_section) {
-                    $new_section_uuid = Uuid::uuid();
-                    $section = new Form_section();
-                    $section->uuid = $new_section_uuid;
-                    $section->form = $new_form_uuid;
-                    $section->name = $form_section->name;
-                    $section->description = $form_section->description;
-                    $section->meta = $form_section->meta;
-                    $section->actions = $form_section->actions;
-                    $section->index = $form_section->index;
-                    $section->disabled = $form_section->disabled ?? false;
-                    $section->save();
-                    // form fields
-                    $form_fields = $form_section->fields;
-                    if ($form_fields && count($form_fields) > 0) {
-                        foreach ($form_fields as $form_field) {
-                            $new_field_uuid = Uuid::uuid();
-                            $field = new Form_field();
-                            $field->uuid = $new_field_uuid;
-                            $field->name = $form_field->name;
-                            $field->description = $form_field->description;
-                            $field->form_section = $new_section_uuid;
-                            $field->meta = $form_field->meta;
-                            $field->type = $form_field->type;
-                            $field->actions = $form_field->actions;
-                            $field->disabled = $form_field->disabled ?? false;
-                            $field->options = $form_field->options;
-                            $field->validation = $form_field->validation;
-                            $field->index = $form_field->index;
-                            $field->save();
+                    try {
+                        $new_section_uuid = Uuid::uuid();
+                        $section = new Form_section();
+                        $section->uuid = $new_section_uuid;
+                        $section->form = $new_form_uuid;
+                        $section->name = $form_section['name'];
+                        $section->description = $form_section['description'] ?? '';
+                        $section->meta = json_encode($form_section['meta']) ?? null;
+                        $section->actions = json_encode($form_section['actions']) ?? null;
+                        $section->index = $form_section['index'];
+                        $section->disabled = $form_section['disabled'] ?? false;
+                        // form fields
+                        $form_fields = $form_section['fields'];
+                        if ($form_fields && count($form_fields) > 0) {
+                            foreach ($form_fields as $form_field) {
+                                try {
+                                    $new_field_uuid = Uuid::uuid();
+                                    $field = new Form_field();
+                                    $field->uuid = $new_field_uuid;
+                                    $field->name = $form_field['name'];
+                                    $field->description = $form_field['description'] ?? '';
+                                    $field->form_section = $new_section_uuid;
+                                    $field->type = $form_field['type'];
+                                    $field->meta = json_encode($form_field['meta']);
+                                    $field->actions = json_encode($form_field['actions']) ?? null;
+                                    $field->disabled = $form_field['disabled'] ?? false;
+                                    $field->options = $form_field['options'] ?? null;
+                                    $field->validation = json_encode($form_field['validation']) ?? null;
+                                    $field->index = $form_field['index'];
+                                    $field->save();
+                                } catch (Exception $ex) {
+                                    return ['Error' => '500', 'message' => 'Could not create form field ' . $ex->getMessage()];
+                                }
+                            }
                         }
+                        $section->save();
+                    } catch (Exception $ex) {
+                        return ['Error' => '500', 'message' => 'Could not create form section  ' . $ex->getMessage()];
                     }
                 }
             }

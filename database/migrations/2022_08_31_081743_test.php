@@ -18,8 +18,8 @@ return new class extends Migration
             $table->uuid('round');
             $table->uuid('schema');
             $table->string('name');
-            $table->string('description');
-            $table->json('meta');
+            $table->string('description')->nullable();
+            $table->json('meta')->nullable();
             $table->string('overall_result');
             $table->string('target_code');
             $table->string('target_type');

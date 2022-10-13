@@ -23,8 +23,8 @@ return new class extends Migration
             $table->boolean('received');
             $table->date('shipped_on');
             $table->date('received_on');
-            $table->string('description');
-            $table->json('meta');
+            $table->string('description')->nullable();
+            $table->json('meta')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('user_groups', function (Blueprint $table) {
             $table->uuid('uuid')->primary()->unique();
             $table->string('name');
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

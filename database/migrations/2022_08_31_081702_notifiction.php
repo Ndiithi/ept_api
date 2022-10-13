@@ -17,9 +17,9 @@ return new class extends Migration
             $table->uuid('uuid')->primary()->unique();
             $table->string('category');
             $table->string('message');
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->string('mode');
-            $table->json('meta');
+            $table->json('meta')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

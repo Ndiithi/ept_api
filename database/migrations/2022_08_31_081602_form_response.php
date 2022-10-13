@@ -20,7 +20,7 @@ return new class extends Migration
             $table->uuid('form_section');
             $table->uuid('round');
             $table->uuid('form_field');
-            $table->json('meta');
+            $table->json('meta')->nullable();
             $table->json('value');
             $table->timestamps();
             $table->softDeletes();

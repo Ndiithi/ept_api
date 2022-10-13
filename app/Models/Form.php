@@ -47,7 +47,8 @@ class Form extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime',
-        'meta' => 'array'
+        'meta' => 'array',
+        'actions' => 'array'
     ];
 
     // sections

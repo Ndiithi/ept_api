@@ -16,9 +16,9 @@ return new class extends Migration
         Schema::create('schemes', function (Blueprint $table) {
             $table->uuid('uuid')->primary()->unique();
             $table->string('name');
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->uuid('program');
-            $table->json('meta');
+            $table->json('meta')->nullable();
             $table->timestamps();
             $table->string('scoringCriteria');
             // $table->integer("sample");

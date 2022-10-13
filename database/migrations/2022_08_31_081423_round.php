@@ -17,7 +17,7 @@ return new class extends Migration
             $table->uuid('uuid')->primary()->unique();
             $table->uuid('program');
             $table->uuid('user_group');
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->date('start_date');
             $table->date('end_date');
             $table->uuid('schema');
@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('name');
             $table->boolean('active');
             $table->string('testing_instructions');
-            $table->json('meta');
+            $table->json('meta')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

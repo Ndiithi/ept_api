@@ -16,11 +16,11 @@ return new class extends Migration
         Schema::create('forms', function (Blueprint $table) {
             $table->uuid('uuid')->primary()->unique();
             $table->string('name');
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->uuid('program');
             $table->string('target_type');
-            $table->json('meta');
-            $table->json('actions');
+            $table->json('meta')->nullable();
+            $table->json('actions')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -18,9 +18,9 @@ return new class extends Migration
             $table->uuid('uuid')->primary()->unique();
             $table->uuid('form');
             $table->string('name');
-            $table->string('description');
-            $table->json('meta');
-            $table->json('actions');
+            $table->string('description')->nullable();
+            $table->json('meta')->nullable();
+            $table->json('actions')->nullable();
             $table->integer('index')->nullable();
             // $table->string('next')->nullable();
             // $table->boolean('next_condition')->nullable();
