@@ -50,8 +50,10 @@ class ProgramController extends Controller
         if (!in_array($program->uuid, $user_program_ids)) {
             return response()->json(['message' => 'Not allowed to view program: '], 500);
         }
-        // TODO: append program forms (& sections & fields), schemes, rounds and reports
-        /*
+        // check if details are requested
+        if ($request->details) {
+            // TODO: append program forms (& sections & fields), schemes, rounds and reports - DONE
+            /*
         "name"
         "code"
         "description"
@@ -61,66 +63,68 @@ class ProgramController extends Controller
         "reports"
         "dataDictionary"
         */
-        $forms = Form::where('program', $program->uuid)->get();
-        if ($forms) {
-            $frm_list = [];
-            foreach ($forms as $form) {
-                //sections
-                $sections = $form->sections()->get();
-                // encode json section attributes
-                if (is_string($form->meta)) $form->meta = json_decode($form->meta);
-                if (is_string($form->actions)) $form->actions = json_decode($form->actions);
-                //fields
-                $fields = [];
-                foreach ($sections as $section) {
-                    $fields = $section->form_fields()->get();
-                    if (is_string($section->meta)) $section->meta = json_decode($section->meta);
-                    if (is_string($section->actions)) $section->actions = json_decode($section->actions);
-                    // encode json fields attributes
-                    foreach ($fields as $field) {
-                        if (is_string($field->meta)) $field->meta = json_decode($field->meta);
-                        if (is_string($field->actions)) $field->actions = json_decode($field->actions);
-                        if (is_string($field->validation)) $field->validation = json_decode($field->validation);
-                        if (is_string($field->options)) $field->options = json_decode($field->options);
+            $forms = Form::where('program', $program->uuid)->get();
+            if ($forms) {
+                $frm_list = [];
+                foreach ($forms as $form) {
+                    //sections
+                    $sections = $form->sections()->get();
+                    // encode json section attributes
+                    if (is_string($form->meta)) $form->meta = json_decode($form->meta);
+                    if (is_string($form->actions)) $form->actions = json_decode($form->actions);
+                    //fields
+                    $fields = [];
+                    foreach ($sections as $section) {
+                        $fields = $section->form_fields()->get();
+                        if (is_string($section->meta)) $section->meta = json_decode($section->meta);
+                        if (is_string($section->actions)) $section->actions = json_decode($section->actions);
+                        // encode json fields attributes
+                        foreach ($fields as $field) {
+                            if (is_string($field->meta)) $field->meta = json_decode($field->meta);
+                            if (is_string($field->actions)) $field->actions = json_decode($field->actions);
+                            if (is_string($field->validation)) $field->validation = json_decode($field->validation);
+                            if (is_string($field->options)) $field->options = json_decode($field->options);
+                        }
+                        $section->fields = $fields;
                     }
-                    $section->fields = $fields;
+                    $form->sections = $sections;
+                    $frm_list[] = $form;
                 }
-                $form->sections = $sections;
-                $frm_list[] = $form;
+                $program->forms = $frm_list;
             }
-            $program->forms = $frm_list;
-        }
-        // $rounds = $program->rounds()->get();
-        $rounds = Round::where('program', $program->uuid)->get();
-        if ($rounds) {
-            $program->rounds = $rounds;
-        }
-        // $schema = $program->schema()->get();
-        $schema = Schema::where('program', $program->uuid)->get();
-        if ($schema) {
-            $program->schema = $schema;
-        }
-        // $reports = $program->reports()->get();
-        $reports = []; //Report::where('program', $program->uuid)->get();
-        if ($reports) {
-            $program->reports = $reports;
-        }
-        // $dataDictionary = $program->dataDictionary()->get();
-        $dataDictionary = Dictionary::where('deleted_at', null)
-            ->where('program', $program->uuid)
-            ->get();
-        // if no records found, try to get the default data dictionary (all entries)
-        if (!$dataDictionary || count($dataDictionary) == 0) {
+            // $rounds = $program->rounds()->get();
+            $rounds = Round::where('program', $program->uuid)->get();
+            if ($rounds) {
+                $program->rounds = $rounds;
+            }
+            // $schema = $program->schema()->get();
+            $schema = Schema::where('program', $program->uuid)->get();
+            if ($schema) {
+                $program->schema = $schema;
+            }
+            // $reports = $program->reports()->get();
+            $reports = []; //Report::where('program', $program->uuid)->get();
+            if ($reports) {
+                $program->reports = $reports;
+            }
+            // $dataDictionary = $program->dataDictionary()->get();
             $dataDictionary = Dictionary::where('deleted_at', null)
+                ->where('program', $program->uuid)
                 ->get();
-        }
-        if ($dataDictionary) {
-            $program_dictionary = [];
-            foreach ($dataDictionary as $dictionary) {
-                $program_dictionary[$dictionary->name] = $dictionary->value ?? $dictionary->meta ?? null;
+            // if no records found, try to get the default data dictionary (all entries)
+            if (!$dataDictionary || count($dataDictionary) == 0) {
+                $dataDictionary = Dictionary::where('deleted_at', null)
+                    ->get();
             }
-            $program->dataDictionary = $program_dictionary;
+            if ($dataDictionary) {
+                $program_dictionary = [];
+                foreach ($dataDictionary as $dictionary) {
+                    $program_dictionary[$dictionary->name] = $dictionary->value ?? $dictionary->meta ?? null;
+                }
+                $program->dataDictionary = $program_dictionary;
+            }
         }
+
         return  $program;
     }
 
