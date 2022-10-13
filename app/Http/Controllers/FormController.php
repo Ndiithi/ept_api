@@ -36,6 +36,11 @@ class FormController extends Controller
         if ($forms == null) {
             return response()->json(['message' => 'Forms not found. '], 404);
         }
+        // encode meta and actions
+        foreach ($forms as $form) {
+            if (is_string($form->meta)) $form->meta = json_decode($form->meta);
+            if (is_string($form->actions)) $form->actions = json_decode($form->actions);
+        }
         return  $forms;
     }
 
@@ -49,7 +54,7 @@ class FormController extends Controller
             if ($request->uuid) {
                 $form = Form::where('uuid', $request->uuid)->first();
             } else {
-                $form = Form::find($request->id);
+                if (isset($request->id)) $form = Form::find($request->id);
             }
             if ($form == null) {
                 return response()->json(['message' => 'Form not found. '], 404);
@@ -105,7 +110,7 @@ class FormController extends Controller
                 ]
             }
              */
-            
+
             //validate
             $request->validate([
                 'name' => 'required',
@@ -125,8 +130,8 @@ class FormController extends Controller
                 'uuid' => $new_form_uuid,
                 'name' => $request->name,
                 'description' => $request->description ?? '',
-                'meta' => $request->meta ?? null,
-                'actions' => $request->actions ?? null,
+                'meta' => json_encode($request->meta) ?? null,
+                'actions' => json_encode($request->actions) ?? null,
                 'program' => $prog->uuid,
                 'target_type' => $request->target_type ?? 'survey', // survey, evaluation, etc
             ]);
@@ -165,7 +170,7 @@ class FormController extends Controller
                                     $field->disabled = $form_field['disabled'] ?? false;
                                     $field->save();
                                 } catch (Exception $ex) {
-                                    return ['Error' => '500', 'message' => 'Could not create form field: '. $form_field['name'] . ' - ' . $ex->getMessage()];
+                                    return ['Error' => '500', 'message' => 'Could not create form field: ' . $form_field['name'] . ' - ' . $ex->getMessage()];
                                 }
                             }
                         }
@@ -193,7 +198,7 @@ class FormController extends Controller
             if ($request->uuid) {
                 $form = Form::where('uuid', $request->uuid)->first();
             } else {
-                $form = Form::find($request->id);
+                if (isset($request->id)) $form = Form::find($request->id);
             }
             if ($form == null) {
                 return response()->json(['message' => 'Form not found. '], 404);
@@ -232,46 +237,53 @@ class FormController extends Controller
             if ($request->uuid) {
                 $form = Form::where('uuid', $request->uuid)->first();
             } else {
-                $form = Form::find($request->id);
+                if (isset($request->id)) $form = Form::find($request->id);
             }
             if ($form == null) {
                 return response()->json(['message' => 'Form not found. '], 404);
             } else {
-                $form->name = $request->name;
-                $form->description = $request->description;
-                $form->meta = $request->meta;
-                $form->actions = $request->actions;
-                $form->program = $request->program;
-                $form->target_type = $request->target_type;
+                if (isset($request->name)) $form->name = $request->name;
+                if (isset($request->description)) $form->description = $request->description;
+                if (isset($request->meta)) $form->meta = json_encode($request->meta);
+                if (isset($request->actions)) $form->actions = json_encode($request->actions);
+                if (isset($request->program)) $form->program = $request->program;
+                if (isset($request->target_type)) $form->target_type = $request->target_type;
                 $form->save();
                 // form sections
                 $form_sections = $request->sections;
-                if ($form_sections && count($form_sections) > 0) {
+                if (isset($request->sections) && count($form_sections) > 0) {
                     foreach ($form_sections as $form_section) {
                         try {
                             $section = Form_section::where('uuid', $form_section['uuid'])->first();
                             // if delete flag is set, delete the section
                             if (isset($form_section['delete']) && $form_section['delete'] == true) {
                                 $section->delete();
-                            }else{
+                            } else {
                                 if ($section == null) {
                                     $new_section_uuid = Uuid::uuid();
                                     $section = new Form_section();
                                     $section->uuid = $new_section_uuid;
                                     $section->form = $form->uuid;
+                                    //
+                                    if (isset($form_section['name'])) $section->name = $form_section['name'];
+                                    if (isset($form_section['description'])) $section->description = $form_section['description'] ?? '';
+                                    if (isset($form_section['meta'])) $section->meta = json_encode($form_section['meta']) ?? null;
+                                    if (isset($form_section['actions'])) $section->actions = json_encode($form_section['actions']) ?? null;
+                                    if (isset($form_section['index'])) $section->index = $form_section['index'];
+                                    if (isset($form_section['disabled'])) $section->disabled = $form_section['disabled'] ?? false;
                                 } else {
-                                    $section->name = $form_section['name'];
-                                    $section->description = $form_section['description'] ?? '';
-                                    $section->meta = json_encode($form_section['meta']) ?? null;
-                                    $section->actions = json_encode($form_section['actions']) ?? null;
-                                    $section->index = $form_section['index'];
-                                    $section->disabled = $form_section['disabled'] ?? false;
+                                    if (isset($form_section['name'])) $section->name = $form_section['name'];
+                                    if (isset($form_section['description'])) $section->description = $form_section['description'] ?? '';
+                                    if (isset($form_section['meta'])) $section->meta = json_encode($form_section['meta']) ?? null;
+                                    if (isset($form_section['actions'])) $section->actions = json_encode($form_section['actions']) ?? null;
+                                    if (isset($form_section['index'])) $section->index = $form_section['index'];
+                                    if (isset($form_section['disabled'])) $section->disabled = $form_section['disabled'] ?? false;
                                 }
                                 $section->save();
                             }
                             // form fields
                             $form_fields = $form_section['fields'];
-                            if ($form_fields && count($form_fields) > 0) {
+                            if (isset($form_section['fields']) && count($form_fields) > 0) {
                                 foreach ($form_fields as $form_field) {
                                     try {
                                         $field = Form_field::where('uuid', $form_field['uuid'])->first();
@@ -284,16 +296,26 @@ class FormController extends Controller
                                                 $field = new Form_field();
                                                 $field->uuid = $new_field_uuid;
                                                 $field->form_section = $section->uuid;
+                                                //
+                                                if (isset($form_field['name'])) $field->name = $form_field['name'];
+                                                if (isset($form_field['description'])) $field->description = $form_field['description'] ?? '';
+                                                if (isset($form_field['type'])) $field->type = $form_field['type'];
+                                                if (isset($form_field['meta'])) $field->meta = $form_field['meta'] ?? null;
+                                                if (isset($form_field['actions'])) $field->actions = $form_field['actions'] ?? null;
+                                                if (isset($form_field['disabled'])) $field->disabled = $form_field['disabled'] ?? false;
+                                                if (isset($form_field['options'])) $field->options = $form_field['options'] ?? null;
+                                                if (isset($form_field['validation'])) $field->validation = json_encode($form_field['validation']) ?? null;
+                                                if (isset($form_field['index'])) $field->index = $form_field['index'];
                                             } else {
-                                                $field->name = $form_field['name'];
-                                                $field->description = $form_field['description'] ?? '';
-                                                $field->type = $form_field['type'];
-                                                $field->meta = $form_field['meta'] ?? null;
-                                                $field->actions = $form_field['actions'] ?? null;
-                                                $field->disabled = $form_field['disabled'] ?? false;
-                                                $field->options = $form_field['options'] ?? null;
-                                                $field->validation = json_encode($form_field['validation']) ?? null;
-                                                $field->index = $form_field['index'];
+                                                if (isset($form_field['name'])) $field->name = $form_field['name'];
+                                                if (isset($form_field['description'])) $field->description = $form_field['description'] ?? '';
+                                                if (isset($form_field['type'])) $field->type = $form_field['type'];
+                                                if (isset($form_field['meta'])) $field->meta = $form_field['meta'] ?? null;
+                                                if (isset($form_field['actions'])) $field->actions = $form_field['actions'] ?? null;
+                                                if (isset($form_field['disabled'])) $field->disabled = $form_field['disabled'] ?? false;
+                                                if (isset($form_field['options'])) $field->options = $form_field['options'] ?? null;
+                                                if (isset($form_field['validation'])) $field->validation = json_encode($form_field['validation']) ?? null;
+                                                if (isset($form_field['index'])) $field->index = $form_field['index'];
                                                 $field->save();
                                             }
                                             $field->save();
@@ -309,9 +331,10 @@ class FormController extends Controller
                         }
                     }
                 }
+                return response()->json(['message' => 'Form updated successfully'], 200);
             }
         } catch (Exception $ex) {
-            return response()->json(['message' => 'Could not save form : '  . $ex->getMessage()], 500);
+            return response()->json(['message' => 'Could not save form: '  . $ex->getMessage()], 500);
         }
     }
 }

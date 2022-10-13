@@ -54,15 +54,15 @@ class ProgramController extends Controller
         if ($request->details) {
             // TODO: append program forms (& sections & fields), schemes, rounds and reports - DONE
             /*
-        "name"
-        "code"
-        "description"
-        "forms"
-        "rounds"
-        "schema"
-        "reports"
-        "dataDictionary"
-        */
+                "name"
+                "code"
+                "description"
+                "forms"
+                "rounds"
+                "schema"
+                "reports"
+                "dataDictionary"
+            */
             $forms = Form::where('program', $program->uuid)->get();
             if ($forms) {
                 $frm_list = [];

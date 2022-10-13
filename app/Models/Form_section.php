@@ -27,6 +27,12 @@ class Form_section extends Model
         'created_at', 'updated_at', 'deleted_at'
     ];
 
+    
+    // id = uuid
+    public $incrementing = false;
+    protected $keyType = 'string';
+    protected $primaryKey = 'uuid';
+
     /**
      * The attributes that should be cast.
      *

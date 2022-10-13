@@ -51,9 +51,16 @@ class Form extends Model
         'actions' => 'array'
     ];
 
+    // id = uuid
+    public $incrementing = false;
+    protected $keyType = 'string';
+    protected $primaryKey = 'uuid';
+
+
     // sections
     public function sections()
     {
         return $this->hasMany('App\Models\Form_section', 'form', 'uuid');
     }
+    
 }

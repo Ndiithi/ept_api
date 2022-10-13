@@ -15,8 +15,14 @@ class Form_field extends Model
      * @var array
      */
     protected $fillable = [
-        'form_section','name', 'description', 'meta', 'type', 'actions', 'created_at', 'updated_at', 'validation', 'disabled', 'options', 'index'
+        'uuid', 'form_section','name', 'description', 'meta', 'type', 'actions', 'created_at', 'updated_at', 'validation', 'disabled', 'options', 'index'
     ];
+
+
+    // id = uuid
+    public $incrementing = false;
+    protected $keyType = 'string';
+    protected $primaryKey = 'uuid';
 
     /**
      * The attributes that should be hidden for serialization.
