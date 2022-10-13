@@ -65,7 +65,27 @@ class FormController extends Controller
             if (!$user_programs->contains($form->program)) {
                 return response()->json(['message' => 'Not allowed to view form: '], 500);
             }
+            // encode json attributes
+            if (is_string($form->meta)) $form->meta = json_decode($form->meta);
+            if (is_string($form->actions)) $form->actions = json_decode($form->actions);
+
             // TODO: append form sections (& fields), schemes, rounds and reports
+            // sections
+            $form_sections = $form->sections()->get();
+            // fields
+            foreach ($form_sections as $section) {
+                $section_fields = $section->form_fields()->get();
+                // encode json attributes
+                if (is_string($section->meta)) $section->meta = json_decode($section->meta);
+                if (is_string($section->actions)) $section->actions = json_decode($section->actions);
+                foreach ($section_fields as $field) {
+                    if (is_string($field->meta)) $field->meta = json_decode($field->meta);
+                    if (is_string($field->validation)) $field->validation = json_decode($field->validation);
+                    if (is_string($field->actions)) $field->actions = json_decode($field->actions);
+                }
+                $section->fields = $section_fields;
+            }
+            $form->sections = $form_sections;
             return  $form;
         } catch (Exception $ex) {
             return ['Error' => '500', 'message' => 'Could not get form  ' . $ex->getMessage()];
@@ -228,6 +248,56 @@ class FormController extends Controller
 
     public function updateForm(Request $request)
     {
+        /* Payload:
+        {
+            "uuid": "88f84faa-fe63-3259-a576-12182e7e0106",
+                "name": "COVID-PT Readiness Assessment Form.",
+            "description": "SARS-CoV2 Readiness Assessment for Round 1 2022..",
+            "target_type": "survey",
+            "meta": [],
+            "actions": [],
+            "program": "prog1",
+            "sections": [
+                {
+                    
+                    "uuid": "7fc60521-3e7b-3897-87eb-d8adf3ea3827",
+                    "form": "88f84faa-fe63-3259-a576-12182e7e0106",
+                    "name": "Section 01",
+                    "description": "1.0. General Information.",
+                    "meta": [],
+                    "actions": [],
+                    "index": 0,
+                    "disabled": false,
+                    "fields": [
+                        {
+                            "uuid": "5026e6a4-c925-31fa-93a6-9a676da828f1",
+                            "form_section": "7fc60521-3e7b-3897-87eb-d8adf3ea3827",
+                            "delete": true
+                        },
+                        {
+                            "uuid": "66f1116a-23b9-3f9a-8dee-907e5119af21",
+                            "form_section": "7fc60521-3e7b-3897-87eb-d8adf3ea3827",
+                            "name": "What is the name of the laboratory manager?",
+                            "type": "text",
+                            "description": "",
+                            "meta": [],
+                            "actions": [],
+                            "validation": [
+                                {
+                                    "type": "required",
+                                    "message": "This field is mandatory."
+                                }
+                            ],
+                            "index": 0,
+                            "disabled": 0,
+                            "options": null
+                        }
+                    ]
+                }
+            ]
+        }
+        */
+
         if (!Gate::allows(SystemAuthorities::$authorities['edit_form'])) {
             return response()->json(['message' => 'Not allowed to edit form . '], 500);
         }
