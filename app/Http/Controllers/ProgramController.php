@@ -63,7 +63,32 @@ class ProgramController extends Controller
         */
         $forms = Form::where('program', $program->uuid)->get();
         if ($forms) {
-            $program->forms = $forms;
+            $frm_list = [];
+            foreach ($forms as $form) {
+                //sections
+                $sections = $form->sections()->get();
+                // encode json section attributes
+                if (is_string($form->meta)) $form->meta = json_decode($form->meta);
+                if (is_string($form->actions)) $form->actions = json_decode($form->actions);
+                //fields
+                $fields = [];
+                foreach ($sections as $section) {
+                    $fields = $section->form_fields()->get();
+                    if (is_string($section->meta)) $section->meta = json_decode($section->meta);
+                    if (is_string($section->actions)) $section->actions = json_decode($section->actions);
+                    // encode json fields attributes
+                    foreach ($fields as $field) {
+                        if (is_string($field->meta)) $field->meta = json_decode($field->meta);
+                        if (is_string($field->actions)) $field->actions = json_decode($field->actions);
+                        if (is_string($field->validation)) $field->validation = json_decode($field->validation);
+                        if (is_string($field->options)) $field->options = json_decode($field->options);
+                    }
+                    $section->fields = $fields;
+                }
+                $form->sections = $sections;
+                $frm_list[] = $form;
+            }
+            $program->forms = $frm_list;
         }
         // $rounds = $program->rounds()->get();
         $rounds = Round::where('program', $program->uuid)->get();
@@ -76,7 +101,7 @@ class ProgramController extends Controller
             $program->schema = $schema;
         }
         // $reports = $program->reports()->get();
-        $reports = [];//Report::where('program', $program->uuid)->get();
+        $reports = []; //Report::where('program', $program->uuid)->get();
         if ($reports) {
             $program->reports = $reports;
         }

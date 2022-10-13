@@ -47,7 +47,7 @@ class Form_section extends Model
     // fields
     public function form_fields()
     {
-        return $this->hasMany('App\Models\Form_field');
+        return $this->hasMany('App\Models\Form_field', 'form_section', 'uuid');
     }
 
 }

@@ -41,7 +41,7 @@ class Form_field extends Model
 
     public function form_section()
     {
-        return $this->belongsTo('App\Models\Form_section');
+        return $this->belongsTo('App\Models\Form_section', 'form_section', 'uuid');
     }
 
 }

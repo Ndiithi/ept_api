@@ -52,8 +52,8 @@ class Form extends Model
     ];
 
     // sections
-    public function form_sections()
+    public function sections()
     {
-        return $this->hasMany('App\Models\Form_section');
+        return $this->hasMany('App\Models\Form_section', 'form', 'uuid');
     }
 }
