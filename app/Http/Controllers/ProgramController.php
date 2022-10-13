@@ -198,6 +198,18 @@ class ProgramController extends Controller
                         $sch->delete();
                     }
                 }
+                // $reports = Report::where('program', $program->uuid)->get();
+                // if ($reports) {
+                //     foreach ($reports as $report) {
+                //         $report->delete();
+                //     }
+                // }
+                $entries = Dictionary::where('program', $program->uuid)->get();
+                if ($entries) {
+                    foreach ($entries as $entry) {
+                        $entry->delete();
+                    }
+                }
 
                 return response()->json(['message' => 'Deleted successfully'], 200);
             }
