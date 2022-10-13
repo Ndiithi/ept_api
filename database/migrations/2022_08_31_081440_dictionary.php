@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('dictionaries', function (Blueprint $table) {
             $table->uuid('uuid')->primary()->unique();
             $table->string('name')->unique();
-            $table->json('value')->default('[]');
+            $table->json('value');
             $table->string('description')->nullable();
             $table->uuid('program')->nullable();
             $table->json('meta')->nullable();

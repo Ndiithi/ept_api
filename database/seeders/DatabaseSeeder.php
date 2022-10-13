@@ -56,6 +56,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Test name',
                 'description' => 'Test field',
                 'type' => 'text',
+                'index' => 0,
                 'actions' => '{"": ""}',
                 'meta' => '{"": ""}',
                 'options' => '',
@@ -69,6 +70,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Test name',
                 'description' => 'Test field',
                 'type' => 'password',
+                'index' => 1,
                 'actions' => '{"": ""}',
                 'meta' => '{"": ""}',
                 'options' => '',
@@ -251,7 +253,6 @@ class DatabaseSeeder extends Seeder
                 'target_type' => 'dropdown',
                 'meta' => '{"": ""}',
                 'actions' => '{"": ""}',
-                'content' => '{"": ""}',
                 'created_at' => new \dateTime,
                 'updated_at' => new \dateTime,
             ),
@@ -283,7 +284,7 @@ class DatabaseSeeder extends Seeder
                 'uuid' =>  Str::uuid()->toString(),
                 'description' => 'description',
                 'name' => 'oncology_HPV_16',
-                'meta' => '[
+                'value' => '[
                     {
                         "target_id": "1",
                         "outcome": "High",
@@ -300,6 +301,7 @@ class DatabaseSeeder extends Seeder
                         "value": false
                     }
                 ]',
+                'meta' => '{"": ""}',
                 'created_at' => new \dateTime,
                 'updated_at' => new \dateTime,
             ),

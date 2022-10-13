@@ -22,7 +22,7 @@ return new class extends Migration
             $table->json('meta');
             $table->json('actions')->nullable();
             $table->json('validation')->nullable();
-            $table->index('index');
+            $table->integer('index');
             $table->boolean('disabled')->default(false);
             $table->string('options')->nullable(); // reference to dictionary entry
             $table->timestamps();

@@ -94,9 +94,9 @@ class FormController extends Controller
                                 "description": "string",
                                 "type": "string",
                                 "meta": "string",
-                                "actions": "string"
+                                "actions": "string",
                                 "validation": "array",
-                                "options": "array",
+                                "options": "string",
                                 "index": "integer",
                             }
                         ]
@@ -114,14 +114,13 @@ class FormController extends Controller
                 'uuid' => $new_form_uuid,
                 'name' => $request->name,
                 'description' => $request->description,
-                'target_type' => $request->target_type,
                 'meta' => $request->meta ?? json_decode('{}'),
                 'target_type' => $request->target_type ?? 'survey', // survey, evaluation, etc
                 'actions' => $request->actions ?? json_decode('{}'),
             ]);
             // form sections
             $form_sections = $request->sections;
-            if ($form_sections) {
+            if ($form_sections && count($form_sections) > 0) {
                 foreach ($form_sections as $form_section) {
                     $new_section_uuid = Uuid::uuid();
                     $section = new Form_section();
