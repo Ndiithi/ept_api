@@ -63,4 +63,13 @@ class Form extends Model
         return $this->hasMany('App\Models\Form_section', 'form', 'uuid');
     }
     
+    // cascade delete
+    public static function boot() {
+        parent::boot();
+
+        static::deleting(function($form) { // before delete() method call this
+             $form->sections()->delete();
+             // do the rest of the cleanup...
+        });
+    }
 }

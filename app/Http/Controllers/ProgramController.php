@@ -24,7 +24,12 @@ class ProgramController extends Controller
         if (!Gate::allows(SystemAuthorities::$authorities['view_program'])) {
             return response()->json(['message' => 'Not allowed to view program: '], 500);
         }
+        
         $programs = Program::where('deleted_at', null)->get();
+        foreach ($programs as $program) {
+            // encode json attributes
+            if (is_string($program->meta)) $program->meta = json_decode($program->meta);
+        }
         return  $programs;
     }
     public function getProgram(Request $request)
@@ -50,6 +55,10 @@ class ProgramController extends Controller
         if (!in_array($program->uuid, $user_program_ids)) {
             return response()->json(['message' => 'Not allowed to view program: '], 500);
         }
+
+        // encode json attributes
+        if (is_string($program->meta)) $program->meta = json_decode($program->meta);
+        
         // check if details are requested
         if ($request->details) {
             // TODO: append program forms (& sections & fields), schemes, rounds and reports - DONE
@@ -170,6 +179,26 @@ class ProgramController extends Controller
                 return response()->json(['message' => 'Program not found. '], 404);
             } else {
                 $program->delete();
+                // TODO: delete all related forms, sections, fields, rounds, schemes, reports, dataDictionary
+                $forms = Form::where('program', $program->uuid)->get();
+                if ($forms) {
+                    foreach ($forms as $form) {
+                        $form->delete();
+                    }
+                }
+                $rounds = Round::where('program', $program->uuid)->get();
+                if ($rounds) {
+                    foreach ($rounds as $round) {
+                        $round->delete();
+                    }
+                }
+                $schema = Schema::where('program', $program->uuid)->get();
+                if ($schema) {
+                    foreach ($schema as $sch) {
+                        $sch->delete();
+                    }
+                }
+
                 return response()->json(['message' => 'Deleted successfully'], 200);
             }
         } catch (Exception $ex) {

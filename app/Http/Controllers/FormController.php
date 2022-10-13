@@ -59,7 +59,7 @@ class FormController extends Controller
             if ($form == null) {
                 return response()->json(['message' => 'Form not found. '], 404);
             }
-            // TODO: check if user has permission to view the program which this form belongs to
+            // TODO: check if user has permission to view the program which this form belongs to - DONE
             $user = $request->user();
             $user_programs = $user->programs()->pluck('uuid');
             if (!$user_programs->contains($form->program)) {
@@ -69,7 +69,7 @@ class FormController extends Controller
             if (is_string($form->meta)) $form->meta = json_decode($form->meta);
             if (is_string($form->actions)) $form->actions = json_decode($form->actions);
 
-            // TODO: append form sections (& fields), schemes, rounds and reports
+            // TODO: append form sections (& fields), schemes, rounds and reports - DONE
             // sections
             $form_sections = $form->sections()->get();
             // fields
