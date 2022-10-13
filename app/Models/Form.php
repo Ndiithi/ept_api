@@ -66,10 +66,10 @@ class Form extends Model
     // cascade delete
     public static function boot() {
         parent::boot();
-
-        static::deleting(function($form) { // before delete() method call this
-             $form->sections()->delete();
-             // do the rest of the cleanup...
+        self::deleting(function($form) {
+            foreach ($form->sections()->get() as $section) {
+                $section->delete();
+            }
         });
     }
 }

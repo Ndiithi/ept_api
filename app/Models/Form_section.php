@@ -59,10 +59,10 @@ class Form_section extends Model
     // cascade delete
     public static function boot() {
         parent::boot();
-
-        static::deleting(function($form_section) { // before delete() method call this
-             $form_section->form_fields()->delete();
-             // do the rest of the cleanup...
+        self::deleting(function($form) {
+            foreach ($form->form_fields()->get() as $form_field) {
+                $form_field->delete();
+            }
         });
     }
 
