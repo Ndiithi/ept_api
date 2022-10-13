@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->json('value')->default('[]');
             $table->string('description')->nullable();
+            $table->uuid('program')->nullable();
             $table->json('meta')->nullable();
             $table->timestamps();
             $table->softDeletes();

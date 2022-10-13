@@ -22,6 +22,13 @@ class DictionaryController extends Controller
         }
 
         $data = Dictionary::paginate(request()->all());
+        // check if program filter is set as a GET parameter
+        if ($request->program) {
+            $data = Dictionary::where('program', $request->program)->paginate(request()->all());
+        }
+        if ($data == null) {
+            return response()->json(['message' => 'No dictionary entry found. '], 404);
+        }
         return Response::json($data, 200);
     }
 
@@ -56,6 +63,7 @@ class DictionaryController extends Controller
             $dictionary = new Dictionary([
                 'uuid' => Uuid::uuid(),
                 'name' => $request->name,
+                'program' => $request->program ? $request->program : null,
                 'value' => json_encode($request->value),
                 'description' => $request->description,
                 'meta' => $request->meta ?? json_decode('{}'),
@@ -104,6 +112,8 @@ class DictionaryController extends Controller
                 $dictionary = Dictionary::find($request->id);
             }
             $dictionary->name = $request->name ?? $dictionary->name;
+            $dictionary->program = $request->program ?? $dictionary->program;
+            $dictionary->value = $request->value ?? $dictionary->value;
             $dictionary->description = $request->description ?? $dictionary->description;
             $dictionary->meta = $request->meta ?? $dictionary->meta;
             $dictionary->save();

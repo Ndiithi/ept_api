@@ -15,7 +15,7 @@ class Dictionary extends Model
      * @var array
      */
     protected $fillable = [
-        'uuid','name', 'description', 'value', 'meta', 'created_at', 'updated_at'
+        'uuid','name', 'description', 'program', 'value', 'meta', 'created_at', 'updated_at'
     ];
 
     /**

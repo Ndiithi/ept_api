@@ -82,8 +82,13 @@ class ProgramController extends Controller
         }
         // $dataDictionary = $program->dataDictionary()->get();
         $dataDictionary = Dictionary::where('deleted_at', null)
-            // ->where('program', $program->uuid)
+            ->where('program', $program->uuid)
             ->get();
+        // if no records found, try to get the default data dictionary (all entries)
+        if (!$dataDictionary || count($dataDictionary) == 0) {
+            $dataDictionary = Dictionary::where('deleted_at', null)
+                ->get();
+        }
         if ($dataDictionary) {
             $program_dictionary = [];
             foreach ($dataDictionary as $dictionary) {
