@@ -93,23 +93,12 @@ class UserRolePermission extends Seeder
         $authObj->insert($data);
 
         //map permissions/authorities and roles
-        $data = array(
-            array('uuid' =>  Str::uuid()->toString(), 'role' => $superadmin_uid, 'permission' => 1,  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
-            array('uuid' =>  Str::uuid()->toString(), 'role' => $superadmin_uid, 'permission' => 2,  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
-            array('uuid' =>  Str::uuid()->toString(), 'role' => $superadmin_uid, 'permission' => 3,  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
-            array('uuid' =>  Str::uuid()->toString(), 'role' => $superadmin_uid, 'permission' => 4,  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
-            array('uuid' =>  Str::uuid()->toString(), 'role' => $superadmin_uid, 'permission' => 5,  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
-            array('uuid' =>  Str::uuid()->toString(), 'role' => $superadmin_uid, 'permission' => 6,  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
-            array('uuid' =>  Str::uuid()->toString(), 'role' => $superadmin_uid, 'permission' => 7,  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
-
-            array('uuid' =>  Str::uuid()->toString(), 'role' => $admin_uid, 'permission' => 1,  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
-            array('uuid' =>  Str::uuid()->toString(), 'role' => $admin_uid, 'permission' => 2,  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
-            array('uuid' =>  Str::uuid()->toString(), 'role' => $admin_uid, 'permission' => 3,  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
-            array('uuid' =>  Str::uuid()->toString(), 'role' => $admin_uid, 'permission' => 4,  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
-            array('uuid' =>  Str::uuid()->toString(), 'role' => $admin_uid, 'permission' => 5,  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
-            array('uuid' =>  Str::uuid()->toString(), 'role' => $admin_uid, 'permission' => 6,  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
-            array('uuid' =>  Str::uuid()->toString(), 'role' => $admin_uid, 'permission' => 7,  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
-        );
+        $data = array();
+        foreach ($permmissions as $key => $value) {
+            $data[] = array('uuid' =>  Str::uuid()->toString(), 'role' => $superadmin_uid, 'permission' => $value['uuid'],  'created_at' => new \dateTime, 'updated_at' => new \dateTime);
+            $data[] = array('uuid' =>  Str::uuid()->toString(), 'role' => $admin_uid, 'permission' => $value['uuid'],  'created_at' => new \dateTime, 'updated_at' => new \dateTime);
+        }
+        
 
         $authObj = new RolePermission();
         RolePermission::query()->truncate();
@@ -118,7 +107,7 @@ class UserRolePermission extends Seeder
         $user = array(
             array(
                 'uuid' =>  Str::uuid()->toString(), 'name' => 'test', 'email' => 'admin@nphl.go.ke',
-                'password' => '$2y$10$wCyQ7j2mwl.NGD3brp1RSuCo3nIv9b1pDO4Cb8v0xjmfBshm93bGm',
+                'password' => '$2y$10$/wAd4G8UpdPOkJ4wDmlQ5OS42R66tfL9mKj18P/oGc.8Cj8n7H8pS',
                 'role' => $superadmin_uid,
                 'meta' => '{"":""}',
                 'created_at' => new \dateTime, 'updated_at' => new \dateTime
