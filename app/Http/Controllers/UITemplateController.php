@@ -133,8 +133,9 @@ class UITemplateController extends Controller
             "form_sections.name as section_name",
             "form_sections.uuid as section_code",
             "form_sections.description as section_description",
-            "form_sections.next as section_next",
-            "form_sections.next_condition as section_nextcondition",
+            "form_sections.index as section_index",
+            // "form_sections.next as section_next",
+            // "form_sections.next_condition as section_nextcondition",
             "form_sections.disabled as section_disabled",
             "form_sections.meta as section_meta",
         )->where("form_sections.form", "=", $formSet->uuid)->get();
@@ -144,8 +145,9 @@ class UITemplateController extends Controller
                 "name" => $rowSet->section_name,
                 "code" => $rowSet->section_code,
                 "description" => $rowSet->section_description,
-                "next" => $rowSet->section_next,
-                "nextCondition" => $rowSet->section_nextcondition,
+                "index" => $rowSet->section_index,
+                // "next" => $rowSet->section_next,
+                // "nextCondition" => $rowSet->section_nextcondition,
                 "disabled" => $rowSet->section_disabled,
                 "metadata" => json_decode($rowSet->section_meta),
                 "fields" => []
@@ -192,8 +194,6 @@ class UITemplateController extends Controller
 
         $roundAdded = false;
         if (!empty($roundsArr)) {
-
-
             foreach ($roundsArr  as $index => $round) {
                 if (strcmp($round["name"], $rowSet->round_name) == 0) {
                     $roundAdded = true;

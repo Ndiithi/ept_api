@@ -21,8 +21,9 @@ return new class extends Migration
             $table->string('description');
             $table->json('meta');
             $table->json('actions');
-            $table->string('next');
-            $table->boolean('next_condition');
+            $table->integer('index')->nullable();
+            // $table->string('next')->nullable();
+            // $table->boolean('next_condition')->nullable();
             $table->boolean('disabled');
             $table->timestamps();
             $table->softDeletes();

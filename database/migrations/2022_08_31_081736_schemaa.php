@@ -20,9 +20,9 @@ return new class extends Migration
             $table->uuid('program');
             $table->json('meta');
             $table->timestamps();
-            $table->softDeletes();
-            // $table->integer("sample");
             $table->string('scoringCriteria');
+            // $table->integer("sample");
+            $table->softDeletes();
         });
     }
 

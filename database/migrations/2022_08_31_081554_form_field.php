@@ -20,12 +20,16 @@ return new class extends Migration
             $table->string('type');
             $table->string('description');
             $table->json('meta');
-            $table->json('actions');
+            $table->json('actions')->nullable();
+            $table->json('validation')->nullable();
+            $table->index('index');
+            $table->boolean('disabled')->default(false);
+            $table->string('options')->nullable(); // reference to dictionary entry
             $table->timestamps();
-$table->softDeletes();
+            $table->softDeletes();
         });
     }
-    
+
     /**
      * Reverse the migrations.
      *

@@ -15,7 +15,7 @@ class Form_field extends Model
      * @var array
      */
     protected $fillable = [
-        'form_section','name', 'description', 'name','meta','type','actions','created_at', 'updated_at'
+        'form_section','name', 'description', 'meta', 'type', 'actions', 'created_at', 'updated_at', 'validation', 'disabled', 'options', 'index'
     ];
 
     /**

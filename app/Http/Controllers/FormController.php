@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Form;
+use App\Models\Form_field;
+use App\Models\Form_section;
 use App\Services\SystemAuthorities;
 use Exception;
+use Faker\Provider\Uuid;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -69,24 +72,94 @@ class FormController extends Controller
             return response()->json(['message' => 'Not allowed to create form: '], 500);
         }
         try {
-
+            /* Payload:
+            {
+                "name": "string",
+                "description": "string",
+                "target_type": "string",
+                "meta": "string",
+                "actions": "string",
+                "program": "string",
+                "sections": [
+                    {
+                        "name": "string",
+                        "description": "string",
+                        "meta": "string",
+                        "actions": "string",
+                        "index": "integer",
+                        "disabled": "boolean",
+                        "fields": [
+                            {
+                                "name": "string",
+                                "description": "string",
+                                "type": "string",
+                                "meta": "string",
+                                "actions": "string"
+                                "validation": "array",
+                                "options": "array",
+                                "index": "integer",
+                            }
+                        ]
+                    }
+                ]
+            }
+             */
             //validate
             $request->validate([
                 'name' => 'required',
                 'description' => 'required',
             ]);
+            $new_form_uuid = Uuid::uuid();
             $form = new Form([
+                'uuid' => $new_form_uuid,
                 'name' => $request->name,
                 'description' => $request->description,
+                'target_type' => $request->target_type,
                 'meta' => $request->meta ?? json_decode('{}'),
                 'target_type' => $request->target_type ?? 'survey', // survey, evaluation, etc
                 'actions' => $request->actions ?? json_decode('{}'),
             ]);
+            // form sections
+            $form_sections = $request->sections;
+            if ($form_sections) {
+                foreach ($form_sections as $form_section) {
+                    $new_section_uuid = Uuid::uuid();
+                    $section = new Form_section();
+                    $section->uuid = $new_section_uuid;
+                    $section->form = $new_form_uuid;
+                    $section->name = $form_section->name;
+                    $section->description = $form_section->description;
+                    $section->meta = $form_section->meta;
+                    $section->actions = $form_section->actions;
+                    $section->index = $form_section->index;
+                    $section->disabled = $form_section->disabled ?? false;
+                    $section->save();
+                    // form fields
+                    $form_fields = $form_section->fields;
+                    if ($form_fields && count($form_fields) > 0) {
+                        foreach ($form_fields as $form_field) {
+                            $new_field_uuid = Uuid::uuid();
+                            $field = new Form_field();
+                            $field->uuid = $new_field_uuid;
+                            $field->name = $form_field->name;
+                            $field->description = $form_field->description;
+                            $field->form_section = $new_section_uuid;
+                            $field->meta = $form_field->meta;
+                            $field->type = $form_field->type;
+                            $field->actions = $form_field->actions;
+                            $field->disabled = $form_field->disabled ?? false;
+                            $field->options = $form_field->options;
+                            $field->validation = $form_field->validation;
+                            $field->index = $form_field->index;
+                            $field->save();
+                        }
+                    }
+                }
+            }
             $form->save();
 
             return response()->json(['message' => 'Created successfully'], 200);
         } catch (Exception $ex) {
-
             return ['Error' => '500', 'message' => 'Could not save form  ' . $ex->getMessage()];
         }
     }
@@ -103,9 +176,9 @@ class FormController extends Controller
             } else {
                 $form = Form::find($request->id);
             }
-            if($form == null){
+            if ($form == null) {
                 return response()->json(['message' => 'Form not found. '], 404);
-            }else{
+            } else {
                 $form->delete();
                 return response()->json(['message' => 'Deleted successfully'], 200);
             }
@@ -130,7 +203,7 @@ class FormController extends Controller
             }
             if ($form == null) {
                 return response()->json(['message' => 'Form not found. '], 404);
-            }else{
+            } else {
                 $form->name = $request->name ?? $form->name;
                 $form->description = $request->description ?? $form->description;
                 $form->target_type = $request->target_type ?? $form->target_type;

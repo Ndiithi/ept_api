@@ -21,7 +21,6 @@ return new class extends Migration
             $table->string('target_type');
             $table->json('meta');
             $table->json('actions');
-            $table->json('content');
             $table->timestamps();
             $table->softDeletes();
         });

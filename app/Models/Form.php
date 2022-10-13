@@ -21,7 +21,8 @@ class Form extends Model
         'description',
         'program',
         'meta',
-        'actions','target_type',
+        'actions',
+        'target_type',
         'created_at',
         'updated_at', 
     ];
