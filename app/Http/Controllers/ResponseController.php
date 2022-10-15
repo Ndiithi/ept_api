@@ -27,6 +27,10 @@ class ResponseController extends Controller
         if ($responses == null) {
             return response()->json(['message' => 'Responses not found. '], 404);
         }
+        // encode the meta field
+        foreach ($responses as $response) {
+            if(is_string($response->meta)) $response->meta = json_decode($response->meta);
+        }
         return  $responses;
     }
 
@@ -51,7 +55,8 @@ class ResponseController extends Controller
             if (!$user_programs->contains($response->program)) {
                 return response()->json(['message' => 'Not allowed to view response: '], 500);
             }
-            // TODO: append form sections (& fields), schemes, rounds and reports
+            // encode json attributes
+            if (is_string($response->meta)) $response->meta = json_decode($response->meta);
             return  $response;
         } catch (Exception $ex) {
             return ['Error' => '500', 'message' => 'Could not get form  ' . $ex->getMessage()];
@@ -76,7 +81,7 @@ class ResponseController extends Controller
                 'form_section' => $request->form_section, 
                 'form_field' => $request->form_field, 
                 'value' => $request->value, 
-                'meta' => $request->meta ?? json_decode('{}'), 
+                'meta' => json_encode($request->meta) ?? null, 
                 'user' => $request->user()->uuid,
             ]);
             $response->save();
@@ -126,11 +131,12 @@ class ResponseController extends Controller
             if ($response == null) {
                 return response()->json(['message' => 'Response not found. '], 404);
             }else{
-                $response->name = $request->name ?? $response->name;
-                $response->description = $request->description ?? $response->description;
-                $response->target_type = $request->target_type ?? $response->target_type;
-                $response->actions = $request->actions ?? $response->actions;
-                $response->meta = $request->meta ?? $response->meta;
+                if(isset($request->form)) $response->form = $request->form;
+                if(isset($request->form_section)) $response->form_section = $request->form_section;
+                if(isset($request->form_field)) $response->form_field = $request->form_field;
+                if(isset($request->value)) $response->value = $request->value;
+                if(isset($request->user)) $response->user = $request->user;
+                if(isset($request->meta)) $response->meta = json_encode($request->meta);
                 $response->save();
                 return response()->json(['message' => 'Updated successfully'], 200);
             }

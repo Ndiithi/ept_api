@@ -18,8 +18,8 @@ return new class extends Migration
             $table->uuid('user');
             $table->uuid('form');
             $table->uuid('form_section');
-            $table->uuid('round');
             $table->uuid('form_field');
+            $table->uuid('round')->nullable();
             $table->json('meta')->nullable();
             $table->json('value');
             $table->timestamps();

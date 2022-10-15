@@ -40,6 +40,11 @@ class Form_response extends Model
         'meta' => 'array'
     ];
 
+    // id = uuid;
+    public $incrementing = false;
+    protected $keyType = 'string';
+    protected $primaryKey = 'uuid';
+
     public function form()
     {
         return $this->belongsTo('App\Models\Form');
