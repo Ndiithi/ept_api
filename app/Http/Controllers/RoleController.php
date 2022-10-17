@@ -82,7 +82,10 @@ class RoleController extends Controller
                 }
             }
 
-            return response()->json(['message' => 'Created successfully'], 200);
+            return response()->json([
+                'message' => 'Created successfully',
+                'data' => $role
+            ], 200);
         } catch (Exception $ex) {
 
             return ['Error' => '500', 'message' => 'Could not save role ' . $ex->getMessage()];
@@ -136,7 +139,10 @@ class RoleController extends Controller
                 $rolePermission->save();
             }
 
-            return response()->json(['message' => 'Updated successfully'], 200);
+            return response()->json([
+                'message' => 'Updated successfully',
+                'data' => $role
+            ], 200);
         } catch (Exception $ex) {
             return response()->json(['message' => 'Could not save role: '  . $ex->getMessage()], 500);
         }

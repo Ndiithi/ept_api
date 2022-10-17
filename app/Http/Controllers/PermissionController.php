@@ -63,7 +63,10 @@ class PermissionController extends Controller
             ]);
             $permission->save();
 
-            return response()->json(['message' => 'Created successfully'], 200);
+            return response()->json([
+                'message' => 'Created successfully',
+                'data' => $permission
+            ], 200);
         } catch (Exception $ex) {
 
             return ['Error' => '500', 'message' => 'Could not save permission ' . $ex->getMessage()];
@@ -121,7 +124,10 @@ class PermissionController extends Controller
             $permission->meta = $request->meta ?? $permission->meta;
             $permission->save();
 
-            return response()->json(['message' => 'Updated successfully'], 200);
+            return response()->json([
+                'message' => 'Updated successfully',
+                'data' => $permission
+            ], 200);
         } catch (Exception $ex) {
             return response()->json(['message' => 'Could not save permission: '  . $ex->getMessage()], 500);
         }

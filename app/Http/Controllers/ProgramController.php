@@ -156,7 +156,10 @@ class ProgramController extends Controller
             ]);
             $program->save();
 
-            return response()->json(['message' => 'Created successfully'], 200);
+            return response()->json([
+                'message' => 'Created successfully',
+                'data' => $program
+            ], 200);
         } catch (Exception $ex) {
 
             return ['Error' => '500', 'message' => 'Could not save program  ' . $ex->getMessage()];
@@ -236,7 +239,10 @@ class ProgramController extends Controller
                 $program->description = $request->description ?? $program->description;
                 $program->meta = $request->meta ?? $program->meta;
                 $program->save();
-                return response()->json(['message' => 'Updated successfully'], 200);
+                return response()->json([
+                    'message' => 'Updated successfully',
+                    'data' => $program
+                ], 200);
             }
         } catch (Exception $ex) {
             return response()->json(['message' => 'Could not update program : '  . $ex->getMessage()], 500);

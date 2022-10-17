@@ -62,7 +62,10 @@ class UserProgramController extends Controller
             ]);
             $userProgram->save();
 
-            return response()->json(['message' => 'Created successfully'], 200);
+            return response()->json([
+                'message' => 'Created successfully',
+                'data' => $userProgram
+            ], 200);
         } catch (Exception $ex) {
 
             return ['Error' => '500', 'message' => 'Could not save  user program ' . $ex->getMessage()];

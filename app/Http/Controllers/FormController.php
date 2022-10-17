@@ -202,7 +202,10 @@ class FormController extends Controller
             }
             $form->save();
 
-            return response()->json(['message' => 'Created successfully'], 200);
+            return response()->json([
+                'message' => 'Created successfully',
+                'data' => $form
+            ], 200);
         } catch (Exception $ex) {
             return ['Error' => '500', 'message' => 'Could not save form: ' . $ex->getMessage()];
         }
@@ -401,7 +404,10 @@ class FormController extends Controller
                         }
                     }
                 }
-                return response()->json(['message' => 'Form updated successfully'], 200);
+                return response()->json([
+                    'message' => 'Form updated successfully',
+                    'data' => $form
+                ], 200);
             }
         } catch (Exception $ex) {
             return response()->json(['message' => 'Could not save form: '  . $ex->getMessage()], 500);

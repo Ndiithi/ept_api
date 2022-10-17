@@ -60,7 +60,7 @@ class AuthController extends Controller
 
             return response()->json([
                 'status' => true,
-                'message' => 'User Created Successfully',
+                'message' => 'Signup successful',
                 'token' => $user->createToken("API TOKEN")->plainTextToken
             ], 200);
         } catch (\Throwable $th) {
@@ -109,6 +109,7 @@ class AuthController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'User Created Successfully',
+                'data' => $user,
                 'token' => $user->createToken("API TOKEN")->plainTextToken
             ], 200);
         } catch (\Throwable $th) {
@@ -206,6 +207,67 @@ class AuthController extends Controller
                 'role' => Role::where('uuid',$user->role)->first(),
                 'permissions' => $user->permissions(),
                 'programs' => $user_programs,
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
+
+
+    /**
+     * Update User Details
+     * @param Request $request
+     * @return User
+     */
+    public function updateUser(Request $request)
+    {
+        try {
+            $validateUser = Validator::make(
+                $request->all(),
+                [
+                    'name' => 'required',
+                    'email' => 'required|email|unique:users,email,' . $request->user()->id,
+                    'role' => 'required'
+                ]
+            );
+
+            if ($validateUser->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'validation error',
+                    'errors' => $validateUser->errors()
+                ], 401);
+            }
+
+            $user = $request->user();
+            if ($request->has('name')) {
+                $user->name = $request->name;
+            }
+            if ($request->has('email')) {
+                $user->email = $request->email;
+            }
+            if ($request->has('role')) {
+                $user->role = Role::find($request->role)->uuid ?? Role::where('name', 'like', '%guest%')->first()->uuid;
+                // if role does not exist then throw error
+                if (!$user->role) {
+                    return response()->json([
+                        'status' => false,
+                        'message' => 'Role does not exist',
+                    ], 401);
+                }
+            }
+            $user->save();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'User Details Updated Successfully',
+                'user' => $user,
+                'role' => Role::where('uuid',$user->role)->first(),
+                'permissions' => $user->permissions(),
+                'programs' => $user->programs(),
             ], 200);
         } catch (\Throwable $th) {
             return response()->json([

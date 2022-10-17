@@ -86,7 +86,10 @@ class ResponseController extends Controller
             ]);
             $response->save();
 
-            return response()->json(['message' => 'Created successfully'], 200);
+            return response()->json([
+                'message' => 'Created successfully',
+                'data' => $response
+            ], 200);
         } catch (Exception $ex) {
 
             return ['Error' => '500', 'message' => 'Could not save response  ' . $ex->getMessage()];
@@ -138,7 +141,10 @@ class ResponseController extends Controller
                 if(isset($request->user)) $response->user = $request->user;
                 if(isset($request->meta)) $response->meta = json_encode($request->meta);
                 $response->save();
-                return response()->json(['message' => 'Updated successfully'], 200);
+                return response()->json([
+                    'message' => 'Updated successfully',
+                    'data' => $response
+                ], 200);
             }
         } catch (Exception $ex) {
             return response()->json(['message' => 'Could not update response : '  . $ex->getMessage()], 500);

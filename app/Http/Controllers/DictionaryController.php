@@ -70,7 +70,10 @@ class DictionaryController extends Controller
             ]);
             $dictionary->save();
 
-            return response()->json(['message' => 'Created successfully'], 200);
+            return response()->json([
+                'message' => 'Created successfully',
+                'data' => $dictionary
+            ], 200);
         } catch (Exception $ex) {
 
             return ['Error' => '500', 'message' => 'Could not save dictionary item ' . $ex->getMessage()];
@@ -118,7 +121,10 @@ class DictionaryController extends Controller
             $dictionary->meta = $request->meta ?? $dictionary->meta;
             $dictionary->save();
 
-            return response()->json(['message' => 'Updated successfully'], 200);
+            return response()->json([
+                'message' => 'Updated successfully',
+                'data' => $dictionary
+            ], 200);
         } catch (Exception $ex) {
             return response()->json(['message' => 'Could not save dictionary item: '  . $ex->getMessage()], 500);
         }
