@@ -30,7 +30,7 @@ class ProgramController extends Controller
             // encode json attributes
             if (is_string($program->meta)) $program->meta = json_decode($program->meta);
         }
-        return  $programs;
+        return response()->json($programs);
     }
     public function getProgram(Request $request)
     {
@@ -63,14 +63,7 @@ class ProgramController extends Controller
         if ($request->details) {
             // TODO: append program forms (& sections & fields), schemes, rounds and reports - DONE
             /*
-                "name"
-                "code"
-                "description"
-                "forms"
-                "rounds"
-                "schema"
-                "reports"
-                "dataDictionary"
+                "name" "code" "description" "forms" "rounds" "schema" "reports" "dataDictionary"
             */
             $forms = Form::where('program', $program->uuid)->get();
             if ($forms) {
@@ -101,22 +94,18 @@ class ProgramController extends Controller
                 }
                 $program->forms = $frm_list;
             }
-            // $rounds = $program->rounds()->get();
             $rounds = Round::where('program', $program->uuid)->get();
             if ($rounds) {
                 $program->rounds = $rounds;
             }
-            // $schema = $program->schema()->get();
             $schema = Schema::where('program', $program->uuid)->get();
             if ($schema) {
                 $program->schema = $schema;
             }
-            // $reports = $program->reports()->get();
             $reports = []; //Report::where('program', $program->uuid)->get();
             if ($reports) {
                 $program->reports = $reports;
             }
-            // $dataDictionary = $program->dataDictionary()->get();
             $dataDictionary = Dictionary::where('deleted_at', null)
                 ->where('program', $program->uuid)
                 ->get();
@@ -152,7 +141,7 @@ class ProgramController extends Controller
                 'uuid' => Uuid::uuid(),
                 'name' => $request->name,
                 'description' => $request->description,
-                'meta' => $request->meta ?? json_decode('{}'),
+                'meta' => json_encode($request->meta) ?? null,
             ]);
             $program->save();
 

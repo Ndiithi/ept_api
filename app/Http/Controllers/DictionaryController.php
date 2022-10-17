@@ -66,7 +66,7 @@ class DictionaryController extends Controller
                 'program' => $request->program ? $request->program : null,
                 'value' => json_encode($request->value),
                 'description' => $request->description,
-                'meta' => $request->meta ?? json_decode('{}'),
+                'meta' => json_encode($request->meta) ?? null,
             ]);
             $dictionary->save();
 

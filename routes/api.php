@@ -7,6 +7,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\ResponseController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\RoundController;
 use App\Http\Controllers\UITemplateController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -74,3 +75,10 @@ Route::get('/form_responses', [ResponseController::class, 'getResponses'])->midd
 Route::get('/form_response/{uuid}', [ResponseController::class, 'getResponse'])->middleware('auth:sanctum');
 Route::delete('/form_response/delete/{uuid}', [ResponseController::class, 'deleteResponse'])->middleware('auth:sanctum');
 Route::put('/form_response/edit/{uuid}', [ResponseController::class, 'updateResponse'])->middleware('auth:sanctum');
+
+Route::post('/rounds/new', [RoundController::class, 'createRound'])->middleware('auth:sanctum');
+Route::get('/rounds', [RoundController::class, 'getRounds'])->middleware('auth:sanctum');
+Route::get('/rounds/{uuid}', [RoundController::class, 'getRound'])->middleware('auth:sanctum');
+Route::delete('/rounds/delete/{uuid}', [RoundController::class, 'deleteRound'])->middleware('auth:sanctum');
+Route::put('/rounds/edit/{uuid}', [RoundController::class, 'updateRound'])->middleware('auth:sanctum');
+

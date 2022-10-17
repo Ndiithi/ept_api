@@ -59,7 +59,7 @@ class PermissionController extends Controller
                 'uuid' => Uuid::uuid(),
                 'name' => $request->name,
                 'description' => $request->description,
-                'meta' => $request->meta ?? json_decode('{}'),
+                'meta' => json_encode($request->meta) ?? null,
             ]);
             $permission->save();
 

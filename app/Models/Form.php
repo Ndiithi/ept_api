@@ -23,7 +23,7 @@ class Form extends Model
         'program',
         'meta',
         'actions',
-        'target_type',
+        'target_type', // pre, actual, post
         'created_at',
         'updated_at', 
     ];
@@ -63,6 +63,12 @@ class Form extends Model
     {
         return $this->hasMany('App\Models\Form_section', 'form', 'uuid');
     }
+
+    // rounds (many to many)
+    // public function rounds()
+    // {
+    //     return $this->belongsToMany('App\Models\Round', 'round__forms', 'form', 'round');
+    // }
     
     // cascade delete
     public static function boot() {

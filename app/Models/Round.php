@@ -16,8 +16,58 @@ class Round extends Model
      * @var array
      */
     protected $fillable = [
-        'uuid', 'program', 'schema', 'form', 'user_group', 'name',
-        'description', 'meta', 'active', 'testing_instructions', 'start_date', 'end_date',
-        'created_at', 'updated_at'
+        'uuid',
+        'program',
+        'schema',
+        // 'user_group',
+        'name',
+        'description',
+        'meta', // e.g mandatory_pre_form, response_approval, etc
+        'active',
+        'testing_instructions',
+        'start_date',
+        'end_date',
+        'created_at',
+        'updated_at'
+        // 'form',
     ];
+
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'created_at', 'updated_at', 'deleted_at'
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'deleted_at' => 'datetime',
+        'meta' => 'array',
+        'forms' => 'array',
+    ];
+
+    // id = uuid;
+    public $incrementing = false;
+    protected $keyType = 'string';
+    protected $primaryKey = 'uuid';
+
+    // program
+    public function program()
+    {
+        return $this->belongsTo('App\Models\Program', 'program', 'uuid');
+    }
+
+    // schema
+    public function schema()
+    {
+        return $this->belongsTo('App\Models\Schema', 'schema', 'uuid');
+    }
 }

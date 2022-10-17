@@ -123,4 +123,42 @@ class User extends Authenticatable
             return false;
         }
     }
+
+    /**
+     * get the groups the user has access to
+     * @return Group[]
+     */
+    public function groups()
+    {
+        $groups = [];
+        $group_ids = UserGroupUser::where('user', $this->uuid)->pluck('user_group');
+        foreach ($group_ids as $group_id) {
+            $gr = UserGroup::where('uuid', $group_id)->first();
+            if ($gr) {
+                $groups[] = $gr;
+            }
+        }
+        return $groups;
+    }
+
+    /**
+     * check if the user has a group
+     * @param string $group
+     * @return bool
+     */
+    public function hasGroup(string $group)
+    {
+        $user = User::select(
+            "users.uuid as uuid"
+        )->join('user_group_users', 'user_group_users.user', '=', 'users.uuid')
+            ->join('user_groups', 'user_groups.uuid', '=', 'user_group_users.user_group')
+            ->where('user_groups.name', $group)
+            ->where('users.uuid', $this->uuid)
+            ->get();
+        if (count($user) != 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
