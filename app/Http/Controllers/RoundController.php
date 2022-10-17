@@ -167,6 +167,40 @@ class RoundController extends Controller
                 if(isset($request->start_date)) $round->start_date = $request->start_date ?? $round->start_date;
                 if(isset($request->end_date)) $round->end_date = $request->end_date ?? $round->end_date;
                 if(isset($request->meta)) $round->meta =  json_encode($request->meta);
+                //forms
+                if(isset($request->forms)) {
+                    $round_forms = $request->forms;
+                    if ($round_forms && count($round_forms) > 0) {
+                        foreach ($round_forms as $round_form) {
+                            try {
+                                $form = Form::where('uuid', $round_form)->first();
+                                if ($form == null) {
+                                    return response()->json(['message' => 'Form not found. '], 404);
+                                }
+                                if (isset($round_form['delete']) && $round_form['delete'] == true) {
+                                    DB::table('round__forms')->where('round', $round->uuid)->where('form', $form->uuid)->delete();
+                                } else {
+                                    if (isset($round_form['uuid'])) {
+                                        DB::table('round__forms')->where('uuid', $round_form['uuid'])->update([
+                                            'round' => $round->uuid,
+                                            'form' => $form->uuid,
+                                            'updated_at' => now(),
+                                        ]);
+                                    } else {
+                                        DB::table('round__forms')->insert([
+                                            'round' => $round->uuid,
+                                            'form' => $form->uuid,
+                                            'created_at' => now(),
+                                            'updated_at' => now(),
+                                        ]);
+                                    }
+                                }
+                            } catch (Exception $e) {
+                                return response()->json(['message' => 'Error attaching form to round: ' . $e->getMessage()], 500);
+                            }
+                        }
+                    }
+                }
                 $round->save();
                 return response()->json([
                     'message' => 'Updated successfully',
