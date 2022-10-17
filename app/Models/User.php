@@ -110,12 +110,12 @@ class User extends Authenticatable
         // return false;
 
         $user = User::select(
-            "users.id as id"
+            "users.uuid as uuid"
         )->join('roles', 'roles.uuid', '=', 'users.role')
             ->join('role_permissions', 'roles.uuid', '=', 'role_permissions.role')
             ->join('permissions', 'permissions.uuid', '=', 'role_permissions.permission')
             ->where('permissions.name', $permission)
-            ->where('users.id', $this->id)
+            ->where('users.uuid', $this->uuid)
             ->get();
         if (count($user) != 0) {
             return true;
