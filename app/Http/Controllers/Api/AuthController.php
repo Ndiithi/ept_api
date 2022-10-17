@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
@@ -40,11 +41,20 @@ class AuthController extends Controller
                     'errors' => $validateUser->errors()
                 ], 401);
             }
+            $guestRole = Role::where('name', 'like', '%guest%')->first();
+            if (!$guestRole) {
+                Log::error('Guest Role not found');
+                return response()->json([
+                    'status' => false,
+                    'message' => 'An error occured, please try again later'
+                ], 401);
+            }
             $user = User::create([
                 'uuid' => Str::uuid(),
                 'name' => $request->name,
                 'email' => $request->email,
-                'role' => Role::where('name', 'like', '%guest%')->first()->id ?? 2,         //$request->role,
+                // 'role' => Role::where('name', 'like', '%guest%')->first()->uuid ?? 2,         //$request->role,
+                'role' => $guestRole->uuid,
                 'password' => Hash::make($request->password),
             ]);
 
@@ -92,7 +102,7 @@ class AuthController extends Controller
                 'uuid' => Str::uuid(),
                 'name' => $request->name,
                 'email' => $request->email,
-                'role' => Role::find($request->role)->uuid ?? Role::where('name', 'like', '%guest%')->first()->id,         //$request->role,
+                'role' => Role::find($request->role)->uuid ?? Role::where('name', 'like', '%guest%')->first()->uuid,         //$request->role,
                 'password' => Hash::make($request->password),
             ]);
 

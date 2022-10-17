@@ -106,7 +106,7 @@ class UserRolePermission extends Seeder
 
         $user = array(
             array(
-                'uuid' =>  Str::uuid()->toString(), 'name' => 'test', 'email' => 'admin@nphl.go.ke',
+                'uuid' =>  Str::uuid()->toString(), 'name' => 'System Administrator', 'email' => 'admin@nphl.go.ke',
                 'password' => '$2y$10$/wAd4G8UpdPOkJ4wDmlQ5OS42R66tfL9mKj18P/oGc.8Cj8n7H8pS',
                 'role' => $superadmin_uid,
                 'meta' => null,
