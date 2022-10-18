@@ -24,7 +24,7 @@ class ProgramController extends Controller
         if (!Gate::allows(SystemAuthorities::$authorities['view_program'])) {
             return response()->json(['message' => 'Not allowed to view program: '], 500);
         }
-        
+
         $programs = Program::where('deleted_at', null)->get();
         foreach ($programs as $program) {
             // encode json attributes
@@ -58,7 +58,7 @@ class ProgramController extends Controller
 
         // encode json attributes
         if (is_string($program->meta)) $program->meta = json_decode($program->meta);
-        
+
         // check if details are requested
         if ($request->details) {
             // TODO: append program forms (& sections & fields), schemes, rounds and reports - DONE
@@ -96,7 +96,30 @@ class ProgramController extends Controller
             }
             $rounds = Round::where('program', $program->uuid)->get();
             if ($rounds) {
-                $program->rounds = $rounds;
+                $program_rounds = [];
+                foreach ($rounds as $round) {
+                    // encode json round attributes
+                    if (is_string($round->meta)) $round->meta = json_decode($round->meta);
+                    if (is_string($round->actions)) $round->actions = json_decode($round->actions);
+                    // get round forms
+                    // "name" "code" "description" "forms" "rounds" "schema" "reports" "dataDictionary"
+                    $round_forms = DB::table('round__forms')->where('round', $round->uuid)->get();
+                    $round__forms = [];
+                    foreach ($round_forms as $round_form) {
+                        $form = Form::where('uuid', $round_form->form)->first();
+                        $fm = [];
+                        if ($form) {
+                            $fm['uuid'] = $form->uuid;
+                            $fm['name'] = $form->name;
+                            $fm['type'] = $round_form->type ?? 'pre';
+                            $fm['is_mandatory'] = $round_form->is_mandatory == 1 ?? false;
+                            $round__forms[] = $fm;
+                        }
+                    }
+                    $round->forms = $round__forms;
+                    $program_rounds[] = $round;
+                }
+                $program->rounds = $program_rounds;
             }
             $schema = Schema::where('program', $program->uuid)->get();
             if ($schema) {

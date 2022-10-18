@@ -89,4 +89,10 @@ class Round extends Model
     {
         return $this->belongsTo('App\Models\Schema', 'schema', 'uuid');
     }
+
+    // forms
+    public function forms()
+    {
+        return $this->belongsToMany('App\Models\Form', 'round__forms', 'round', 'form');
+    }
 }

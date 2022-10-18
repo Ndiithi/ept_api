@@ -51,11 +51,24 @@ class RoundController extends Controller
         if (is_string($round->meta)) $round->meta = json_decode($round->meta);
 
         // check if details are requested
-        // TODO: append round forms (& sections & fields), schemes and reports
+        // TODO: append round forms
         if ($request->details) {
-            /*
-                "name" "code" "description" "forms" "rounds" "schema" "reports" "dataDictionary"
-            */
+            // "name" "code" "description" "forms" "rounds" "schema" "reports" "dataDictionary"
+            $round_forms = DB::table('round__forms')->where('round', $round->uuid)->get();
+            // dd(json_encode($round_forms));
+            $round__forms = [];
+            foreach ($round_forms as $round_form) {
+                $form = Form::where('uuid', $round_form->form)->first();
+                $fm = [];
+                if ($form) {
+                    $fm['uuid'] = $form->uuid;
+                    $fm['name'] = $form->name;
+                    $fm['type'] = $round_form->type ?? 'pre';
+                    $fm['is_mandatory'] = $round_form->is_mandatory == 1 ?? false;
+                    $round__forms[] = $fm;
+                }
+            }
+            $round->forms = $round__forms;
         }
 
         return  response()->json($round);
@@ -159,17 +172,17 @@ class RoundController extends Controller
                         return response()->json(['message' => 'Schema not found. '], 404);
                     }
                 }
-                if(isset($request->program)) $round->program = $request->program;
-                if(isset($request->schema)) $round->schema = $request->schema;
-                if(isset($request->name)) $round->name = $request->name ?? $round->name;
-                if(isset($request->description)) $round->description = $request->description ?? $round->description;
-                if(isset($request->active)) $round->active = $request->active ?? $round->active;
-                if(isset($request->testing_instructions)) $round->testing_instructions = $request->testing_instructions ?? $round->testing_instructions;
-                if(isset($request->start_date)) $round->start_date = $request->start_date ?? $round->start_date;
-                if(isset($request->end_date)) $round->end_date = $request->end_date ?? $round->end_date;
-                if(isset($request->meta)) $round->meta =  json_encode($request->meta);
+                if (isset($request->program)) $round->program = $request->program;
+                if (isset($request->schema)) $round->schema = $request->schema;
+                if (isset($request->name)) $round->name = $request->name ?? $round->name;
+                if (isset($request->description)) $round->description = $request->description ?? $round->description;
+                if (isset($request->active)) $round->active = $request->active ?? $round->active;
+                if (isset($request->testing_instructions)) $round->testing_instructions = $request->testing_instructions ?? $round->testing_instructions;
+                if (isset($request->start_date)) $round->start_date = $request->start_date ?? $round->start_date;
+                if (isset($request->end_date)) $round->end_date = $request->end_date ?? $round->end_date;
+                if (isset($request->meta)) $round->meta =  json_encode($request->meta);
                 //forms
-                if(isset($request->forms)) {
+                if (isset($request->forms)) {
                     $round_forms = $request->forms;
                     if ($round_forms && count($round_forms) > 0) {
                         foreach ($round_forms as $round_form) {
