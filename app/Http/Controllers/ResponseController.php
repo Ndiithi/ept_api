@@ -79,7 +79,8 @@ class ResponseController extends Controller
             $response = new Form([
                 'form' => $request->form, 
                 'form_section' => $request->form_section, 
-                'form_field' => $request->form_field, 
+                'form_field' => $request->form_field,
+                'round' => $request->round,
                 'value' => $request->value, 
                 'meta' => json_encode($request->meta) ?? null, 
                 'user' => $request->user()->uuid,
@@ -138,6 +139,7 @@ class ResponseController extends Controller
                 if(isset($request->form_section)) $response->form_section = $request->form_section;
                 if(isset($request->form_field)) $response->form_field = $request->form_field;
                 if(isset($request->value)) $response->value = $request->value;
+                if(isset($request->round)) $response->round = json_encode($request->round);
                 if(isset($request->user)) $response->user = $request->user;
                 if(isset($request->meta)) $response->meta = json_encode($request->meta);
                 $response->save();
