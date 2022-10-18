@@ -22,7 +22,7 @@ class Round extends Model
         // 'user_group',
         'name',
         'description',
-        'meta', // e.g mandatory_pre_form, response_approval, etc
+        'meta', // e.g pre_response_approval, etc
         'active',
         'testing_instructions',
         'start_date',
@@ -52,6 +52,25 @@ class Round extends Model
         'deleted_at' => 'datetime',
         'meta' => 'array',
         'forms' => 'array',
+    ];
+
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+        'start_date',
+        'end_date'
+    ];
+
+    // encode json fields
+    protected $jsonEncode = [
+        'meta',
+        'forms'
     ];
 
     // id = uuid;

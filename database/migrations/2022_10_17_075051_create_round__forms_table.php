@@ -17,6 +17,8 @@ return new class extends Migration
             $table->id();
             $table->uuid('round');
             $table->uuid('form');
+            $table->string('type')->default('pre'); // pre, response, post
+            $table->boolean('is_mandatory')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

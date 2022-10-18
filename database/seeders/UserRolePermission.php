@@ -69,7 +69,12 @@ class UserRolePermission extends Seeder
             array('uuid' => Uuid::uuid(), 'name' => 'add_form',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
             array('uuid' => Uuid::uuid(), 'name' => 'fill_form',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
             array('uuid' => Uuid::uuid(), 'name' => 'delete_form',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
-            array('uuid' => Uuid::uuid(), 'name' => 'edit_form',  'created_at' => new \dateTime, 'updated_at' => new \dateTime)
+            array('uuid' => Uuid::uuid(), 'name' => 'edit_form',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
+            // round
+            array('uuid' => Uuid::uuid(), 'name' => 'view_round',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
+            array('uuid' => Uuid::uuid(), 'name' => 'add_round',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
+            array('uuid' => Uuid::uuid(), 'name' => 'delete_round',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
+            array('uuid' => Uuid::uuid(), 'name' => 'edit_round',  'created_at' => new \dateTime, 'updated_at' => new \dateTime)
 
         );
         $authObj = new Permission();

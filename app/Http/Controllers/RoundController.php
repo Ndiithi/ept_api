@@ -85,7 +85,6 @@ class RoundController extends Controller
                 return response()->json(['message' => 'Schema not found. '], 404);
             }
             $round = new Round([
-                // uuid
                 'uuid' => Uuid::uuid(),
                 'program' => $request->program,
                 'schema' => $request->schema,
@@ -103,7 +102,7 @@ class RoundController extends Controller
             if ($round_forms && count($round_forms) > 0) {
                 foreach ($round_forms as $round_form) {
                     try {
-                        $form = Form::where('uuid', $round_form)->first();
+                        $form = Form::where('uuid', $round_form['uuid'])->first();
                         if ($form == null) {
                             return response()->json(['message' => 'Form not found. '], 404);
                         }
@@ -111,6 +110,8 @@ class RoundController extends Controller
                         DB::table('round__forms')->insert([
                             'round' => $round->uuid,
                             'form' => $form->uuid,
+                            'type' => $round_form['type'] ?? 'pre',
+                            'is_mandatory' => $round_form['is_mandatory'] ?? false,
                             'created_at' => now(),
                             'updated_at' => now(),
                         ]);
@@ -173,26 +174,30 @@ class RoundController extends Controller
                     if ($round_forms && count($round_forms) > 0) {
                         foreach ($round_forms as $round_form) {
                             try {
-                                $form = Form::where('uuid', $round_form)->first();
-                                if ($form == null) {
-                                    return response()->json(['message' => 'Form not found. '], 404);
-                                }
+                                // $form = Form::where('uuid', $round_form['uuid'])->first();
+                                // if ($form == null) {
+                                //     return response()->json(['message' => 'Form not found. '], 404);
+                                // }
                                 if (isset($round_form['delete']) && $round_form['delete'] == true) {
-                                    DB::table('round__forms')->where('round', $round->uuid)->where('form', $form->uuid)->delete();
+                                    DB::table('round__forms')->where('round', $round->uuid)->where('form', $round_form['uuid'])->delete();
                                 } else {
-                                    if (isset($round_form['uuid'])) {
-                                        DB::table('round__forms')->where('uuid', $round_form['uuid'])->update([
-                                            'round' => $round->uuid,
-                                            'form' => $form->uuid,
-                                            'updated_at' => now(),
-                                        ]);
-                                    } else {
+                                    // check if exists
+                                    $exists = DB::table('round__forms')->where('round', $round->uuid)->where('form', $round_form['uuid'])->first();
+                                    if ($exists == null) {
                                         DB::table('round__forms')->insert([
                                             'round' => $round->uuid,
-                                            'form' => $form->uuid,
+                                            'form' => $round_form['uuid'],
                                             'created_at' => now(),
                                             'updated_at' => now(),
                                         ]);
+                                    } else {
+                                        $curr_tie = DB::table('round__forms')->where('form', $round_form['uuid'])->first();
+                                        if (isset($round_form['type']) && $round_form['type'] != $curr_tie->type) {
+                                            DB::table('round__forms')->where('uuid', $round_form['uuid'])->update(['type' => $round_form['type']]);
+                                        }
+                                        if (isset($round_form['is_mandatory']) && $round_form['is_mandatory'] != $curr_tie->is_mandatory) {
+                                            DB::table('round__forms')->where('uuid', $round_form['uuid'])->update(['is_mandatory' => $round_form['is_mandatory']]);
+                                        }
                                     }
                                 }
                             } catch (Exception $e) {

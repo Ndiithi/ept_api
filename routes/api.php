@@ -76,9 +76,9 @@ Route::get('/form_response/{uuid}', [ResponseController::class, 'getResponse'])-
 Route::delete('/form_response/delete/{uuid}', [ResponseController::class, 'deleteResponse'])->middleware('auth:sanctum');
 Route::put('/form_response/edit/{uuid}', [ResponseController::class, 'updateResponse'])->middleware('auth:sanctum');
 
-Route::post('/rounds/new', [RoundController::class, 'createRound'])->middleware('auth:sanctum');
+Route::post('/round/new', [RoundController::class, 'createRound'])->middleware('auth:sanctum');
 Route::get('/rounds', [RoundController::class, 'getRounds'])->middleware('auth:sanctum');
-Route::get('/rounds/{uuid}', [RoundController::class, 'getRound'])->middleware('auth:sanctum');
-Route::delete('/rounds/delete/{uuid}', [RoundController::class, 'deleteRound'])->middleware('auth:sanctum');
-Route::put('/rounds/edit/{uuid}', [RoundController::class, 'updateRound'])->middleware('auth:sanctum');
+Route::get('/round/{uuid}', [RoundController::class, 'getRound'])->middleware('auth:sanctum');
+Route::delete('/round/delete/{uuid}', [RoundController::class, 'deleteRound'])->middleware('auth:sanctum');
+Route::put('/round/edit/{uuid}', [RoundController::class, 'updateRound'])->middleware('auth:sanctum');
 

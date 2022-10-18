@@ -25,6 +25,11 @@ class SystemAuthorities
         'edit_response' => 'edit_response',
         'add_response' => 'add_response',
 
+        'delete_round' => 'delete_round',
+        'view_round' => 'view_round',
+        'edit_round' => 'edit_round',
+        'add_round' => 'add_round',
+
         'delete_form' => 'delete_form',
         'view_form' => 'view_form',
         'edit_form' => 'edit_form',
