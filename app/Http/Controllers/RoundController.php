@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Dictionary;
 use App\Models\Form;
+use App\Models\Form_response;
 use App\Models\Program;
 use App\Models\Round;
 use App\Models\Schema;
@@ -34,6 +35,8 @@ class RoundController extends Controller
     }
     public function getRound(Request $request)
     {
+
+        $user = $request->user();
         if (!Gate::allows(SystemAuthorities::$authorities['view_round'])) {
             return response()->json(['message' => 'Not allowed to view round: '], 500);
         }
@@ -59,14 +62,28 @@ class RoundController extends Controller
             $round__forms = [];
             foreach ($round_forms as $round_form) {
                 $form = Form::where('uuid', $round_form->form)->first();
+                // TODO: check if user has made submissions for this form for this round - DONE
+                $form_subs = Form_response::where('form', $form->uuid)->where('round', $round->uuid)->where('user', $user->uuid)->pluck('uuid');
                 $fm = [];
                 if ($form) {
                     $fm['uuid'] = $form->uuid;
                     $fm['name'] = $form->name;
                     $fm['type'] = $round_form->type ?? 'pre';
                     $fm['is_mandatory'] = $round_form->is_mandatory == 1 ?? false;
+                    $fm['is_submitted'] = count($form_subs) > 0;
+                    if (count($form_subs) > 0) {
+                        $fm['submissions'] = $form_subs;
+                    }
                     $round__forms[] = $fm;
                 }
+                // $fm = [];
+                // if ($form) {
+                //     $fm['uuid'] = $form->uuid;
+                //     $fm['name'] = $form->name;
+                //     $fm['type'] = $round_form->type ?? 'pre';
+                //     $fm['is_mandatory'] = $round_form->is_mandatory == 1 ?? false;
+                //     $round__forms[] = $fm;
+                // }
             }
             $round->forms = $round__forms;
         }

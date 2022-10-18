@@ -108,7 +108,7 @@ class ProgramController extends Controller
                     $round__forms = [];
                     foreach ($round_forms as $round_form) {
                         $form = Form::where('uuid', $round_form->form)->first();
-                        // TODO: check if user has made submissions for this form for this round
+                        // TODO: check if user has made submissions for this form for this round - DONE
                         $form_subs = Form_response::where('form', $form->uuid)->where('round', $round->uuid)->where('user', $user->uuid)->pluck('uuid');
                         $fm = [];
                         if ($form) {
