@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\DictionaryController;
 use App\Http\Controllers\FormController;
+use App\Http\Controllers\FormSubmissionController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\ResponseController;
@@ -70,11 +71,11 @@ Route::get('/form/{uuid}', [FormController::class, 'getForm'])->middleware('auth
 Route::delete('/form/delete/{uuid}', [FormController::class, 'deleteForm'])->middleware('auth:sanctum');
 Route::put('/form/edit/{uuid}', [FormController::class, 'updateForm'])->middleware('auth:sanctum');
 
-Route::post('/form_response/new', [ResponseController::class, 'createResponse'])->middleware('auth:sanctum');
-Route::get('/form_responses', [ResponseController::class, 'getResponses'])->middleware('auth:sanctum');
-Route::get('/form_response/{uuid}', [ResponseController::class, 'getResponse'])->middleware('auth:sanctum');
-Route::delete('/form_response/delete/{uuid}', [ResponseController::class, 'deleteResponse'])->middleware('auth:sanctum');
-Route::put('/form_response/edit/{uuid}', [ResponseController::class, 'updateResponse'])->middleware('auth:sanctum');
+Route::post('/form_submission/new', [FormSubmissionController::class, 'createSubmission'])->middleware('auth:sanctum');
+Route::get('/form_submissions', [FormSubmissionController::class, 'getResponses'])->middleware('auth:sanctum');
+Route::get('/form_submission/{uuid}', [FormSubmissionController::class, 'getSubmission'])->middleware('auth:sanctum');
+Route::delete('/form_submission/delete/{uuid}', [FormSubmissionController::class, 'deleteSubmission'])->middleware('auth:sanctum');
+Route::put('/form_submission/edit/{uuid}', [FormSubmissionController::class, 'updateSubmission'])->middleware('auth:sanctum');
 
 Route::post('/round/new', [RoundController::class, 'createRound'])->middleware('auth:sanctum');
 Route::get('/rounds', [RoundController::class, 'getRounds'])->middleware('auth:sanctum');

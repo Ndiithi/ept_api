@@ -15,11 +15,12 @@ return new class extends Migration
     {
         Schema::create('form_responses', function (Blueprint $table) {
             $table->uuid('uuid')->primary()->unique();
-            $table->uuid('user');
-            $table->uuid('form');
-            $table->uuid('form_section');
+            // $table->uuid('user');
+            // $table->uuid('form');
+            // $table->uuid('round')->nullable();
+            $table->uuid('form_submission');
+            $table->uuid('form_section')->nullable();
             $table->uuid('form_field');
-            $table->uuid('round')->nullable();
             $table->json('meta')->nullable();
             $table->json('value');
             $table->timestamps();

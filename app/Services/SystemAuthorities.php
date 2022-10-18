@@ -20,10 +20,10 @@ class SystemAuthorities
         'edit_role' => 'edit_role',
         'add_role' => 'add_role',
 
-        'delete_response' => 'delete_response',
-        'view_response' => 'view_response',
-        'edit_response' => 'edit_response',
-        'add_response' => 'add_response',
+        'delete_submission' => 'delete_submission',
+        'view_submission' => 'view_submission',
+        'edit_submission' => 'edit_submission',
+        'add_submission' => 'add_submission',
 
         'delete_round' => 'delete_round',
         'view_round' => 'view_round',

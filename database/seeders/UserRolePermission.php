@@ -38,11 +38,11 @@ class UserRolePermission extends Seeder
             array('uuid' => Uuid::uuid(), 'name' => 'add_permission',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
             array('uuid' => Uuid::uuid(), 'name' => 'delete_permission',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
             array('uuid' => Uuid::uuid(), 'name' => 'edit_permission',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
-            // response
-            array('uuid' => Uuid::uuid(), 'name' => 'view_response',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
-            array('uuid' => Uuid::uuid(), 'name' => 'add_response',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
-            array('uuid' => Uuid::uuid(), 'name' => 'delete_response',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
-            array('uuid' => Uuid::uuid(), 'name' => 'edit_response',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
+            // submission
+            array('uuid' => Uuid::uuid(), 'name' => 'view_submission',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
+            array('uuid' => Uuid::uuid(), 'name' => 'add_submission',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
+            array('uuid' => Uuid::uuid(), 'name' => 'delete_submission',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
+            array('uuid' => Uuid::uuid(), 'name' => 'edit_submission',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
             // program
             array('uuid' => Uuid::uuid(), 'name' => 'view_program',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),
             array('uuid' => Uuid::uuid(), 'name' => 'add_program',  'created_at' => new \dateTime, 'updated_at' => new \dateTime),

@@ -18,7 +18,7 @@ class Form_response extends Model
      * @var array
      */
     protected $fillable = [
-        'uuid', 'form', 'form_section', 'form_field', 'round', 'value', 'meta', 'user', 'created_at', 'updated_at'
+        'uuid', 'form_section', 'form_submission', 'form_field', 'value', 'meta', 'created_at', 'updated_at'
     ];
 
     /**
@@ -47,28 +47,13 @@ class Form_response extends Model
     protected $keyType = 'string';
     protected $primaryKey = 'uuid';
 
-    public function form()
+    public function form_submission()
     {
-        return $this->belongsTo('App\Models\Form', 'form', 'uuid');
-    }
-
-    public function form_section()
-    {
-        return $this->belongsTo('App\Models\Form_section', 'form_section', 'uuid');
+        return $this->belongsTo('App\Models\Form_Submission', 'form_submission', 'uuid');
     }
 
     public function form_field()
     {
         return $this->belongsTo('App\Models\Form_field', 'form_field', 'uuid');
-    }
-
-    public function user()
-    {
-        return $this->belongsTo('App\Models\User', 'user', 'uuid');
-    }
-
-    public function round()
-    {
-        return $this->belongsTo('App\Models\Round', 'round', 'uuid');
     }
 }

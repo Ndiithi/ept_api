@@ -76,14 +76,6 @@ class RoundController extends Controller
                     }
                     $round__forms[] = $fm;
                 }
-                // $fm = [];
-                // if ($form) {
-                //     $fm['uuid'] = $form->uuid;
-                //     $fm['name'] = $form->name;
-                //     $fm['type'] = $round_form->type ?? 'pre';
-                //     $fm['is_mandatory'] = $round_form->is_mandatory == 1 ?? false;
-                //     $round__forms[] = $fm;
-                // }
             }
             $round->forms = $round__forms;
         }

@@ -10,6 +10,8 @@ class Round extends Model
 {
     use HasFactory, SoftDeletes;
 
+    // TODO: add enrolled_participants attribute
+
     /**
      * The attributes that are mass assignable.
      *
